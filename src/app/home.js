@@ -1,11 +1,6 @@
 import { StatusBar, StyleSheet, Text, View } from 'react-native'
-import { routerStore } from '../../stores/router'
 
 export default function Home () {
-  const getProps = routerStore(state => state.getProps)
-  const { email } = getProps()
-  console.log(email)
-
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>

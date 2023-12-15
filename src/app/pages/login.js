@@ -7,6 +7,7 @@ import Logo from '../../../assets/logo.png'
 import Ok from '../../../assets/ok'
 import No from '../../../assets/no'
 import { Image } from 'expo-image'
+import { UserModel } from '../../models/user'
 
 export default function Login () {
   const nav = routerStore(state => state.nav)
@@ -43,8 +44,14 @@ export default function Login () {
         type: 'success',
         message: 'Usuario encontrado'
       })
+
+      setTimeout(() => {
+        nav('home')
+      }, 200)
     })
   }, [authParams])
+
+  console.log(status)
 
   return (
     <View style={styles.container}>
