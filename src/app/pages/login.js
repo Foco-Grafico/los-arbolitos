@@ -3,6 +3,10 @@ import { StyleSheet, View, TextInput, Text } from 'react-native'
 import { routerStore } from '../../../stores/router'
 import { loginDebounce } from '../../lib/api-call/auth'
 import { accountStore } from '../../../stores/account'
+import Logo from '../../../assets/logo.png'
+import Ok from '../../../assets/ok'
+import No from '../../../assets/no'
+import { Image } from 'expo-image'
 
 export default function Login () {
   const nav = routerStore(state => state.nav)
