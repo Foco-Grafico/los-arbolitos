@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, TextInput, Button, Alert } from 'react-native'
+import { StyleSheet, View, TextInput, Button, Alert, Text } from 'react-native'
 
 export default function Login () {
   const [email, setEmail] = useState('')
@@ -17,20 +17,38 @@ export default function Login () {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder='Correo electrónico'
-        onChangeText={setEmail}
-        value={email}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder='Contraseña'
-        secureTextEntry
-        onChangeText={setPassword}
-        value={password}
-      />
-      <Button title='Iniciar sesión' onPress={handleLogin} />
+      <View
+        style={{
+          width: '35%',
+          borderWidth: 1
+        }}
+      >
+        <Text>Imagen</Text>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <TextInput
+          style={styles.input}
+          placeholder='Correo electrónico'
+          onChangeText={setEmail}
+          value={email}
+          textContentType='emailAddress'
+        />
+        <TextInput
+          style={styles.input}
+          placeholder='Contraseña'
+          secureTextEntry
+          onChangeText={setPassword}
+          value={password}
+          textContentType='password'
+        />
+        <Button title='Iniciar sesión' onPress={handleLogin} />
+      </View>
     </View>
   )
 }
@@ -38,8 +56,7 @@ export default function Login () {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    padding: 16
+    flexDirection: 'row'
   },
   input: {
     height: 40,
