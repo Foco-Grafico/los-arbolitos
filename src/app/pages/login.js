@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 12,
-    paddingLeft: 8
+    paddingLeft: 8,
+    paddingRight: 8
   }
 })
