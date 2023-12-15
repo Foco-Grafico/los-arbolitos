@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, TextInput, Button, Alert, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TextInput, Alert, Text, TouchableOpacity } from 'react-native'
 
 export default function Login () {
   const [email, setEmail] = useState('')
