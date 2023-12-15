@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "requireFullScreen": true
     },
     "android": {
       "adaptiveIcon": {
@@ -31,6 +32,14 @@
         "projectId": "125157e9-5358-4b8a-9e5c-2a9695819058"
       }
     },
-    "owner": "foco-grafico"
+    "owner": "foco-grafico",
+    "plugins": [
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "LANDSCAPE"
+        }
+      ]
+    ]
   }
 }
