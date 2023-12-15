@@ -3,7 +3,8 @@ import { Route } from './src/app/components/route'
 import Home from './src/app/home'
 import Login from './src/app/pages/login'
 import { SetScreenOrientation } from './src/lib/orientation'
-import { LogBox } from 'react-native'
+import { LogBox, View } from 'react-native'
+import Constants from 'expo-constants'
 
 LogBox.ignoreLogs(['new NativeEventEmitter'])
 
@@ -16,13 +17,18 @@ export default function App () {
   }, [])
 
   return (
-    <>
+    <View
+      style={{
+        flex: 1,
+        paddingTop: Constants.statusBarHeight
+      }}
+    >
       <Route name='home'>
         <Home />
       </Route>
       <Route name='login'>
         <Login />
       </Route>
-    </>
+    </View>
   )
 }
