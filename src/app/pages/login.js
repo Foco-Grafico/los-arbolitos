@@ -7,11 +7,12 @@ import Logo from '../../../assets/logo.png'
 import Ok from '../../../assets/ok'
 import No from '../../../assets/no'
 import { Image } from 'expo-image'
-import { UserModel } from '../../models/user'
+import Rest from '../../../assets/rest.jpg'
 
 export default function Login () {
   const nav = routerStore(state => state.nav)
   const setAccount = accountStore(state => state.setAccount)
+  const [found, setFound] = useState(false)
   const [authParams, setAuthParams] = useState({
     user: '',
     pass: ''
@@ -29,13 +30,17 @@ export default function Login () {
       })
       return
     }
+    setStatus({
+      type: 'loading'
+    })
 
     loginDebounce(authParams.user, authParams.pass, (user, err) => {
       if (err) {
         setStatus({
           type: 'error',
           message: err.message
-        })
+        },
+        setFound(false))
         return
       }
 
@@ -43,11 +48,13 @@ export default function Login () {
       setStatus({
         type: 'success',
         message: 'Usuario encontrado'
-      })
+      },
+      setFound(true)
+      )
 
       setTimeout(() => {
         nav('home')
-      }, 200)
+      }, 2000)
     })
   }, [authParams])
 
@@ -60,7 +67,9 @@ export default function Login () {
           width: '35%',
           borderWidth: 1
         }}
-      />
+      >
+        <Image source={Rest} style={styles.image2} contentFit='cover' />
+      </View>
       <View
         style={{
           flex: 1,
@@ -88,21 +97,13 @@ export default function Login () {
           />
         </View>
 
-        <Text style={{ color: 'gray' }}>CARGANDO...</Text>
-        <View style={{ flexDirection: 'row', gap: 10 }}>
-          <Ok style={{
-            width: '100%',
-            height: '100%'
-          }}
-          />
-          <No style={{
-            width: '100%',
-            height: '100%'
-          }}
-          />
+        <View style={{ flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+          {status.type === 'loading' && <Text style={{ color: 'gray' }}>CARGANDO...</Text>}
+          {found
+            ? <Ok />
+            : <No />}
         </View>
       </View>
-
     </View>
   )
 }
