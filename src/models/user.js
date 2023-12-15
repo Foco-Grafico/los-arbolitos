@@ -1,11 +1,21 @@
-// import { z } from 'zod'
+import { z } from 'zod'
 
-// export const User = z.object({
-//   id: z.number({
-//     coerce: true,
-//     required_error: 'User ID is required'
-//   }),
-//   name: z.string(),
-//   email: z.string().email(),
-//   password: z.string()
-// })
+export const TypeModel = z.object({
+  id: z.number({
+    coerce: true,
+    required_error: 'Type ID is required'
+  }),
+  name: z.string()
+})
+
+export const UserModel = z.object({
+  id: z.string(),
+  name: z.string(),
+  lastname: z.string(),
+  phone: z.string(),
+  username: z.string()
+})
+  .extend({
+    type: TypeModel,
+    status: TypeModel
+  })
