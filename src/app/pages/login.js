@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, TextInput, Alert, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TextInput, Text, TouchableOpacity } from 'react-native'
+import { routerStore } from '../../../stores/router'
 
 export default function Login () {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const nav = routerStore(state => state.nav)
 
   return (
     <View style={styles.container}>
@@ -40,11 +42,12 @@ export default function Login () {
         />
         <TouchableOpacity
           onPress={() => {
-            if (email === '' || password === '') {
-              Alert.alert('Por favor, introduce tu correo electrónico y contraseña')
-            } else {
-              Alert.alert(`Bienvenido ${email}`)
-            }
+            nav('home', { email: 'hola' })
+            // if (email === '' || password === '') {
+            //   Alert.alert('Por favor, introduce tu correo electrónico y contraseña')
+            // } else {
+            //   Alert.alert(`Bienvenido ${email}`)
+            // }
           }}
         >
           <Text>
