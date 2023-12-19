@@ -2,6 +2,7 @@ import { TextInput, ScrollView, StyleSheet, Text, View, TouchableOpacity, FlatLi
 import { Image } from 'expo-image'
 import Counters from '../components/counters'
 import Footer from '../components/footer'
+import { useState } from 'react'
 
 const tables = [
   { id: 1, name: 'M1', status: 'ocupada' },
@@ -25,7 +26,26 @@ const products = [
   { id: 10, name: 'HUEVOS CON TOCINO', status: 'ocupada', description: 'Huevos con tocino' }
 ]
 
+const orders = [
+  { id: 1, name: 'CHILAQUILES VERDES', quantity: 1 },
+  { id: 2, name: 'CHILAQUILES ROJOS', quantity: 2 },
+  { id: 3, name: 'MACHACA', quantity: 3 },
+  { id: 4, name: 'MENUDO', quantity: 1 },
+  { id: 5, name: 'HUEVOS RANCHEROS', quantity: 2 }
+]
+
 export default function ShowProducts () {
+  const [isActive, setIsActive] = useState(false)
+  const [activeOrder, setActiveOrder] = useState(false)
+
+  const toggleActiveOrder = () => {
+    setActiveOrder(!activeOrder)
+  }
+
+  const toggleIsActive = () => {
+    setIsActive(!isActive)
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.aside}>
@@ -43,18 +63,64 @@ export default function ShowProducts () {
       </View>
 
       <View style={styles.order}>
-        <Text>Lista de productos</Text>
         <TouchableOpacity style={styles.buttons}>
           <Text style={styles.text2}>
             SOLICITAR CUENTA
           </Text>
         </TouchableOpacity>
 
+        <View style={{ justifyContent: 'flex-start', height: '70%', alignItems: 'flex-start', width: '100%', paddingHorizontal: 20, gap: 15 }}>
+          <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+            <Text style={styles.title}>
+              CANT.
+            </Text>
+            <Text style={styles.title}>
+              PRODUCTO
+            </Text>
+          </View>
+          <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', width: '100%', paddingHorizontal: 20, flexDirection: 'column' }}>
+            {orders.map((order) => {
+              return (
+                <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '100%' }} key={order.name + 1}>
+                  <TouchableOpacity style={{ gap: 20, justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '95%' }}>
+                    <Text style={styles.text2}>
+                      {order.quantity}
+                    </Text>
+                    <Text style={styles.text2}>
+                      {order.name}
+                    </Text>
+                  </TouchableOpacity>
+                  <View>
+                    <TouchableOpacity style={styles.circle}>
+                      <Text style={styles.text}>
+                        -
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )
+            })}
+          </View>
+        </View>
+
         <TouchableOpacity style={styles.buttons}>
           <Text style={styles.text2}>
             ENVIAR COMANDA
           </Text>
         </TouchableOpacity>
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <TouchableOpacity
+            style={isActive ? styles.slider : styles.sliderActive}
+            onPress={() => {
+              toggleIsActive()
+              console.log(isActive)
+            }}
+          >
+            <View style={isActive ? styles.sliderBefore : styles.sliderBeforeActive} />
+          </TouchableOpacity>
+          <Text style={{ color: 'white' }}>COMANDA PRIORITARIA</Text>
+        </View>
       </View>
 
       <View style={styles.productList}>
@@ -122,10 +188,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold'
   },
+  title: {
+    color: '#000',
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
   text2: {
     color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold'
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center'
   },
   order: {
     backgroundColor: '#b89c98',
@@ -164,10 +236,9 @@ const styles = StyleSheet.create({
   },
   buttons: {
     backgroundColor: '#005943',
-    borderRadius: 100,
+    borderRadius: 10,
     fontSize: 20,
     color: '#000000',
-    borderWidth: 1,
     shadowRadius: 5,
     shadowOpacity: 1,
     shadowColor: '#000000',
@@ -177,5 +248,52 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 200,
     height: 40
+  },
+  slider: {
+    width: 60,
+    height: 30,
+    backgroundColor: 'lightgray',
+    borderRadius: 20,
+    overflow: 'hidden',
+    borderWidth: 4,
+    borderColor: 'transparent',
+    shadowRadius: 10,
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    shadowOffset: { width: 0, height: 0 },
+    elevation: 10
+  },
+  sliderActive: {
+    width: 60,
+    height: 30,
+    backgroundColor: '#00a378',
+    borderRadius: 20,
+    overflow: 'hidden',
+    borderWidth: 4,
+    borderColor: 'transparent',
+    shadowRadius: 10,
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    shadowOffset: { width: 0, height: 0 },
+    elevation: 10
+  },
+  sliderBefore: {
+    width: '50%',
+    height: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    shadowRadius: 10,
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    shadowOffset: { width: 0, height: 0 },
+    elevation: 10
+  },
+  sliderBeforeActive: {
+    transform: [{ translateX: 30 }],
+    width: '50%',
+    height: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    shadowRadius: 10,
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    shadowOffset: { width: 0, height: 0 },
+    elevation: 10
   }
 })
