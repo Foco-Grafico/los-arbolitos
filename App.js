@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Route } from './src/app/components/route'
 import Home from './src/app/home'
 import Login from './src/app/pages/login'
+import ShowProducts from './src/app/pages/show-products-for-order'
 import { SetScreenOrientation } from './src/lib/orientation'
 import { LogBox, View } from 'react-native'
 import Constants from 'expo-constants'
@@ -29,6 +30,10 @@ export default function App () {
       <Route name='login'>
         <Login />
       </Route>
+      <Route name='show-products'>
+        <ShowProducts />
+      </Route>
+
     </View>
   )
 }

@@ -53,7 +53,7 @@ export default function Login () {
       )
 
       setTimeout(() => {
-        nav('home')
+        nav('show-products')
       }, 2000)
     })
   }, [authParams])
