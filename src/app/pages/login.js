@@ -12,45 +12,27 @@ import Rest from '../../../assets/rest.jpg'
 export default function Login () {
   const nav = routerStore(state => state.nav)
   const setAccount = accountStore(state => state.setAccount)
-  const [found, setFound] = useState(false)
   const [authParams, setAuthParams] = useState({
     user: '',
     pass: ''
   })
-  const [status, setStatus] = useState({
-    type: 'nulo',
-    message: ''
-  })
+  const [status, setStatus] = useState('nulo')
 
   useEffect(() => {
     if (authParams.user === '' && authParams.pass === '') {
-      setStatus({
-        type: 'nulo',
-        message: ''
-      })
+      setStatus('nulo')
       return
     }
-    setStatus({
-      type: 'loading'
-    })
+    setStatus('loading')
 
     loginDebounce(authParams.user, authParams.pass, (user, err) => {
       if (err) {
-        setStatus({
-          type: 'error',
-          message: err.message
-        },
-        setFound(false))
+        setStatus('error')
         return
       }
 
       setAccount(user)
-      setStatus({
-        type: 'success',
-        message: 'Usuario encontrado'
-      },
-      setFound(true)
-      )
+      setStatus('success')
 
       setTimeout(() => {
         nav('show-products')
@@ -98,10 +80,9 @@ export default function Login () {
         </View>
 
         <View style={{ flexDirection: 'column', gap: 10, alignItems: 'center' }}>
-          {status.type === 'loading' && <Text style={{ color: 'gray' }}>CARGANDO...</Text>}
-          {found
-            ? <Ok />
-            : <No />}
+          {status === 'loading' && <Text style={{ color: 'gray' }}>CARGANDO...</Text>}
+          {status === 'success' && <Ok />}
+          {status === 'error' && <No />}
         </View>
       </View>
     </View>
