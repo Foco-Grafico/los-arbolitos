@@ -1,21 +1,25 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import useGetCategories from '../hooks/useGetCategories'
+import { waiterStore } from '../../../stores/waiter'
 
 export default function App () {
   const [selectedOption, setSelectedOption] = useState(0)
+  const { categories } = useGetCategories()
+  const setSelectedCategory = waiterStore(state => state.setSelectedCategory)
 
-  const options = ['Aperitivos', 'Desayunos', 'Comidas', 'Postres', 'Bebidas']
-
-  console.log(selectedOption)
   return (
     <View style={styles.footer}>
-      {options.map((option, index) => (
+      {categories.map((option, index) => (
         <TouchableOpacity
-          key={index}
+          key={option.key}
           style={selectedOption === index ? styles.selected : styles.notSelected}
-          onPress={() => setSelectedOption(index)}
+          onPress={() => {
+            setSelectedOption(index)
+            setSelectedCategory(option.id)
+          }}
         >
-          <Text style={styles.text}>{option}</Text>
+          <Text style={styles.text}>{option.name}</Text>
         </TouchableOpacity>
       ))}
     </View>

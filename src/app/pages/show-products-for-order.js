@@ -3,6 +3,11 @@ import { Image } from 'expo-image'
 import Counters from '../components/counters'
 import Footer from '../components/footer'
 import { useState } from 'react'
+import useWaiterGetProductsInCategory from '../hooks/getProductsinCategory'
+import { API_URL } from '../../lib/api-call/data'
+import { waiterStore } from '../../../stores/waiter'
+import SignoMenos from '../../../assets/signodemenos'
+import Aceptar from '../../../assets/aceptar'
 
 const tables = [
   { id: 1, name: 'M1', status: 'ocupada' },
@@ -11,19 +16,6 @@ const tables = [
   { id: 4, name: 'M4', status: 'ocupada' },
   { id: 5, name: 'M5', status: 'ocupada' },
   { id: 6, name: 'M6', status: 'ocupada' }
-]
-
-const products = [
-  { id: 1, name: 'CHILAQUILES VERDES', status: 'ocupada', description: 'Chilaquiles verdes con pollo' },
-  { id: 2, name: 'CHILAQUILES ROJOS', status: 'ocupada', description: 'Chilaquiles rojos con pollo' },
-  { id: 3, name: 'MACHACA', status: 'ocupada', description: 'Machaca con huevo' },
-  { id: 4, name: 'MENUDO', status: 'ocupada', description: 'Menudo con tortillas' },
-  { id: 5, name: 'HUEVOS RANCHEROS', status: 'ocupada', description: 'Huevos rancheros con frijoles' },
-  { id: 6, name: 'WAFFLES', status: 'ocupada', description: 'Waffles con miel' },
-  { id: 7, name: 'HUEVOS CON JAMON', status: 'ocupada', description: 'Huevos con jamon' },
-  { id: 8, name: 'HUEVOS CON CHORIZO', status: 'ocupada', description: 'Huevos con chorizo' },
-  { id: 9, name: 'HUEVOS CON SALCHICHA', status: 'ocupada', description: 'Huevos con salchicha' },
-  { id: 10, name: 'HUEVOS CON TOCINO', status: 'ocupada', description: 'Huevos con tocino' }
 ]
 
 const orders = [
@@ -36,10 +28,19 @@ const orders = [
 
 export default function ShowProducts () {
   const [isActive, setIsActive] = useState(false)
-  const [activeOrder, setActiveOrder] = useState(false)
+  const [enviarCuenta, setEnviarCuenta] = useState(false)
+  const [enviarComanda, setEnviarComanda] = useState(false)
+  const { dishes } = useWaiterGetProductsInCategory()
+  const setSearch = waiterStore(state => state.setSearch)
 
-  const toggleActiveOrder = () => {
-    setActiveOrder(!activeOrder)
+  const toggleEnviarComanda = () => {
+    setEnviarComanda(!enviarComanda)
+    console.log('enviar comanda')
+  }
+
+  const toggleEnviarCuenta = () => {
+    setEnviarCuenta(!enviarCuenta)
+    console.log('enviar cuenta')
   }
 
   const toggleIsActive = () => {
@@ -63,7 +64,7 @@ export default function ShowProducts () {
       </View>
 
       <View style={styles.order}>
-        <TouchableOpacity style={styles.buttons}>
+        <TouchableOpacity style={styles.buttons} onPress={toggleEnviarCuenta}>
           <Text style={styles.text2}>
             SOLICITAR CUENTA
           </Text>
@@ -78,7 +79,7 @@ export default function ShowProducts () {
               PRODUCTO
             </Text>
           </View>
-          <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', width: '100%', paddingHorizontal: 20, flexDirection: 'column' }}>
+          <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', width: '100%', paddingHorizontal: 20, flexDirection: 'column', gap: 10 }}>
             {orders.map((order) => {
               return (
                 <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '100%' }} key={order.name + 1}>
@@ -91,10 +92,8 @@ export default function ShowProducts () {
                     </Text>
                   </TouchableOpacity>
                   <View>
-                    <TouchableOpacity style={styles.circle}>
-                      <Text style={styles.text}>
-                        -
-                      </Text>
+                    <TouchableOpacity style={{ width: 24, height: 24 }}>
+                      <SignoMenos fill='#005942' style={{ width: 24, height: 24 }} />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -103,7 +102,7 @@ export default function ShowProducts () {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.buttons}>
+        <TouchableOpacity style={styles.buttons} onPress={toggleEnviarComanda}>
           <Text style={styles.text2}>
             ENVIAR COMANDA
           </Text>
@@ -125,18 +124,18 @@ export default function ShowProducts () {
 
       <View style={styles.productList}>
         <View style={{ flexDirection: 'row', paddingHorizontal: 20, alignSelf: 'flex-end' }}>
-          <TextInput placeholder='BUSCAR' style={styles.buscador} />
+          <TextInput placeholder='BUSCAR' style={styles.buscador} onChangeText={setSearch} />
         </View>
         <View style={{ flex: 1, flexDirection: 'row', paddingHorizontal: 5 }}>
           <FlatList
             contentContainerStyle={{ paddingHorizontal: 10, gap: 15 }}
-            data={products}
+            data={dishes}
             numColumns={2}
             keyExtractor={item => item.id.toString()}
             renderItem={({ item }) => (
               <View style={styles.products}>
                 <TouchableOpacity style={styles.img}>
-                  <Image source={require('../../../assets/rest.jpg')} style={styles.img} />
+                  <Image source={item.picture.startsWith('http') ? item.picture : `${API_URL}/${item.picture}`} style={styles.img} />
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'column', gap: 5, width: 130, height: 100, justifyContent: 'space-between' }}>
                   <Text style={styles.text}>
@@ -154,8 +153,61 @@ export default function ShowProducts () {
           />
         </View>
         <Footer />
+        {enviarCuenta && (
+          <View
+            animationType='slide'
+            transparent
+            style={{
+              display: enviarCuenta ? 'flex' : 'none',
+              position: 'absolute',
+              width: '100%',
+              height: '100%'
+            }}
+          >
+            <View style={styles.modal}>
+              <View style={styles.modalForm}>
+                <Text style={styles.modalText}>
+                  ESTAS SEGURO QUE DESEAS ENVIAR LA CUENTA A CAJA?
+                </Text>
+                <TouchableOpacity
+                  onPress={toggleEnviarCuenta}
+                >
+                  <Text>
+                    SI
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        )}
+        {enviarComanda && (
+          <View
+            animationType='slide'
+            transparent
+            style={{
+              display: enviarComanda ? 'flex' : 'none',
+              position: 'absolute',
+              width: '100%',
+              height: '100%'
+            }}
+          >
+            <View style={styles.modal}>
+              <View style={styles.modalForm}>
+                <Text style={styles.modalText}>
+                  ESTAS SEGURO QUE DESEAS ENVIAR LA COMANDA A COCINA?
+                </Text>
+                <TouchableOpacity
+                  onPress={toggleEnviarComanda}
+                >
+                  <Text>
+                    SI
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        )}
       </View>
-
     </View>
   )
 }
@@ -214,7 +266,8 @@ const styles = StyleSheet.create({
     width: 630,
     flexDirection: 'column',
     textAlign: 'center',
-    gap: 10
+    gap: 10,
+    position: 'relative'
   },
   products: {
     flexDirection: 'row',
@@ -295,5 +348,29 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, 0.25)',
     shadowOffset: { width: 0, height: 0 },
     elevation: 10
+  },
+  modal: {
+    backgroundColor: '#377c6a90',
+    flexDirection: 'column',
+    textAlign: 'center',
+    gap: 10,
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modalText: {
+    color: '#000',
+    fontSize: 12,
+    fontWeight: 'bold'
+  },
+  modalForm: {
+    backgroundColor: '#fff',
+    width: 540,
+    height: 100,
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingVertical: 20,
+    gap: 20
   }
 })
