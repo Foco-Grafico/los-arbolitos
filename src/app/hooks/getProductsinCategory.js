@@ -15,7 +15,6 @@ export default function useWaiterGetProductsInCategory (id) {
       abortController.current.abort('Previous request cancelled')
       abortController.current = new AbortController()
     } catch {
-      // Do nothing
     }
 
     GetDishesCategories(selectedCategory, {
@@ -27,13 +26,16 @@ export default function useWaiterGetProductsInCategory (id) {
         }
 
         if (res.status === 404) {
-          setErr('No se encontraron productos')
+          setErr('No se encontraron productosa')
           return { data: [] }
         }
 
         throw new Error('Error al obtener los productos')
       })
-      .then(res => setDishes(res.data))
+      .then(res => {
+        console.log(JSON.stringify(res.data))
+        setDishes(res.data)
+      })
       .catch((err) => {
         console.error(err)
       })

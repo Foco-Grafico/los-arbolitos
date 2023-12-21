@@ -1,59 +1,56 @@
 import { TextInput, ScrollView, StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native'
 import { Image } from 'expo-image'
-import Counters from '../components/counters'
 import Footer from '../components/footer'
 import { useState } from 'react'
 import useWaiterGetProductsInCategory from '../hooks/getProductsinCategory'
 import { API_URL } from '../../lib/api-call/data'
 import { waiterStore } from '../../../stores/waiter'
 import SignoMenos from '../../../assets/signodemenos'
-import Aceptar from '../../../assets/aceptar'
-
-const tables = [
-  { id: 1, name: 'M1', status: 'ocupada' },
-  { id: 2, name: 'M2', status: 'ocupada' },
-  { id: 3, name: 'M3', status: 'ocupada' },
-  { id: 4, name: 'M4', status: 'ocupada' },
-  { id: 5, name: 'M5', status: 'ocupada' },
-  { id: 6, name: 'M6', status: 'ocupada' }
-]
-
-const orders = [
-  { id: 1, name: 'CHILAQUILES VERDES', quantity: 1 },
-  { id: 2, name: 'CHILAQUILES ROJOS', quantity: 2 },
-  { id: 3, name: 'MACHACA', quantity: 3 },
-  { id: 4, name: 'MENUDO', quantity: 1 },
-  { id: 5, name: 'HUEVOS RANCHEROS', quantity: 2 }
-]
+import SwitchSlider from '../components/switch-slider'
+import useWaiterGetTablesinZone from '../hooks/getTablesbyZone'
+import Editar from '../../../assets/editar'
+import SignoMas from '../../../assets/signodemas'
+import addDishToOrder from '../func/add-dish-to-order'
 
 export default function ShowProducts () {
-  const [isActive, setIsActive] = useState(false)
+  const [tableSelected, setTableSelected] = useState(null)
   const [enviarCuenta, setEnviarCuenta] = useState(false)
   const [enviarComanda, setEnviarComanda] = useState(false)
-  const { dishes } = useWaiterGetProductsInCategory()
   const setSearch = waiterStore(state => state.setSearch)
+  const { dishes } = useWaiterGetProductsInCategory()
+  const { tables } = useWaiterGetTablesinZone()
+
+  const addItem = (item) => {
+    const orderId = tables[tableSelected].order.id
+    const dishId = item.id
+
+    const supplies = item.supplies.map((supply) => ({
+      id: supply.id,
+      quantity: supply.quantity
+    }))
+
+    addDishToOrder({
+      dishId,
+      orderId,
+      supplies
+    })
+  }
 
   const toggleEnviarComanda = () => {
     setEnviarComanda(!enviarComanda)
-    console.log('enviar comanda')
   }
 
   const toggleEnviarCuenta = () => {
     setEnviarCuenta(!enviarCuenta)
-    console.log('enviar cuenta')
-  }
-
-  const toggleIsActive = () => {
-    setIsActive(!isActive)
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.aside}>
         <ScrollView contentContainerStyle={{ gap: 20, padding: 5 }}>
-          {tables.map((table) => {
+          {tables.map((table, i) => {
             return (
-              <TouchableOpacity style={styles.circle} key={table.name + 1}>
+              <TouchableOpacity onPress={() => { setTableSelected(i) }} style={tableSelected === i ? styles.selectedCircle : styles.circle} key={table.key}>
                 <Text style={styles.text}>
                   {table.name}
                 </Text>
@@ -80,15 +77,15 @@ export default function ShowProducts () {
             </Text>
           </View>
           <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', width: '100%', paddingHorizontal: 20, flexDirection: 'column', gap: 10 }}>
-            {orders.map((order) => {
+            {tableSelected != null && tables[tableSelected].order.dishes.map((dish) => {
               return (
-                <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '100%' }} key={order.name + 1}>
+                <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '100%' }} key={dish.key}>
                   <TouchableOpacity style={{ gap: 20, justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '95%' }}>
                     <Text style={styles.text2}>
-                      {order.quantity}
+                      {dish?.quantity}
                     </Text>
                     <Text style={styles.text2}>
-                      {order.name}
+                      {dish?.name}
                     </Text>
                   </TouchableOpacity>
                   <View>
@@ -100,6 +97,7 @@ export default function ShowProducts () {
               )
             })}
           </View>
+
         </View>
 
         <TouchableOpacity style={styles.buttons} onPress={toggleEnviarComanda}>
@@ -109,15 +107,7 @@ export default function ShowProducts () {
         </TouchableOpacity>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <TouchableOpacity
-            style={isActive ? styles.slider : styles.sliderActive}
-            onPress={() => {
-              toggleIsActive()
-              console.log(isActive)
-            }}
-          >
-            <View style={isActive ? styles.sliderBefore : styles.sliderBeforeActive} />
-          </TouchableOpacity>
+          <SwitchSlider />
           <Text style={{ color: 'white' }}>COMANDA PRIORITARIA</Text>
         </View>
       </View>
@@ -145,12 +135,20 @@ export default function ShowProducts () {
                     {item.description}
                   </Text>
                   <View style={{ justifyContent: 'flex-end', alignContent: 'flex-end' }}>
-                    <Counters />
+                    <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                      <TouchableOpacity>
+                        <Editar fill='#005942' style={{ width: 24, height: 24 }} />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => addItem(item)}>
+                        <SignoMas fill='#005942' style={{ width: 24, height: 24 }} />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               </View>
             )}
           />
+
         </View>
         <Footer />
         {enviarCuenta && (
@@ -224,7 +222,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 40,
     height: 40
-
+  },
+  selectedCircle: {
+    borderRadius: 100,
+    backgroundColor: '#fff',
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 40,
+    height: 40
   },
   aside: {
     backgroundColor: '#005943',
@@ -301,53 +307,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 200,
     height: 40
-  },
-  slider: {
-    width: 60,
-    height: 30,
-    backgroundColor: 'lightgray',
-    borderRadius: 20,
-    overflow: 'hidden',
-    borderWidth: 4,
-    borderColor: 'transparent',
-    shadowRadius: 10,
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 10
-  },
-  sliderActive: {
-    width: 60,
-    height: 30,
-    backgroundColor: '#00a378',
-    borderRadius: 20,
-    overflow: 'hidden',
-    borderWidth: 4,
-    borderColor: 'transparent',
-    shadowRadius: 10,
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 10
-  },
-  sliderBefore: {
-    width: '50%',
-    height: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    shadowRadius: 10,
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 10
-  },
-  sliderBeforeActive: {
-    transform: [{ translateX: 30 }],
-    width: '50%',
-    height: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    shadowRadius: 10,
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 10
   },
   modal: {
     backgroundColor: '#377c6a90',

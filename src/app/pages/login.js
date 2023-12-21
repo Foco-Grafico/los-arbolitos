@@ -40,8 +40,6 @@ export default function Login () {
     })
   }, [authParams])
 
-  console.log(status)
-
   return (
     <View style={styles.container}>
       <View

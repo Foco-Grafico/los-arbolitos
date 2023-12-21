@@ -1,6 +1,6 @@
 import { APIENDPOINTS } from '../../lib/api-call/data'
 
-export default function getCategories () {
+export default function getTablesbyZone (waiterId) {
   const headers = new Headers()
   headers.append('accept', 'application/json')
 
@@ -9,5 +9,5 @@ export default function getCategories () {
     headers
   }
 
-  return fetch(`${APIENDPOINTS.getCategories}`, options)
+  return fetch(`${APIENDPOINTS.getTablesbyZone(waiterId)}`, options)
 }

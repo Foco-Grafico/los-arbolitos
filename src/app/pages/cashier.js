@@ -78,7 +78,6 @@ export default function Cashier () {
       ]
     }
   ]
-  console.log(selected)
   return (
     <View style={styles.container}>
       <View style={styles.header}>
