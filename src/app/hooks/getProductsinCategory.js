@@ -33,7 +33,6 @@ export default function useWaiterGetProductsInCategory (id) {
         throw new Error('Error al obtener los productos')
       })
       .then(res => {
-        console.log(JSON.stringify(res.data))
         setDishes(res.data)
       })
       .catch((err) => {

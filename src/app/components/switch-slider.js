@@ -7,38 +7,39 @@ export default function SwitchSlider () {
   const handleClick = () => {
     setActive(!active)
   }
-  const FadeInView = (props) => {
-    const moveAnim = useRef(new Animated.Value(0)).current
-
-    useEffect(() => {
-      Animated.spring(
-        moveAnim,
-        {
-          toValue: active ? 10 : -20,
-          useNativeDriver: true
-        }
-      ).start()
-    }, [moveAnim, active])
-
-    return (
-      <View style={{ paddingLeft: 20 }}>
-        <Animated.View
-          style={{
-            ...props.style,
-            transform: [{ translateX: moveAnim }]
-          }}
-        >
-          {props.children}
-        </Animated.View>
-      </View>
-    )
-  }
 
   return (
     <View style={active ? styles.slider : styles.inActive}>
       <TouchableOpacity onPress={handleClick}>
-        <FadeInView style={active ? styles.bolitaActive : styles.bolitainActive} />
+        <FadeInView active={active} style={active ? styles.bolitaActive : styles.bolitainActive} />
       </TouchableOpacity>
+    </View>
+  )
+}
+
+const FadeInView = ({ active, style }) => {
+  const moveAnim = useRef(new Animated.Value(-20))
+
+  useEffect(() => {
+    Animated.spring(
+      moveAnim.current,
+      {
+        toValue: active ? 10 : -20,
+        useNativeDriver: true,
+        bounciness: 60
+
+      }
+    ).start()
+  }, [active])
+
+  return (
+    <View style={{ paddingLeft: 20 }}>
+      <Animated.View
+        style={{
+          ...style,
+          transform: [{ translateX: moveAnim.current }]
+        }}
+      />
     </View>
   )
 }

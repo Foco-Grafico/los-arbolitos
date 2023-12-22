@@ -1,155 +1,28 @@
-import { TextInput, ScrollView, StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native'
-import { Image } from 'expo-image'
+import { TextInput, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import Footer from '../components/footer'
 import { useState } from 'react'
-import useWaiterGetProductsInCategory from '../hooks/getProductsinCategory'
-import { API_URL } from '../../lib/api-call/data'
 import { waiterStore } from '../../../stores/waiter'
-import SignoMenos from '../../../assets/signodemenos'
-import SwitchSlider from '../components/switch-slider'
-import useWaiterGetTablesinZone from '../hooks/getTablesbyZone'
-import Editar from '../../../assets/editar'
-import SignoMas from '../../../assets/signodemas'
-import addDishToOrder from '../func/add-dish-to-order'
+import EditProducts from '../components/waiters/edit-products'
+import TableList from '../components/waiters/table-list'
+import OrderSection from '../components/waiters/order-section'
+import DishList from '../components/waiters/dish-list'
 
 export default function ShowProducts () {
-  const [tableSelected, setTableSelected] = useState(null)
   const [enviarCuenta, setEnviarCuenta] = useState(false)
   const [enviarComanda, setEnviarComanda] = useState(false)
   const setSearch = waiterStore(state => state.setSearch)
-  const { dishes } = useWaiterGetProductsInCategory()
-  const { tables } = useWaiterGetTablesinZone()
-
-  const addItem = (item) => {
-    const orderId = tables[tableSelected].order.id
-    const dishId = item.id
-
-    const supplies = item.supplies.map((supply) => ({
-      id: supply.id,
-      quantity: supply.quantity
-    }))
-
-    addDishToOrder({
-      dishId,
-      orderId,
-      supplies
-    })
-  }
-
-  const toggleEnviarComanda = () => {
-    setEnviarComanda(!enviarComanda)
-  }
-
-  const toggleEnviarCuenta = () => {
-    setEnviarCuenta(!enviarCuenta)
-  }
 
   return (
     <View style={styles.container}>
-      <View style={styles.aside}>
-        <ScrollView contentContainerStyle={{ gap: 20, padding: 5 }}>
-          {tables.map((table, i) => {
-            return (
-              <TouchableOpacity onPress={() => { setTableSelected(i) }} style={tableSelected === i ? styles.selectedCircle : styles.circle} key={table.key}>
-                <Text style={styles.text}>
-                  {table.name}
-                </Text>
-              </TouchableOpacity>
-            )
-          })}
-        </ScrollView>
-      </View>
+      <TableList />
 
-      <View style={styles.order}>
-        <TouchableOpacity style={styles.buttons} onPress={toggleEnviarCuenta}>
-          <Text style={styles.text2}>
-            SOLICITAR CUENTA
-          </Text>
-        </TouchableOpacity>
-
-        <View style={{ justifyContent: 'flex-start', height: '70%', alignItems: 'flex-start', width: '100%', paddingHorizontal: 20, gap: 15 }}>
-          <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-            <Text style={styles.title}>
-              CANT.
-            </Text>
-            <Text style={styles.title}>
-              PRODUCTO
-            </Text>
-          </View>
-          <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', width: '100%', paddingHorizontal: 20, flexDirection: 'column', gap: 10 }}>
-            {tableSelected != null && tables[tableSelected].order.dishes.map((dish) => {
-              return (
-                <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '100%' }} key={dish.key}>
-                  <TouchableOpacity style={{ gap: 20, justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '95%' }}>
-                    <Text style={styles.text2}>
-                      {dish?.quantity}
-                    </Text>
-                    <Text style={styles.text2}>
-                      {dish?.name}
-                    </Text>
-                  </TouchableOpacity>
-                  <View>
-                    <TouchableOpacity style={{ width: 24, height: 24 }}>
-                      <SignoMenos fill='#005942' style={{ width: 24, height: 24 }} />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )
-            })}
-          </View>
-
-        </View>
-
-        <TouchableOpacity style={styles.buttons} onPress={toggleEnviarComanda}>
-          <Text style={styles.text2}>
-            ENVIAR COMANDA
-          </Text>
-        </TouchableOpacity>
-
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <SwitchSlider />
-          <Text style={{ color: 'white' }}>COMANDA PRIORITARIA</Text>
-        </View>
-      </View>
+      <OrderSection setEnviarComanda={setEnviarComanda} setEnviarCuenta={setEnviarCuenta} />
 
       <View style={styles.productList}>
         <View style={{ flexDirection: 'row', paddingHorizontal: 20, alignSelf: 'flex-end' }}>
           <TextInput placeholder='BUSCAR' style={styles.buscador} onChangeText={setSearch} />
         </View>
-        <View style={{ flex: 1, flexDirection: 'row', paddingHorizontal: 5 }}>
-          <FlatList
-            contentContainerStyle={{ paddingHorizontal: 10, gap: 15 }}
-            data={dishes}
-            numColumns={2}
-            keyExtractor={item => item.id.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.products}>
-                <TouchableOpacity style={styles.img}>
-                  <Image source={item.picture.startsWith('http') ? item.picture : `${API_URL}/${item.picture}`} style={styles.img} />
-                </TouchableOpacity>
-                <View style={{ flexDirection: 'column', gap: 5, width: 130, height: 100, justifyContent: 'space-between' }}>
-                  <Text style={styles.text}>
-                    {item.name}
-                  </Text>
-                  <Text style={styles.text}>
-                    {item.description}
-                  </Text>
-                  <View style={{ justifyContent: 'flex-end', alignContent: 'flex-end' }}>
-                    <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                      <TouchableOpacity>
-                        <Editar fill='#005942' style={{ width: 24, height: 24 }} />
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={() => addItem(item)}>
-                        <SignoMas fill='#005942' style={{ width: 24, height: 24 }} />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            )}
-          />
-
-        </View>
+        <DishList />
         <Footer />
         {enviarCuenta && (
           <View
@@ -168,7 +41,9 @@ export default function ShowProducts () {
                   ESTAS SEGURO QUE DESEAS ENVIAR LA CUENTA A CAJA?
                 </Text>
                 <TouchableOpacity
-                  onPress={toggleEnviarCuenta}
+                  onPress={() => {
+                    setEnviarCuenta(false)
+                  }}
                 >
                   <Text>
                     SI
@@ -195,7 +70,9 @@ export default function ShowProducts () {
                   ESTAS SEGURO QUE DESEAS ENVIAR LA COMANDA A COCINA?
                 </Text>
                 <TouchableOpacity
-                  onPress={toggleEnviarComanda}
+                  onPress={() => {
+                    setEnviarComanda(false)
+                  }}
                 >
                   <Text>
                     SI
@@ -205,6 +82,7 @@ export default function ShowProducts () {
             </View>
           </View>
         )}
+        <EditProducts />
       </View>
     </View>
   )
@@ -327,6 +205,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: 540,
     height: 100,
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingVertical: 20,
+    gap: 20
+  },
+  modalEditProduct: {
+    backgroundColor: '#fff',
+    width: 540,
+    height: 400,
     flexDirection: 'column',
     alignItems: 'center',
     paddingVertical: 20,
