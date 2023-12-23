@@ -26,7 +26,7 @@ export default function useWaiterGetProductsInCategory (id) {
         }
 
         if (res.status === 404) {
-          setErr('No se encontraron productosa')
+          setErr('No se encontraron productos')
           return { data: [] }
         }
 

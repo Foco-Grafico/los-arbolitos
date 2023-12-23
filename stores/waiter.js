@@ -19,16 +19,27 @@ export const orderStore = create((set, get) => ({
 
   setSelectedPostionTable: (position) => set({ selectedPostionTable: position }),
   setTable: (table) => set({ table }),
-  selectProduct: (productName) => {
+  selectProduct: (productName, isModified) => {
     const { table } = get()
-    console.log('table', 'me ejecute')
 
     set({
-      selectedProducts: table.order.dishes.filter(dish => dish.name === productName),
+      selectedProducts: table.order.dishes.filter(dish => dish.name === productName && Boolean(dish.modified) === isModified),
       isDishSelected: true
     })
   },
   setIsDishSelected: (isDishSelected) => {
     set({ isDishSelected, selectedProducts: [] })
+  },
+  incrementSupplyQuantity: (supplyIndex, productIndex) => {
+    const { selectedProducts } = get()
+    const newSelectedProducts = [...selectedProducts]
+    newSelectedProducts[productIndex].supplies[supplyIndex].quantity++
+    set({ selectedProducts: newSelectedProducts })
+  },
+  decrementSupplyQuantity: (supplyIndex, productIndex) => {
+    const { selectedProducts } = get()
+    const newSelectedProducts = [...selectedProducts]
+    newSelectedProducts[productIndex].supplies[supplyIndex].quantity--
+    set({ selectedProducts: newSelectedProducts })
   }
 }))

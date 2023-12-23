@@ -12,9 +12,8 @@ import { Image } from 'expo-image'
 export default function DishList () {
   const { dishes } = useWaiterGetProductsInCategory()
   const table = orderStore((state) => state.table)
-
   return (
-    <View style={{ flex: 1, flexDirection: 'row', paddingHorizontal: 5 }}>
+    <View style={styles.container}>
       <FlatList
         contentContainerStyle={{ paddingHorizontal: 10, gap: 15 }}
         data={dishes}
@@ -61,7 +60,9 @@ export default function DishList () {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: '100%'
+    height: '100%',
+    flex: 1,
+    paddingHorizontal: 5
   },
   circle: {
     borderRadius: 100,
