@@ -4,6 +4,7 @@ import Home from './src/app/home'
 import Login from './src/app/pages/login'
 import Waiter from './src/app/pages/show-products-for-order'
 import Cashier from './src/app/pages/cashier'
+import Kitchen from './src/app/pages/kitchen'
 import { SetScreenOrientation } from './src/lib/orientation'
 import { LogBox, View } from 'react-native'
 import { routes } from './src/lib/data'
@@ -37,6 +38,9 @@ export default function App () {
       </Route>
       <Route name={routes[4]}>
         <Cashier />
+      </Route>
+      <Route name='kitchen'>
+        <Kitchen />
       </Route>
 
     </View>
