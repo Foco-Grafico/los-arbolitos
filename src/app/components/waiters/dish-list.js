@@ -8,21 +8,39 @@ import { API_URL } from '../../../lib/api-call/data'
 import addDishToOrder from '../../../lib/api-call/order/add-dish-to-order'
 import { orderStore } from '../../../../stores/waiter'
 import { Image } from 'expo-image'
+import { useDeviceType, types } from '../../hooks/device'
 
 export default function DishList () {
   const { dishes } = useWaiterGetProductsInCategory()
   const table = orderStore((state) => state.table)
+  const deviceType = useDeviceType()
+  const isTablet = deviceType === types.TABLET
+
   return (
-    <View style={styles.container}>
+    <View style={{
+      flex: 1,
+      paddingHorizontal: 15
+    }}
+    >
       <FlatList
-        contentContainerStyle={{ paddingHorizontal: 10, gap: 15 }}
+        contentContainerStyle={{ gap: 15 }}
         data={dishes}
         numColumns={2}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.products}>
-            <TouchableOpacity style={styles.img}>
-              <Image source={item.picture.startsWith('http') ? item.picture : `${API_URL}/${item.picture}`} style={styles.img} />
+          <View style={{
+            flexDirection: 'row',
+            gap: 10,
+            padding: 1
+          }}
+          >
+            <TouchableOpacity>
+              <Image
+                source={item.picture.startsWith('http') ? item.picture : `${API_URL}/${item.picture}`} style={{
+                  width: isTablet ? 100 : 60,
+                  height: isTablet ? 100 : 60
+                }}
+              />
             </TouchableOpacity>
             <View style={{ flexDirection: 'column', gap: 5, width: 130, height: 100, justifyContent: 'space-between' }}>
               <Text style={styles.text}>
@@ -59,7 +77,6 @@ export default function DishList () {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: '100%',
     flex: 1,
     paddingHorizontal: 5
   },

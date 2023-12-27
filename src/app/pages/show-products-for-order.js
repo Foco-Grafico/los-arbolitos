@@ -26,8 +26,17 @@ export default function ShowProducts () {
 
       <OrderSection setEnviarComanda={setEnviarComanda} setEnviarCuenta={setEnviarCuenta} />
 
-      <View style={styles.productList}>
-        <View style={{ flexDirection: 'row', paddingHorizontal: 20, alignSelf: 'flex-end' }}>
+      <View style={{
+        backgroundColor: '#fff',
+        flexDirection: 'column',
+        textAlign: 'center',
+        gap: 10,
+        position: 'relative',
+        flex: 1,
+        paddingTop: 20
+      }}
+      >
+        <View style={{ paddingHorizontal: 20, alignSelf: 'flex-end' }}>
           <TextInput placeholder='BUSCAR' style={styles.buscador} onChangeText={setSearch} />
         </View>
         <DishList />
@@ -37,7 +46,6 @@ export default function ShowProducts () {
             animationType='slide'
             transparent
             style={{
-              display: enviarCuenta ? 'flex' : 'none',
               position: 'absolute',
               width: '100%',
               height: '100%'
@@ -223,7 +231,8 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 20
   },
   modalText: {
     color: '#000',
@@ -232,8 +241,7 @@ const styles = StyleSheet.create({
   },
   modalForm: {
     backgroundColor: '#fff',
-    width: 540,
-    height: 100,
+    width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
     paddingVertical: 20,

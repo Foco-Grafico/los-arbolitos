@@ -6,8 +6,8 @@ import Waiter from './src/app/pages/show-products-for-order'
 import Cashier from './src/app/pages/cashier'
 import { SetScreenOrientation } from './src/lib/orientation'
 import { LogBox, View } from 'react-native'
-import Constants from 'expo-constants'
 import { routes } from './src/lib/data'
+import { StatusBar } from 'expo-status-bar'
 
 LogBox.ignoreLogs(['new NativeEventEmitter', 'Aborted'])
 
@@ -22,10 +22,10 @@ export default function App () {
   return (
     <View
       style={{
-        flex: 1,
-        paddingTop: Constants.statusBarHeight
+        flex: 1
       }}
     >
+      <StatusBar hidden />
       <Route name='home'>
         <Home />
       </Route>

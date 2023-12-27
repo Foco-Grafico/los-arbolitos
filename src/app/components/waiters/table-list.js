@@ -1,5 +1,5 @@
 import useWaiterGetTablesinZone from '../../hooks/getTablesbyZone'
-import { Text, View, ScrollView, TouchableOpacity, StyleSheet } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
 import { orderStore } from '../../../../stores/waiter'
 
 export default function TableList () {
@@ -8,8 +8,24 @@ export default function TableList () {
   const tableSelected = orderStore((state) => state.selectedPostionTable)
 
   return (
-    <View style={styles.aside}>
-      <ScrollView contentContainerStyle={{ gap: 20, padding: 5 }}>
+    <View style={{
+      backgroundColor: '#005943',
+      paddingVertical: 10,
+      paddingHorizontal: 8
+    }}
+    >
+      <FlatList
+        data={tables}
+        contentContainerStyle={{ gap: 10 }}
+        renderItem={({ item: table, index: i }) => (
+          <TouchableOpacity onPress={() => { setTableSelected(i) }} style={tableSelected === i ? styles.selectedCircle : styles.circle} key={table.key}>
+            <Text style={styles.text}>
+              {table.name}
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
+      {/* <ScrollView contentContainerStyle={{ gap: 20 }}>
         {tables.map((table, i) => {
           return (
             <TouchableOpacity onPress={() => { setTableSelected(i) }} style={tableSelected === i ? styles.selectedCircle : styles.circle} key={table.key}>
@@ -19,7 +35,7 @@ export default function TableList () {
             </TouchableOpacity>
           )
         })}
-      </ScrollView>
+      </ScrollView> */}
     </View>
   )
 }

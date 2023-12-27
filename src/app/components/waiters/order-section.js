@@ -1,6 +1,6 @@
 import { TouchableOpacity, Text, View, StyleSheet } from 'react-native'
 import SwitchSlider from '../switch-slider'
-// import DishListInOrder from './dish-list-in-order'
+import DishListInOrder from './dish-list-in-order'
 import { orderStore } from '../../../../stores/waiter'
 
 export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
@@ -24,17 +24,28 @@ export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
       alignItems: 'center',
       backgroundColor: '#b89c98',
       paddingVertical: 20,
-      gap: 10
+      gap: 10,
+      paddingHorizontal: 15
     }}
     >
-      <TouchableOpacity style={styles.buttons} onPress={toggleEnviarCuenta}>
+      <TouchableOpacity
+        style={{
+          backgroundColor: '#005943',
+          borderRadius: 10,
+          fontSize: 20,
+          elevation: 10,
+          textAlign: 'center',
+          width: '100%',
+          paddingVertical: 5
+        }} onPress={toggleEnviarCuenta}
+      >
         <Text style={styles.text2}>
           SOLICITAR CUENTA
         </Text>
       </TouchableOpacity>
 
       <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', paddingHorizontal: 20, gap: 15, flex: 1, width: '100%' }}>
-        <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+        <View style={{ flexDirection: 'row', gap: 10 }}>
           <Text style={styles.title}>
             CANT.
           </Text>
@@ -42,15 +53,27 @@ export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
             PRODUCTO
           </Text>
         </View>
-        {/* <DishListInOrder /> */}
+        <DishListInOrder />
       </View>
 
       <View
         style={{
-          alignItems: 'center'
+          alignItems: 'center',
+          width: '100%',
+          gap: 10
         }}
       >
-        <TouchableOpacity style={styles.buttons} onPress={toggleEnviarComanda(table?.order?.id)}>
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#005943',
+            borderRadius: 10,
+            fontSize: 20,
+            elevation: 10,
+            textAlign: 'center',
+            width: '100%',
+            paddingVertical: 5
+          }} onPress={toggleEnviarComanda(table?.order?.id)}
+        >
           <Text style={styles.text2}>
             ENVIAR COMANDA
           </Text>
