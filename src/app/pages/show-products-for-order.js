@@ -6,10 +6,13 @@ import EditProducts from '../components/waiters/edit-products'
 import TableList from '../components/waiters/table-list'
 import OrderSection from '../components/waiters/order-section'
 import DishList from '../components/waiters/dish-list'
-import { sendTokitchen } from '../../lib/api-call/order/move-order'
+import { sendToCashier, sendTokitchen } from '../../lib/api-call/order/move-order'
 
 export default function ShowProducts () {
-  const [enviarCuenta, setEnviarCuenta] = useState(false)
+  const [enviarCuenta, setEnviarCuenta] = useState({
+    show: false,
+    orderId: null
+  })
   const [enviarComanda, setEnviarComanda] = useState({
     show: false,
     orderId: null
@@ -26,18 +29,24 @@ export default function ShowProducts () {
 
       <OrderSection setEnviarComanda={setEnviarComanda} setEnviarCuenta={setEnviarCuenta} />
 
-      <View style={styles.productList}>
-        <View style={{ flexDirection: 'row', paddingHorizontal: 20, alignSelf: 'flex-end' }}>
+      <View style={{
+        backgroundColor: '#fff',
+        flexDirection: 'column',
+        textAlign: 'center',
+        gap: 10,
+        position: 'relative',
+        flex: 1,
+        paddingTop: 20
+      }}
+      >
+        <View style={{ paddingHorizontal: 20, alignSelf: 'flex-end' }}>
           <TextInput placeholder='BUSCAR' style={styles.buscador} onChangeText={setSearch} />
         </View>
         <DishList />
         <Footer />
-        {enviarCuenta && (
+        {enviarCuenta.show && (
           <View
-            animationType='slide'
-            transparent
             style={{
-              display: enviarCuenta ? 'flex' : 'none',
               position: 'absolute',
               width: '100%',
               height: '100%'
@@ -48,15 +57,39 @@ export default function ShowProducts () {
                 <Text style={styles.modalText}>
                   ESTAS SEGURO QUE DESEAS ENVIAR LA CUENTA A CAJA?
                 </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    setEnviarCuenta(false)
-                  }}
+                <View style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  width: '100%'
+                }}
                 >
-                  <Text>
-                    SI
-                  </Text>
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setEnviarCuenta(prev => ({
+                        ...prev,
+                        show: false
+                      }))
+                    }}
+                  >
+                    <Text>
+                      NO
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      sendToCashier(enviarComanda.orderId)
+                        .catch(err => console.log(err))
+                      setEnviarCuenta(prev => ({
+                        ...prev,
+                        show: false
+                      }))
+                    }}
+                  >
+                    <Text>
+                      SI
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
@@ -100,6 +133,10 @@ export default function ShowProducts () {
                     onPress={() => {
                       sendTokitchen(enviarComanda.orderId)
                         .catch(err => console.log(err))
+                      setEnviarComanda(prev => ({
+                        ...prev,
+                        show: false
+                      }))
                     }}
                   >
                     <Text>
@@ -223,7 +260,8 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 20
   },
   modalText: {
     color: '#000',
@@ -232,8 +270,7 @@ const styles = StyleSheet.create({
   },
   modalForm: {
     backgroundColor: '#fff',
-    width: 540,
-    height: 100,
+    width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
     paddingVertical: 20,

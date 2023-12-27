@@ -55,35 +55,65 @@ export default function DishListInOrder () {
   }
 
   return (
-    <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', width: '100%', paddingHorizontal: 20, flexDirection: 'column', gap: 10 }}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 35, gap: 5 }}>
-        {dishes.map((dish, i) => {
-          return (
-            <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '90%' }} key={dish.key}>
-              <TouchableOpacity
-                style={{ gap: 20, justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '95%' }}
-                onPress={() => selectProduct(dish.originalName, dish.isModified)}
-                disabled={isDishSelected}
-              >
-                <Text style={styles.text2}>
-                  {dish?.quantity}
-                </Text>
-                <Text style={styles.text2}>
-                  {dish?.name}
-                </Text>
-              </TouchableOpacity>
-              <View>
-                <TouchableOpacity
-                  style={{ width: 24, height: 24 }} onPress={handleRemoveItem(dish.id, i)} disabled={isDishSelected}
-                >
-                  <SignoMenos fill='#005942' style={{ width: 24, height: 24 }} />
-                </TouchableOpacity>
-              </View>
-            </View>
-          )
-        })}
-      </ScrollView>
-    </View>
+    <ScrollView
+      style={{ width: '100%' }}
+      contentContainerStyle={{
+        flex: 1
+      }}
+    >
+      {dishes.map((dish, i) => (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 10 }} key={dish.key}>
+          <TouchableOpacity
+            style={{ gap: 36, flexDirection: 'row' }}
+            onPress={() => selectProduct(dish.originalName, dish.isModified)}
+            disabled={isDishSelected}
+          >
+            <Text style={styles.text2}>
+              {dish?.quantity}
+            </Text>
+            <Text style={styles.text2}>
+              {dish?.name}
+            </Text>
+          </TouchableOpacity>
+          <View>
+            <TouchableOpacity
+              style={{ width: 24, height: 24 }} onPress={handleRemoveItem(dish.id, i)} disabled={isDishSelected}
+            >
+              <SignoMenos fill='#005942' style={{ width: 24, height: 24 }} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      ))}
+    </ScrollView>
+    // <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', width: '100%', paddingHorizontal: 20, flexDirection: 'column', gap: 10 }}>
+    //   <ScrollView contentContainerStyle={{ paddingBottom: 35, gap: 5 }}>
+    //     {dishes.map((dish, i) => {
+    //       return (
+    //         <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '90%' }} key={dish.key}>
+    //           <TouchableOpacity
+    //             style={{ gap: 20, justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '95%' }}
+    //             onPress={() => selectProduct(dish.originalName, dish.isModified)}
+    //             disabled={isDishSelected}
+    //           >
+    //             <Text style={styles.text2}>
+    //               {dish?.quantity}
+    //             </Text>
+    //             <Text style={styles.text2}>
+    //               {dish?.name}
+    //             </Text>
+    //           </TouchableOpacity>
+    //           <View>
+    //             <TouchableOpacity
+    //               style={{ width: 24, height: 24 }} onPress={handleRemoveItem(dish.id, i)} disabled={isDishSelected}
+    //             >
+    //               <SignoMenos fill='#005942' style={{ width: 24, height: 24 }} />
+    //             </TouchableOpacity>
+    //           </View>
+    //         </View>
+    //       )
+    //     })}
+    //   </ScrollView>
+    // </View>
   )
 }
 

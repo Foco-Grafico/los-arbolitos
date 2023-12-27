@@ -213,7 +213,8 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: 10
   },
   buscador: {
     borderWidth: 1,
@@ -239,11 +240,12 @@ const styles = StyleSheet.create({
   },
   modalEditProduct: {
     backgroundColor: '#fff',
-    width: 550,
-    height: 500,
+    width: '100%',
+    height: '100%',
     flexDirection: 'column',
     alignItems: 'center',
     paddingVertical: 20,
+    paddingHorizontal: 10,
     gap: 20
   },
   modalObject: {
