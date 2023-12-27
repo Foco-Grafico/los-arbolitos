@@ -6,10 +6,13 @@ import EditProducts from '../components/waiters/edit-products'
 import TableList from '../components/waiters/table-list'
 import OrderSection from '../components/waiters/order-section'
 import DishList from '../components/waiters/dish-list'
-import { sendTokitchen } from '../../lib/api-call/order/move-order'
+import { sendToCashier, sendTokitchen } from '../../lib/api-call/order/move-order'
 
 export default function ShowProducts () {
-  const [enviarCuenta, setEnviarCuenta] = useState(false)
+  const [enviarCuenta, setEnviarCuenta] = useState({
+    show: false,
+    orderId: null
+  })
   const [enviarComanda, setEnviarComanda] = useState({
     show: false,
     orderId: null
@@ -41,10 +44,8 @@ export default function ShowProducts () {
         </View>
         <DishList />
         <Footer />
-        {enviarCuenta && (
+        {enviarCuenta.show && (
           <View
-            animationType='slide'
-            transparent
             style={{
               position: 'absolute',
               width: '100%',
@@ -56,15 +57,35 @@ export default function ShowProducts () {
                 <Text style={styles.modalText}>
                   ESTAS SEGURO QUE DESEAS ENVIAR LA CUENTA A CAJA?
                 </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    setEnviarCuenta(false)
-                  }}
+                <View style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  width: '100%'
+                }}
                 >
-                  <Text>
-                    SI
-                  </Text>
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setEnviarCuenta(prev => ({
+                        ...prev,
+                        show: false
+                      }))
+                    }}
+                  >
+                    <Text>
+                      NO
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      sendToCashier(enviarComanda.orderId)
+                        .catch(err => console.log(err))
+                    }}
+                  >
+                    <Text>
+                      SI
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>

@@ -13,8 +13,11 @@ export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
     }))
   }
 
-  const toggleEnviarCuenta = () => {
-    setEnviarCuenta(prev => !prev)
+  const toggleEnviarCuenta = (id) => () => {
+    setEnviarCuenta(prev => ({
+      show: !prev.show,
+      orderId: id
+    }))
   }
 
   return (
@@ -37,7 +40,7 @@ export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
           textAlign: 'center',
           width: '100%',
           paddingVertical: 5
-        }} onPress={toggleEnviarCuenta}
+        }} onPress={toggleEnviarCuenta(table?.order?.id)}
       >
         <Text style={styles.text2}>
           SOLICITAR CUENTA
