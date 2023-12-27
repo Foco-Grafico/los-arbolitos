@@ -17,7 +17,11 @@ export default function ShowProducts () {
   const setSearch = waiterStore(state => state.setSearch)
 
   return (
-    <View style={styles.container}>
+    <View style={{
+      flexDirection: 'row',
+      flex: 1
+    }}
+    >
       <TableList />
 
       <OrderSection setEnviarComanda={setEnviarComanda} setEnviarCuenta={setEnviarCuenta} />

@@ -1,6 +1,6 @@
 import { TouchableOpacity, Text, View, StyleSheet } from 'react-native'
 import SwitchSlider from '../switch-slider'
-import DishListInOrder from './dish-list-in-order'
+// import DishListInOrder from './dish-list-in-order'
 import { orderStore } from '../../../../stores/waiter'
 
 export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
@@ -18,14 +18,22 @@ export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
   }
 
   return (
-    <View style={styles.order}>
+    <View style={{
+      width: 'auto',
+      borderWidth: 1,
+      alignItems: 'center',
+      backgroundColor: '#b89c98',
+      paddingVertical: 20,
+      gap: 10
+    }}
+    >
       <TouchableOpacity style={styles.buttons} onPress={toggleEnviarCuenta}>
         <Text style={styles.text2}>
           SOLICITAR CUENTA
         </Text>
       </TouchableOpacity>
 
-      <View style={{ justifyContent: 'flex-start', height: '70%', alignItems: 'flex-start', width: '100%', paddingHorizontal: 20, gap: 15 }}>
+      <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', paddingHorizontal: 20, gap: 15, flex: 1, width: '100%' }}>
         <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
           <Text style={styles.title}>
             CANT.
@@ -34,18 +42,24 @@ export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
             PRODUCTO
           </Text>
         </View>
-        <DishListInOrder />
+        {/* <DishListInOrder /> */}
       </View>
 
-      <TouchableOpacity style={styles.buttons} onPress={toggleEnviarComanda(table?.order?.id)}>
-        <Text style={styles.text2}>
-          ENVIAR COMANDA
-        </Text>
-      </TouchableOpacity>
+      <View
+        style={{
+          alignItems: 'center'
+        }}
+      >
+        <TouchableOpacity style={styles.buttons} onPress={toggleEnviarComanda(table?.order?.id)}>
+          <Text style={styles.text2}>
+            ENVIAR COMANDA
+          </Text>
+        </TouchableOpacity>
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-        <SwitchSlider />
-        <Text style={{ color: 'white' }}>COMANDA PRIORITARIA</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <SwitchSlider />
+          <Text style={{ color: 'white' }}>COMANDA PRIORITARIA</Text>
+        </View>
       </View>
     </View>
   )

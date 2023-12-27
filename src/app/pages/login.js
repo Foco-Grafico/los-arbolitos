@@ -8,6 +8,7 @@ import Ok from '../../../assets/ok'
 import No from '../../../assets/no'
 import { Image } from 'expo-image'
 import Rest from '../../../assets/rest.jpg'
+import { routes } from '../../lib/data'
 
 export default function Login () {
   const nav = routerStore(state => state.nav)
@@ -35,7 +36,7 @@ export default function Login () {
       setStatus('success')
 
       setTimeout(() => {
-        nav('show-products')
+        nav(routes[user.type.id])
       }, 2000)
     })
   }, [authParams])
