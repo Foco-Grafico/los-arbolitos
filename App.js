@@ -27,9 +27,9 @@ export default function App () {
         paddingTop: Constants.statusBarHeight
       }}
     >
-      <Route name='home'>
+      {/* <Route name='home'>
         <Home />
-      </Route>
+      </Route> */}
       <Route name='login'>
         <Login />
       </Route>
@@ -39,7 +39,7 @@ export default function App () {
       <Route name={routes[4]}>
         <Cashier />
       </Route>
-      <Route name='kitchen'>
+      <Route name={routes[3]}>
         <Kitchen />
       </Route>
 
