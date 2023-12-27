@@ -35,7 +35,7 @@ export default function Login () {
       setStatus('success')
 
       setTimeout(() => {
-        nav('show-products')
+        nav('kitchen')
       }, 2000)
     })
   }, [authParams])
