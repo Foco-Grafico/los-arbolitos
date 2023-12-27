@@ -79,6 +79,10 @@ export default function ShowProducts () {
                     onPress={() => {
                       sendToCashier(enviarComanda.orderId)
                         .catch(err => console.log(err))
+                      setEnviarCuenta(prev => ({
+                        ...prev,
+                        show: false
+                      }))
                     }}
                   >
                     <Text>
@@ -129,6 +133,10 @@ export default function ShowProducts () {
                     onPress={() => {
                       sendTokitchen(enviarComanda.orderId)
                         .catch(err => console.log(err))
+                      setEnviarComanda(prev => ({
+                        ...prev,
+                        show: false
+                      }))
                     }}
                   >
                     <Text>
