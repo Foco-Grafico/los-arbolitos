@@ -8,19 +8,35 @@ import SignoMas from '../../../../assets/signodemas'
 import useGetSupplies from '../../hooks/getSupplies'
 import { useState } from 'react'
 import debounce from 'just-debounce-it'
+import { modifyDish } from '../../../lib/api-call/order/modify-dish'
 
 export default function EditProducts () {
-  const { isDishSelected, setIsDishSelected, selectedProducts } = orderStore((state) => ({
+  const { isDishSelected, setIsDishSelected, selectedProducts, addSupplyToProduct, table } = orderStore((state) => ({
     isDishSelected: state.isDishSelected,
     setIsDishSelected: state.setIsDishSelected,
-    selectedProducts: state.selectedProducts
+    selectedProducts: state.selectedProducts,
+    addSupplyToProduct: state.addSupplyToProduct,
+    table: state.table
   }))
   const [query, setQuery] = useState(null)
   const { supplies, setView } = useGetSupplies({ q: query })
-  console.log('supplies', supplies)
 
   const toggleModificarPlatillo = () => {
     setIsDishSelected(false)
+
+    for (const product of selectedProducts) {
+      const supplies = product.supplies.map(supply => ({
+        id: supply.id,
+        quantity: supply.quantity
+      }))
+
+      console.log(supplies)
+
+      modifyDish(table?.order?.id, product.id, supplies)
+        .catch((error) => {
+          console.log(error)
+        })
+    }
   }
 
   const debouncedSetQ = debounce(setQuery, 400)
@@ -28,8 +44,6 @@ export default function EditProducts () {
   if (isDishSelected) {
     return (
       <View
-        animationType='slide'
-        transparent
         style={{
           position: 'absolute',
           width: '100%',
@@ -40,9 +54,21 @@ export default function EditProducts () {
         <View style={styles.modal}>
           <View style={styles.modalEditProduct}>
             <ScrollView
+              onScroll={() => {
+                setView(false)
+              }}
               contentContainerStyle={{ }}
             >
-              {selectedProducts.map((item, i) => <Product suppliesSetView={setView} setQ={debouncedSetQ} supplies={supplies} key={i} product={item} index={i} />)}
+              {selectedProducts.map((item, i) => (
+                <Product
+                  addSupplyToProduct={addSupplyToProduct}
+                  suppliesSetView={setView} setQ={debouncedSetQ}
+                  supplies={supplies}
+                  key={i}
+                  product={item}
+                  index={i}
+                />
+              ))}
             </ScrollView>
             <TouchableOpacity
               onPress={toggleModificarPlatillo}
@@ -56,7 +82,7 @@ export default function EditProducts () {
   }
 }
 
-const Product = ({ product, index, setQ, supplies, suppliesSetView }) => {
+const Product = ({ product, index, setQ, supplies, suppliesSetView, addSupplyToProduct }) => {
   return (
     <View style={styles.modalObject}>
       <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
@@ -66,34 +92,66 @@ const Product = ({ product, index, setQ, supplies, suppliesSetView }) => {
           </Text>
           <Eliminar style={{ width: 24, height: 24 }} />
         </View>
-        <View style={{ flexDirection: 'row', paddingHorizontal: 20, alignSelf: 'flex-start', position: 'relative' }}>
+        <View style={{ flexDirection: 'row', paddingHorizontal: 20, position: 'relative' }}>
           <TextInput
-            onFocus={() => {
-              suppliesSetView(true)
-            }}
-            onBlur={() => {
-              suppliesSetView(false)
-            }}
             onChangeText={(text) => {
+              suppliesSetView(true)
               setQ(text)
             }}
             placeholder='BUSCAR'
             placeholderTextColor='#005943'
             style={styles.buscador}
           />
-          <View style={{ position: 'absolute', right: 10, top: 10 }}>
-            {supplies.map((supply, i) => {
-              return (
-                <TouchableOpacity style={{ width: 100, color: '#005943', fontSize: 15, fontWeight: 'bold', top: 10 }} key={supply.key}>
-                  {supply != null ? <Text>{supply?.name}</Text> : null}
-                </TouchableOpacity>
-              )
-            })}
-            {supplies?.name}
-          </View>
+          {supplies.length > 0 && (
+            <View style={{
+              position: 'absolute',
+              top: '105%',
+              width: '100%',
+              left: 20,
+              maxHeight: 110,
+              backgroundColor: '#8d89898a',
+              borderRadius: 5,
+              gap: 5,
+              paddingVertical: 5,
+              overflow: 'hidden'
+            }}
+            >
+              {supplies.map((supply, i) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      const newSupply = {
+                        extra_cost: 0,
+                        id: supply.id,
+                        key: `${supply.key + i}`,
+                        name: supply.name,
+                        quantity: 1
+                      }
+
+                      addSupplyToProduct(newSupply, index)
+                      suppliesSetView(false)
+                    }}
+                    style={{ width: '100%', paddingHorizontal: 10 }} key={supply.key}
+                  >
+                    {supply != null
+                      ? (
+                        <Text style={{
+                          fontSize: 15,
+                          fontWeight: 'bold'
+                        }}
+                        >
+                          {supply?.name}
+                        </Text>
+                        )
+                      : null}
+                  </TouchableOpacity>
+                )
+              })}
+              {supplies?.name}
+            </View>
+          )}
         </View>
       </View>
-      {/* Create a supply list container with a style group in two columns */}
       <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
         {product.supplies.map((supply, i) => <Supply key={supply.key} supply={supply} productIndex={index} index={i} />)}
       </View>

@@ -1,10 +1,16 @@
 import { TouchableOpacity, Text, View, StyleSheet } from 'react-native'
 import SwitchSlider from '../switch-slider'
 import DishListInOrder from './dish-list-in-order'
+import { orderStore } from '../../../../stores/waiter'
 
 export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
-  const toggleEnviarComanda = () => {
-    setEnviarComanda(prev => !prev)
+  const table = orderStore(state => state.table)
+
+  const toggleEnviarComanda = (id) => () => {
+    setEnviarComanda(prev => ({
+      show: !prev.show,
+      orderId: id
+    }))
   }
 
   const toggleEnviarCuenta = () => {
@@ -31,7 +37,7 @@ export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
         <DishListInOrder />
       </View>
 
-      <TouchableOpacity style={styles.buttons} onPress={toggleEnviarComanda}>
+      <TouchableOpacity style={styles.buttons} onPress={toggleEnviarComanda(table?.order?.id)}>
         <Text style={styles.text2}>
           ENVIAR COMANDA
         </Text>

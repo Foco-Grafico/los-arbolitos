@@ -40,6 +40,26 @@ export const orderStore = create((set, get) => ({
     const { selectedProducts } = get()
     const newSelectedProducts = [...selectedProducts]
     newSelectedProducts[productIndex].supplies[supplyIndex].quantity--
+
+    if (newSelectedProducts[productIndex].supplies[supplyIndex].quantity === 0) {
+      newSelectedProducts[productIndex].supplies.splice(supplyIndex, 1)
+    }
+
+    set({ selectedProducts: newSelectedProducts })
+  },
+  addSupplyToProduct: (supply, productIndex) => {
+    const { selectedProducts } = get()
+    const newSelectedProducts = [...selectedProducts]
+
+    const supplyIndex = newSelectedProducts[productIndex].supplies.findIndex(s => s.id === supply.id)
+
+    if (supplyIndex !== -1) {
+      // newSelectedProducts[productIndex].supplies[supplyIndex].quantity++
+      // set({ selectedProducts: newSelectedProducts })
+      return
+    }
+
+    newSelectedProducts[productIndex].supplies.push(supply)
     set({ selectedProducts: newSelectedProducts })
   }
 }))

@@ -37,6 +37,8 @@ export default function DishList () {
                     <Editar fill='#005942' style={{ width: 24, height: 24 }} />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => {
+                    console.log(item.supplies)
+
                     addDishToOrder({
                       dishId: item.id,
                       orderId: table.order.id,

@@ -6,10 +6,14 @@ import EditProducts from '../components/waiters/edit-products'
 import TableList from '../components/waiters/table-list'
 import OrderSection from '../components/waiters/order-section'
 import DishList from '../components/waiters/dish-list'
+import { sendTokitchen } from '../../lib/api-call/order/move-order'
 
 export default function ShowProducts () {
   const [enviarCuenta, setEnviarCuenta] = useState(false)
-  const [enviarComanda, setEnviarComanda] = useState(false)
+  const [enviarComanda, setEnviarComanda] = useState({
+    show: false,
+    orderId: null
+  })
   const setSearch = waiterStore(state => state.setSearch)
 
   return (
@@ -53,7 +57,7 @@ export default function ShowProducts () {
             </View>
           </View>
         )}
-        {enviarComanda && (
+        {enviarComanda.show && (
           <View
             animationType='slide'
             transparent
@@ -69,15 +73,36 @@ export default function ShowProducts () {
                 <Text style={styles.modalText}>
                   ESTAS SEGURO QUE DESEAS ENVIAR LA COMANDA A COCINA?
                 </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    setEnviarComanda(false)
-                  }}
+
+                <View style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  width: '100%'
+                }}
                 >
-                  <Text>
-                    SI
-                  </Text>
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setEnviarComanda(prev => ({
+                        ...prev,
+                        show: false
+                      }))
+                    }}
+                  >
+                    <Text>
+                      NO
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      sendTokitchen(enviarComanda.orderId)
+                        .catch(err => console.log(err))
+                    }}
+                  >
+                    <Text>
+                      SI
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
