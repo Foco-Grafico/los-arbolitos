@@ -26,6 +26,6 @@ export default function useKitchenGetOrders () {
   }, [])
 
   return {
-    orders
+    orders, setOrders
   }
 }

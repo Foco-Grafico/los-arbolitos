@@ -16,18 +16,17 @@ export default function NavBarKitchen ({ mesero, mesa }) {
 }
 
 const styles = StyleSheet.create({
-
   bar: {
     backgroundColor: '#005942',
     alignItems: 'center',
     justifyContent: 'space-around',
     flexDirection: 'row',
     width: '100%',
-    paddingVertical: 10
+    paddingVertical: 15
   },
   circle: {
-    width: 75,
-    height: 75,
+    width: 40,
+    height: 40,
     borderRadius: 100 / 2,
     justifyContent: 'center',
     backgroundColor: 'white'
