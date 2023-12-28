@@ -1,25 +1,30 @@
-// import { Image } from 'expo-image'
 import { Image } from 'expo-image'
 import { StyleSheet, Text, View } from 'react-native'
 import Aceptar from '../../../../assets/aceptar'
+import { kitchenStore } from '../../../../stores/kitchen'
+import { API_URL } from '../../../lib/api-call/data'
+import Estrella from '../../../../assets/estrella'
 
-export default function ActualDish ({ dish }) {
+export default function ActualDish () {
+  const dish = kitchenStore(state => state.selectedDish)
+  console.log(dish.priority)
+
   return (
     <View style={styles.product}>
-      {/* <Image source={item.picture.startsWith('http') ? item.picture : `${API_URL}/${item.picture}`} style={styles.img} /> */}
       <View style={{ flexDirection: 'row' }}>
-        <Image source={require('../../../../assets/splash.png')} style={styles.img} />
+        <Image source={dish?.picture?.startsWith('http') ? dish?.picture : `${API_URL}/${dish?.picture}`} style={styles.img} />
+        {dish.priority && <Estrella style={{ width: 24, height: 24, position: 'absolute', right: 0 }} />}
         <View style={{ flexDirection: 'column' }}>
-          <Text style={styles.text}>{dish.name}</Text>
-          <Text> {dish.description} </Text>
+          <Text style={styles.text}>{dish?.name}</Text>
+          <Text> {dish?.description} </Text>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.text}>Cantidad ({dish.quantity})</Text>
+          <Text style={styles.text}>Cantidad ({dish?.quantity})</Text>
         </View>
       </View>
       <View style={styles.observations}>
         <Text style={{ color: '#005943', fontWeight: 'black', fontSize: 12 }}>OBSERVACIONES</Text>
-        <Text style={styles.text}>{dish.observations}</Text>
+        <Text style={styles.text}>{dish?.observations}</Text>
       </View>
       <Aceptar style={{ width: 24, height: 24 }} />
     </View>

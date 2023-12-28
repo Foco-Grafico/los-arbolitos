@@ -2,20 +2,16 @@ import { StyleSheet, View } from 'react-native'
 import NavBarKitchen from '../components/kitchen/navBar'
 import ActualDish from '../components/kitchen/actual-dish'
 import OrderList from '../components/kitchen/order-list'
+import { accountStore } from '../../../stores/account'
 
 export default function Kitchen () {
+  const account = accountStore(state => state.account)
+
   return (
     <View style={styles.container}>
-      <NavBarKitchen />
+      <NavBarKitchen mesero={account.name} />
       <View style={styles.container}>
-        <ActualDish dish={{
-          name: 'Hamburguesa',
-          quantity: 1,
-          status: 'En proceso',
-          description: 'Sin crema',
-          observations: 'Sin crema'
-        }}
-        />
+        <ActualDish />
       </View>
       <OrderList />
       <View style={styles.footer} />

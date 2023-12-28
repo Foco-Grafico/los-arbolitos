@@ -1,14 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 
-export default function NavBarKitchen () {
-  const mesero = 'Juan'
-  const mesa = '1'
-
+export default function NavBarKitchen ({ mesero, mesa }) {
   return (
     <View style={styles.bar}>
       <Text style={styles.text}>MESERO {mesero}</Text>
       <View style={styles.barright}>
-        <Text style={styles.text}>ORDEN DE LA MESA {mesa}</Text>
+        <Text style={styles.text}>ORDEN DE LA MESA</Text>
         <View style={styles.circle}>
           <Text style={styles.circleText}>{mesa}</Text>
         </View>
