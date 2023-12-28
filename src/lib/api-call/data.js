@@ -7,5 +7,6 @@ export const APIENDPOINTS = {
   setSupply: `${API_URL}/dishes/supply/`,
   getTablesbyZone: (waiterId) => `${API_URL}/zones/table/${waiterId}`,
   addDishToOrder: (dishId, orderId) => `${API_URL}/orders/${orderId}/dish/${dishId}`,
-  getSupplies: `${API_URL}/supplies`
+  getSupplies: `${API_URL}/supplies`,
+  getOrdersKitchen: `${API_URL}/kitchen`
 }

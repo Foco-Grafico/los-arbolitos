@@ -39,7 +39,7 @@ export default function App () {
       <Route name={routes[4]}>
         <Cashier />
       </Route>
-      <Route name='kitchen'>
+      <Route name={routes[3]}>
         <Kitchen />
       </Route>
 
