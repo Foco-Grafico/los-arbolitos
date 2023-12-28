@@ -17,11 +17,14 @@ const validateParams = z.object({
   dishId: z.number({
     coerce: true
   }).int(),
-  listSupply: listSupplySchema.array()
+  listSupply: listSupplySchema.array(),
+  priority: z.number({
+    coerce: true
+  }).int()
 })
 
-export const modifyDish = async (orderId, dishId, listSupply) => {
-  const safeParams = validateParams.safeParse({ orderId, dishId, listSupply })
+export const modifyDish = async (orderId, dishId, listSupply, priority) => {
+  const safeParams = validateParams.safeParse({ orderId, dishId, listSupply, priority })
 
   if (!safeParams.success) {
     globalThis.alert(`Parámetros inválidos ${safeParams.error.message}`)
@@ -31,14 +34,15 @@ export const modifyDish = async (orderId, dishId, listSupply) => {
   const {
     orderId: safeOrderId,
     dishId: safeDishId,
-    listSupply: safeListSupply
+    listSupply: safeListSupply,
+    priority: safePriority
   } = safeParams.data
 
   const headers = new Headers()
   headers.append('Content-Type', 'application/json')
   headers.append('Accept', 'application/json')
 
-  const res = await fetch(`${API_URL}/orders/${safeOrderId}/dish/${safeDishId}`, {
+  const res = await fetch(`${API_URL}/orders/${safeOrderId}/dish/${safeDishId}?priority=${safePriority}`, {
     method: 'PUT',
     headers,
     body: JSON.stringify(safeListSupply)

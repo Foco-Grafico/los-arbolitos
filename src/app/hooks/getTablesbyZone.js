@@ -60,6 +60,28 @@ export default function useWaiterGetTablesinZone () {
       })
     })
 
+    socket.on(SOCKETS.update_priority, ({ id, priority }) => {
+      console.log(id, priority)
+
+      setTables(prev => {
+        const copyPrev = [...prev]
+        const tableIndex = copyPrev.findIndex((table) => table.order.id === id)
+
+        const table = copyPrev[tableIndex]
+        const newTable = {
+          ...table,
+          order: {
+            ...table.order,
+            priority
+          }
+        }
+
+        copyPrev[tableIndex] = newTable
+
+        return copyPrev
+      })
+    })
+
     return () => {
       socket.disconnect()
     }

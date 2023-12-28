@@ -51,7 +51,14 @@ export default function DishList () {
               </Text>
               <View style={{ justifyContent: 'flex-end', alignContent: 'flex-end' }}>
                 <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      // orderStore.setState({
+                      //   selectedProducts: item,
+                      //   isDishSelected: true
+                      // })
+                    }}
+                  >
                     <Editar fill='#005942' style={{ width: 24, height: 24 }} />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => {

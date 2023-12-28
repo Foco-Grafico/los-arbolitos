@@ -23,7 +23,7 @@ export const orderStore = create((set, get) => ({
     const { table } = get()
 
     set({
-      selectedProducts: table.order.dishes.filter(dish => dish.name === productName && Boolean(dish.modified) === isModified),
+      selectedProducts: table.order.dishes.filter(dish => dish.name === productName && dish.modified === isModified),
       isDishSelected: true
     })
   },
@@ -32,12 +32,36 @@ export const orderStore = create((set, get) => ({
   },
   incrementSupplyQuantity: (supplyIndex, productIndex) => {
     const { selectedProducts } = get()
+
+    // if (!Array.isArray(selectedProducts)) {
+    //   const newSelectedProducts = { ...selectedProducts }
+    //   newSelectedProducts.supplies[supplyIndex].quantity++
+
+    //   set({ selectedProducts: newSelectedProducts })
+
+    //   return
+    // }
+
     const newSelectedProducts = [...selectedProducts]
     newSelectedProducts[productIndex].supplies[supplyIndex].quantity++
     set({ selectedProducts: newSelectedProducts })
   },
   decrementSupplyQuantity: (supplyIndex, productIndex) => {
     const { selectedProducts } = get()
+
+    // if (!Array.isArray(selectedProducts)) {
+    //   const newSelectedProducts = { ...selectedProducts }
+    //   newSelectedProducts.supplies[supplyIndex].quantity--
+
+    //   if (newSelectedProducts.supplies[supplyIndex].quantity === 0) {
+    //     newSelectedProducts.supplies.splice(supplyIndex, 1)
+    //   }
+
+    //   set({ selectedProducts: newSelectedProducts })
+
+    //   return
+    // }
+
     const newSelectedProducts = [...selectedProducts]
     newSelectedProducts[productIndex].supplies[supplyIndex].quantity--
 
@@ -49,6 +73,21 @@ export const orderStore = create((set, get) => ({
   },
   addSupplyToProduct: (supply, productIndex) => {
     const { selectedProducts } = get()
+
+    // if (!Array.isArray(selectedProducts)) {
+    //   const supplyIndex = selectedProducts.findIndex(s => s.id === supply.id)
+
+    //   if (supplyIndex !== -1) {
+    //     // selectedProducts[supplyIndex].supplies[0].quantity++
+    //     // set({ selectedProducts })
+    //     return
+    //   }
+
+    //   selectedProducts?.supplies.push(supply)
+
+    //   return
+    // }
+
     const newSelectedProducts = [...selectedProducts]
 
     const supplyIndex = newSelectedProducts[productIndex].supplies.findIndex(s => s.id === supply.id)
@@ -60,6 +99,14 @@ export const orderStore = create((set, get) => ({
     }
 
     newSelectedProducts[productIndex].supplies.push(supply)
+    set({ selectedProducts: newSelectedProducts })
+  },
+  editPriority: (priority, productIndex) => {
+    const { selectedProducts } = get()
+    const newSelectedProducts = [...selectedProducts]
+
+    newSelectedProducts[productIndex].priority = priority
+
     set({ selectedProducts: newSelectedProducts })
   }
 }))

@@ -2,9 +2,16 @@ import { TouchableOpacity, Text, View, StyleSheet } from 'react-native'
 import SwitchSlider from '../switch-slider'
 import DishListInOrder from './dish-list-in-order'
 import { orderStore } from '../../../../stores/waiter'
+import { togglePriority } from '../../../lib/api-call/order/toggle'
+import { useEffect, useState } from 'react'
 
 export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
   const table = orderStore(state => state.table)
+  const [priority, setPriority] = useState(false)
+
+  useEffect(() => {
+    setPriority(table?.order?.priority)
+  }, [table])
 
   const toggleEnviarComanda = (id) => () => {
     setEnviarComanda(prev => ({
@@ -83,7 +90,15 @@ export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
         </TouchableOpacity>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <SwitchSlider />
+          <SwitchSlider
+            defaultValue={priority}
+            onPress={(value, setActive) => {
+              togglePriority(table?.order?.id, value)
+                .catch(() => {
+                  setActive(!value)
+                })
+            }}
+          />
           <Text style={{ color: 'white' }}>COMANDA PRIORITARIA</Text>
         </View>
       </View>
