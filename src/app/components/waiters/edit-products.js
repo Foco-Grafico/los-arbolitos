@@ -11,19 +11,36 @@ import debounce from 'just-debounce-it'
 import { modifyDish } from '../../../lib/api-call/order/modify-dish'
 
 export default function EditProducts () {
-  const { isDishSelected, setIsDishSelected, selectedProducts, addSupplyToProduct, table } = orderStore((state) => ({
+  const { isDishSelected, setIsDishSelected, selectedProducts, addSupplyToProduct, table, editPriority } = orderStore((state) => ({
     isDishSelected: state.isDishSelected,
     setIsDishSelected: state.setIsDishSelected,
     selectedProducts: state.selectedProducts,
     addSupplyToProduct: state.addSupplyToProduct,
-    table: state.table
+    table: state.table,
+    editPriority: state.editPriority
   }))
   const [query, setQuery] = useState(null)
   const { supplies, setView } = useGetSupplies({ q: query })
 
+  console.log(selectedProducts)
+
   const toggleModificarPlatillo = () => {
     setIsDishSelected(false)
 
+    // if (!Array.isArray(selectedProducts)) {
+    //   const supplies = selectedProducts.supplies.map(supply => ({
+    //     id: supply.id,
+    //     quantity: supply.quantity
+    //   }))
+
+    //   addDishToOrder({
+    //     dishId: selectedProducts.id,
+    //     orderId: table?.order?.id,
+    //     supplies
+    //   })
+
+    //   return
+    // }
     for (const product of selectedProducts) {
       const supplies = product.supplies.map(supply => ({
         id: supply.id,
@@ -32,7 +49,7 @@ export default function EditProducts () {
 
       console.log(supplies)
 
-      modifyDish(table?.order?.id, product.id, supplies)
+      modifyDish(table?.order?.id, product.id, supplies, product.priority)
         .catch((error) => {
           console.log(error)
         })
@@ -59,16 +76,19 @@ export default function EditProducts () {
               }}
               contentContainerStyle={{ }}
             >
-              {selectedProducts.map((item, i) => (
-                <Product
-                  addSupplyToProduct={addSupplyToProduct}
-                  suppliesSetView={setView} setQ={debouncedSetQ}
-                  supplies={supplies}
-                  key={i}
-                  product={item}
-                  index={i}
-                />
-              ))}
+              {
+                selectedProducts.map((item, i) => (
+                  <Product
+                    setPriority={editPriority}
+                    addSupplyToProduct={addSupplyToProduct}
+                    suppliesSetView={setView} setQ={debouncedSetQ}
+                    supplies={supplies}
+                    key={item.key}
+                    product={item}
+                    index={i}
+                  />
+                ))
+}
             </ScrollView>
             <TouchableOpacity
               onPress={toggleModificarPlatillo}
@@ -82,7 +102,7 @@ export default function EditProducts () {
   }
 }
 
-const Product = ({ product, index, setQ, supplies, suppliesSetView, addSupplyToProduct }) => {
+const Product = ({ product, index, setQ, supplies, suppliesSetView, addSupplyToProduct, setPriority }) => {
   return (
     <View style={styles.modalObject}>
       <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
@@ -163,7 +183,12 @@ const Product = ({ product, index, setQ, supplies, suppliesSetView, addSupplyToP
         <Text style={styles.modalText}>
           PLATILLO PRIORITARIO
         </Text>
-        <SwitchSlider />
+        <SwitchSlider
+          defaultValue={product?.priority}
+          onPress={(value) => {
+            setPriority(value, index)
+          }}
+        />
       </View>
       <View style={{ backgroundColor: '#005943', width: '90%', height: 5, alignContent: 'center' }} />
     </View>
