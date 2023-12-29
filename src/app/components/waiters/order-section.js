@@ -6,7 +6,7 @@ import { DishListInOrder } from './dish-list-in-order'
 // import { togglePriority } from '../../../lib/api-call/order/toggle'
 // import { useEffect, useState } from 'react'
 
-export default function OrderSection () {
+export default function OrderSection ({ setShowSendCommand }) {
   return (
     <View style={{
       width: 'auto',
@@ -53,7 +53,12 @@ export default function OrderSection () {
       </View>
 
       <View>
-        <TouchableOpacity style={sendButton}>
+        <TouchableOpacity
+          onPress={() => {
+            setShowSendCommand?.(true)
+          }}
+          style={sendButton}
+        >
           <Text style={buttonText}>
             ENVIAR COMANDA
           </Text>

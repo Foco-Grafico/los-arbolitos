@@ -9,8 +9,9 @@ import Editar from '../../../../assets/editar'
 import addDishToOrder from '../../../lib/api-call/order/add-dish-to-order'
 import { tableStore } from '../../../../stores/waiter'
 import { v4 } from '../../../lib/uuid'
+import { SendCommandModal } from './send-command-modal'
 
-export const Products = () => {
+export const Products = ({ isVisibleSendCommand }) => {
   const { dishes, setCategory, setSearch } = useWaiterGetProductsInCategory()
   const order = tableStore(state => state.order)
 
@@ -203,6 +204,7 @@ export const Products = () => {
         }}
       />
       <EditProducts />
+      <SendCommandModal visibleController={isVisibleSendCommand} orderId={order.id} />
     </View>
   )
 }

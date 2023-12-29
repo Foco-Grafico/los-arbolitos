@@ -7,11 +7,13 @@ import { TableList } from '../components/waiters/table-list'
 // import { useState } from 'react'
 import OrderSection from '../components/waiters/order-section'
 import { Products } from '../components/waiters/products'
+import { useState } from 'react'
 // import DishList from '../components/waiters/dish-list'
 // import { sendToCashier, sendTokitchen } from '../../lib/api-call/order/move-order'
 
 export function Waiter () {
   const setTable = tableStore(state => state.setTable)
+  const [visibleSendCommand, setVisibleSendCommand] = useState(false)
 
   return (
     <View style={{
@@ -24,9 +26,13 @@ export function Waiter () {
       }}
       />
 
-      <OrderSection />
+      <OrderSection setShowSendCommand={setVisibleSendCommand} />
 
-      <Products />
+      <Products isVisibleSendCommand={{
+        isVisible: visibleSendCommand,
+        setVisible: setVisibleSendCommand
+      }}
+      />
 
       {/*
       <View style={{
