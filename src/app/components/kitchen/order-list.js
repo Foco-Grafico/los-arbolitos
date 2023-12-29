@@ -13,7 +13,7 @@ export default function OrderList () {
   const isTablet = useState(false)
 
   return (
-    <ScrollView horizontal>
+    <ScrollView horizontal contentContainerStyle={{ paddingHorizontal: 20 }}>
       <View style={styles.container}>
         {orders?.map((order) => (
           <View key={order.key} style={{ flexDirection: 'row', gap: 10 }}>
@@ -31,7 +31,8 @@ export default function OrderList () {
                       height: isTablet ? 100 : 60
                     }}
                   />
-                  {dish.priority && <Estrella style={{ width: 24, height: 24, position: 'absolute', right: 0 }} />}
+                  {order.priority && <Estrella style={{ width: 24, height: 24, position: 'absolute', right: -10, top: -10 }} condition={false} />}
+                  {dish.priority && <Estrella style={{ width: 24, height: 24, position: 'absolute', right: -10, top: -10 }} condition />}
                   <Text style={styles.text}>{dish.name}</Text>
                   <Text style={styles.text}>{dish?.description}</Text>
                 </TouchableOpacity>
@@ -50,13 +51,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: '100%',
     flexDirection: 'row',
+    justifyContent: 'center',
     gap: 10,
-    paddingHorizontal: 30
+    flex: 1
   },
   text: {
     color: 'black',
     fontSize: 10,
-    marginRight: 20,
     fontWeight: 'bold',
     textAlign: 'center'
   },
