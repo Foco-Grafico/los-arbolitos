@@ -1,34 +1,31 @@
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { Image } from 'expo-image'
 import { API_URL } from '../../../lib/api-call/data'
-import { useState } from 'react'
-import useKitchenGetOrders from '../../hooks/getOrdersInKitchen'
 import { kitchenStore } from '../../../../stores/kitchen'
 import Estrella from '../../../../assets/estrella'
+import { useDeviceType, types } from '../../hooks/device'
 
-export default function OrderList () {
-  const { orders } = useKitchenGetOrders()
-
+export default function OrderList ({ orders }) {
   const setDish = kitchenStore(state => state.setSelectedDish)
-  const isTablet = useState(false)
+  const type = useDeviceType()
 
   return (
     <ScrollView horizontal contentContainerStyle={{ paddingHorizontal: 20 }}>
       <View style={styles.container}>
-        {orders?.map((order) => (
+        {orders?.map((order, i) => (
           <View key={order.key} style={{ flexDirection: 'row', gap: 10 }}>
             <View style={{ flexDirection: 'row', gap: 15, alignItems: 'center' }}>
-              {order?.dishes?.map((dish, i) => (
+              {order?.dishes?.map((dish) => (
                 <TouchableOpacity
                   key={i} style={{ flexDirection: 'column', flex: 1, position: 'relative' }}
                   onPress={() => {
-                    setDish(dish)
+                    setDish({ ...dish, orderIndex: i })
                   }}
                 >
                   <Image
                     source={dish?.picture?.startsWith('http') ? dish?.picture : `${API_URL}/${dish.picture}`} style={{
-                      width: isTablet ? 100 : 60,
-                      height: isTablet ? 100 : 60
+                      width: type === types.TABLET ? 100 : 60,
+                      height: type === types.TABLET ? 100 : 60
                     }}
                   />
                   {order.priority && <Estrella style={{ width: 24, height: 24, position: 'absolute', right: -10, top: -10 }} condition={false} />}

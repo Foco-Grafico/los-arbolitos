@@ -3,16 +3,18 @@ import NavBarKitchen from '../components/kitchen/navBar'
 import ActualDish from '../components/kitchen/actual-dish'
 import OrderList from '../components/kitchen/order-list'
 import { accountStore } from '../../../stores/account'
+import useKitchenGetOrders from '../hooks/getOrdersInKitchen'
 
 export default function Kitchen () {
   const account = accountStore(state => state.account)
+  const { orders, setOrders } = useKitchenGetOrders()
 
   return (
     <View style={styles.container}>
       <NavBarKitchen mesero={account.name} />
       <View style={styles.middle}>
-        <ActualDish />
-        <OrderList />
+        <ActualDish setOrders={setOrders} />
+        <OrderList orders={orders} />
       </View>
       <View style={styles.footer} />
     </View>
