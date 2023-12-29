@@ -1,32 +1,12 @@
-import { TouchableOpacity, Text, View, StyleSheet } from 'react-native'
-import SwitchSlider from '../switch-slider'
-import DishListInOrder from './dish-list-in-order'
-import { orderStore } from '../../../../stores/waiter'
-import { togglePriority } from '../../../lib/api-call/order/toggle'
-import { useEffect, useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { DishListInOrder } from './dish-list-in-order'
+// import SwitchSlider from '../switch-slider'
+// import DishListInOrder from './dish-list-in-order'
+// import { orderStore } from '../../../../stores/waiter'
+// import { togglePriority } from '../../../lib/api-call/order/toggle'
+// import { useEffect, useState } from 'react'
 
-export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
-  const table = orderStore(state => state.table)
-  const [priority, setPriority] = useState(false)
-
-  useEffect(() => {
-    setPriority(table?.order?.priority)
-  }, [table])
-
-  const toggleEnviarComanda = (id) => () => {
-    setEnviarComanda(prev => ({
-      show: !prev.show,
-      orderId: id
-    }))
-  }
-
-  const toggleEnviarCuenta = (id) => () => {
-    setEnviarCuenta(prev => ({
-      show: !prev.show,
-      orderId: id
-    }))
-  }
-
+export default function OrderSection () {
   return (
     <View style={{
       width: 'auto',
@@ -39,107 +19,68 @@ export default function OrderSection ({ setEnviarCuenta, setEnviarComanda }) {
     }}
     >
       <TouchableOpacity
-        style={{
-          backgroundColor: '#005943',
-          borderRadius: 10,
-          fontSize: 20,
-          elevation: 10,
-          textAlign: 'center',
-          width: '100%',
-          paddingVertical: 5
-        }} onPress={toggleEnviarCuenta(table?.order?.id)}
+        style={sendButton}
+        onPress={() => {
+          // toggleEnviarCuenta(table?.order?.id)
+        }}
       >
-        <Text style={styles.text2}>
+        <Text style={buttonText}>
           SOLICITAR CUENTA
         </Text>
       </TouchableOpacity>
 
-      <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', paddingHorizontal: 20, gap: 15, flex: 1, width: '100%' }}>
-        <View style={{ flexDirection: 'row', gap: 10 }}>
-          <Text style={styles.title}>
-            CANT.
+      <View
+        style={{
+          flex: 1,
+          width: '100%'
+        }}
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 10
+          }}
+        >
+          <Text style={bold}>
+            CANT
           </Text>
-          <Text style={styles.title}>
-            PRODUCTO
+          <Text style={bold}>
+            PLATILLO
           </Text>
         </View>
+
         <DishListInOrder />
       </View>
 
-      <View
-        style={{
-          alignItems: 'center',
-          width: '100%',
-          gap: 10
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            backgroundColor: '#005943',
-            borderRadius: 10,
-            fontSize: 20,
-            elevation: 10,
-            textAlign: 'center',
-            width: '100%',
-            paddingVertical: 5
-          }} onPress={toggleEnviarComanda(table?.order?.id)}
-        >
-          <Text style={styles.text2}>
+      <View>
+        <TouchableOpacity style={sendButton}>
+          <Text style={buttonText}>
             ENVIAR COMANDA
           </Text>
         </TouchableOpacity>
-
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <SwitchSlider
-            defaultValue={priority}
-            onPress={(value, setActive) => {
-              togglePriority(table?.order?.id, value)
-                .catch(() => {
-                  setActive(!value)
-                })
-            }}
-          />
-          <Text style={{ color: 'white' }}>COMANDA PRIORITARIA</Text>
-        </View>
       </View>
     </View>
   )
 }
 
-const styles = StyleSheet.create({
-  order: {
-    backgroundColor: '#b89c98',
-    width: 300,
-    height: '100%',
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingVertical: 20,
-    gap: 20
+const { bold, buttonText, sendButton } = StyleSheet.create({
+  bold: {
+    fontWeight: 'bold'
   },
-  buttons: {
-    backgroundColor: '#005943',
-    borderRadius: 10,
-    fontSize: 20,
-    color: '#000000',
-    shadowRadius: 5,
-    shadowOpacity: 1,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 10,
-    textAlign: 'center',
-    justifyContent: 'center',
-    width: 200,
-    height: 40
-  },
-  text2: {
+  buttonText: {
     color: '#fff',
     fontSize: 14,
     fontWeight: 'bold',
     textAlign: 'center'
   },
-  title: {
-    color: '#000',
-    fontSize: 14,
-    fontWeight: 'bold'
+  sendButton: {
+    backgroundColor: '#005943',
+    borderRadius: 10,
+    fontSize: 20,
+    elevation: 10,
+    textAlign: 'center',
+    width: '100%',
+    paddingVertical: 5,
+    paddingHorizontal: 10
   }
 })

@@ -1,23 +1,29 @@
 import { useEffect, useRef, useState } from 'react'
-import { waiterStore } from '../../../stores/waiter'
 import GetDishesCategories from '../func/get-dishes-category'
+import { API_URL } from '../../lib/api-call/data'
 
-export default function useWaiterGetProductsInCategory (id) {
-  const selectedCategory = waiterStore(state => state.selectedCategory)
-  const search = waiterStore(state => state.search)
+export default function useWaiterGetProductsInCategory () {
+  // const selectedCategory = waiterStore(state => state.selectedCategory)
+  // const search = waiterStore(state => state.search)
+  const [search, setSearch] = useState('')
   const [dishes, setDishes] = useState([])
   const [err, setErr] = useState(null)
+  const [category, setCategory] = useState(null)
   const abortController = useRef(new AbortController())
   const [dishesF, setDishesF] = useState([])
 
   useEffect(() => {
+    if (category == null) {
+      return
+    }
+
     try {
       abortController.current.abort('Previous request cancelled')
       abortController.current = new AbortController()
     } catch {
     }
 
-    GetDishesCategories(selectedCategory, {
+    GetDishesCategories(category, {
       signal: abortController.current.signal
     })
       .then((res) => {
@@ -33,12 +39,15 @@ export default function useWaiterGetProductsInCategory (id) {
         throw new Error('Error al obtener los productos')
       })
       .then(res => {
-        setDishes(res.data)
+        setDishes(res.data.map(dish => ({
+          ...dish,
+          picture: dish.picture.startsWith('http') ? dish.picture : `${API_URL}/${dish.picture}`
+        })))
       })
       .catch((err) => {
         console.error(err)
       })
-  }, [selectedCategory])
+  }, [category])
 
   useEffect(() => {
     setDishesF(dishes.filter(dish => dish.name.toLowerCase().includes(search.toLowerCase())))
@@ -46,6 +55,8 @@ export default function useWaiterGetProductsInCategory (id) {
 
   return {
     dishes: dishesF,
+    setCategory,
+    setSearch,
     err
   }
 }

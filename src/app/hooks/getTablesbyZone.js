@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { accountStore } from '../../../stores/account'
 import GetTablesbyZone from '../func/get-tablesby-zone'
-import { orderStore } from '../../../stores/waiter'
-import { SOCKETS, socket } from '../../services/socket'
+// import { orderStore } from '../../../stores/waiter'
+// import { SOCKETS, socket } from '../../services/socket'
 
 export default function useWaiterGetTablesinZone () {
   const account = accountStore(state => state.account)
   const [tables, setTables] = useState([])
-  const tableSelected = orderStore((state) => state.selectedPostionTable)
-  const setTable = orderStore((state) => state.setTable)
+  // const tableSelected = orderStore((state) => state.selectedPostionTable)
+  // const setTable = orderStore((state) => state.setTable)
 
   useEffect(() => {
     GetTablesbyZone(account.id)
@@ -24,7 +24,7 @@ export default function useWaiterGetTablesinZone () {
         throw new Error('Error al obtener las mesas')
       })
       .then(res => {
-        setTable(res.data[tableSelected])
+        // setTable(res.data[tableSelected])
         setTables(res.data)
       })
       .catch((err) => {
@@ -32,60 +32,60 @@ export default function useWaiterGetTablesinZone () {
       })
   }, [])
 
-  useEffect(() => {
-    setTable(tables[tableSelected])
-  }, [tableSelected])
+  // useEffect(() => {
+  //   setTable(tables[tableSelected])
+  // }, [tableSelected])
 
-  useEffect(() => {
-    socket.on(SOCKETS.new_order_dish, (data) => {
-      setTables(prev => {
-        const copyPrev = [...prev]
-        const tableIndex = copyPrev.findIndex((table) => table.order.id === data.order_id)
+  // useEffect(() => {
+  //   socket.on(SOCKETS.new_order_dish, (data) => {
+  //     setTables(prev => {
+  //       const copyPrev = [...prev]
+  //       const tableIndex = copyPrev.findIndex((table) => table.order.id === data.order_id)
 
-        const table = copyPrev[tableIndex]
-        const newTable = {
-          ...table,
-          order: {
-            ...table.order,
-            dishes: data.dishes,
-            total: data.total
-          }
-        }
+  //       const table = copyPrev[tableIndex]
+  //       const newTable = {
+  //         ...table,
+  //         order: {
+  //           ...table.order,
+  //           dishes: data.dishes,
+  //           total: data.total
+  //         }
+  //       }
 
-        copyPrev[tableIndex] = newTable
+  //       copyPrev[tableIndex] = newTable
 
-        setTable(copyPrev[tableIndex])
+  //       setTable(copyPrev[tableIndex])
 
-        return copyPrev
-      })
-    })
+  //       return copyPrev
+  //     })
+  //   })
 
-    socket.on(SOCKETS.update_priority, ({ id, priority }) => {
-      console.log(id, priority)
+  //   socket.on(SOCKETS.update_priority, ({ id, priority }) => {
+  //     console.log(id, priority)
 
-      setTables(prev => {
-        const copyPrev = [...prev]
-        const tableIndex = copyPrev.findIndex((table) => table.order.id === id)
+  //     setTables(prev => {
+  //       const copyPrev = [...prev]
+  //       const tableIndex = copyPrev.findIndex((table) => table.order.id === id)
 
-        const table = copyPrev[tableIndex]
-        const newTable = {
-          ...table,
-          order: {
-            ...table.order,
-            priority
-          }
-        }
+  //       const table = copyPrev[tableIndex]
+  //       const newTable = {
+  //         ...table,
+  //         order: {
+  //           ...table.order,
+  //           priority
+  //         }
+  //       }
 
-        copyPrev[tableIndex] = newTable
+  //       copyPrev[tableIndex] = newTable
 
-        return copyPrev
-      })
-    })
+  //       return copyPrev
+  //     })
+  //   })
 
-    return () => {
-      socket.disconnect()
-    }
-  }, [])
+  //   return () => {
+  //     socket.disconnect()
+  //   }
+  // }, [])
 
   return {
     tables
