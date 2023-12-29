@@ -5,15 +5,10 @@ export default function addDishToOrder ({ dishId, orderId, supplies }) {
   headers.append('accept', 'application/json')
   headers.append('Content-Type', 'application/json')
 
-  const suppliesFormatted = supplies.map((supply) => ({
-    id: supply.id,
-    quantity: supply.quantity
-  }))
-
   const options = {
     method: 'POST',
     headers,
-    body: JSON.stringify(suppliesFormatted)
+    body: JSON.stringify(supplies)
   }
 
   return fetch(APIENDPOINTS.addDishToOrder(dishId, orderId), options)

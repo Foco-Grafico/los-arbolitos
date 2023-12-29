@@ -3,6 +3,7 @@ import { create } from 'zustand'
 export const tableStore = create((set) => ({
   table: {},
   order: {
+    id: 0,
     dishes: [],
     pretty_list: []
   },

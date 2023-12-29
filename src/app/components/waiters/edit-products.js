@@ -1,5 +1,5 @@
 // import { TouchableOpacity, View, StyleSheet, Text, TextInput, ScrollView } from 'react-native'
-// import Aceptar from '../../../../assets/aceptar'
+import Aceptar from '../../../../assets/aceptar'
 // import SwitchSlider from '../switch-slider'
 // import { orderStore } from '../../../../stores/waiter'
 import Eliminar from '../../../../assets/eliminar'
@@ -10,10 +10,12 @@ import Eliminar from '../../../../assets/eliminar'
 // import debounce from 'just-debounce-it'
 // import { modifyDish } from '../../../lib/api-call/order/modify-dish'
 
-import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { modalStore } from '../../../../stores/waiter'
 import SignoMas from '../../../../assets/signodemas'
 import SignoMenos from '../../../../assets/signodemenos'
+import { v4 } from '../../../lib/uuid'
+import { useState } from 'react'
 
 export default function EditProducts () {
   const {
@@ -31,6 +33,18 @@ export default function EditProducts () {
       quantity: type === '+' ? items[productIndex].supplies[index].quantity + 1 : items[productIndex].supplies[index].quantity - 1
     }
 
+    if (newSupply.quantity <= 0) {
+      items[productIndex].supplies.splice(index, 1)
+
+      modalStore.setState({
+        data: {
+          ...data,
+          items
+        }
+      })
+      return
+    }
+
     supplies[index] = newSupply
 
     const product = {
@@ -40,9 +54,11 @@ export default function EditProducts () {
 
     items[productIndex] = product
 
-    setShow('editDish', {
-      items,
-      prettyDish: { ...data.prettyDish }
+    modalStore.setState({
+      data: {
+        ...data,
+        items
+      }
     })
   }
 
@@ -73,10 +89,12 @@ export default function EditProducts () {
         >
           <FlatList
             style={{
-              width: '100%'
-            }}
-            contentContainerStyle={{
+              width: '100%',
               flex: 1
+            }}
+            keyExtractor={() => v4()}
+            contentContainerStyle={{
+              gap: 20
             }}
             data={data.items}
             renderItem={({ item, index }) => (
@@ -151,13 +169,91 @@ export default function EditProducts () {
                 </View>
 
                 <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
-                  {item.supplies.map((supply, i) => <Supply adjust={adjustQuantity} key={supply.key} supply={supply} productIndex={index} index={i} />)}
+                  {item.supplies.map((supply, i) => <Supply adjust={adjustQuantity} key={v4()} supply={supply} productIndex={index} index={i} />)}
                 </View>
 
-              </View>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderRadius: 6,
+                    paddingHorizontal: 10
+                  }}
+                >
+                  <Text>
+                    Observaciones
+                  </Text>
 
+                  <TextInput
+                    style={{
+                      flexWrap: 'wrap'
+                    }}
+                  />
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    gap: 15
+                  }}
+                >
+                  <Text>
+                    PLATILLO PRIORITARIO
+                  </Text>
+                  <View>
+                    <Switch
+                      trackColor={{ true: '#005942' }}
+                      thumbColor='#005942'
+                      value={item.priority}
+                      onValueChange={() => {
+                        modalStore.setState({
+                          data: {
+                            ...data,
+                            items: [...data.items].map((product, i) => {
+                              if (i === index) {
+                                return {
+                                  ...product,
+                                  priority: !product.priority
+                                }
+                              }
+
+                              return product
+                            })
+                          }
+                        })
+                      }}
+                    />
+                  </View>
+                </View>
+
+                <View style={{
+                  backgroundColor: '#005943',
+                  width: '100%',
+                  height: 5,
+                  alignContent: 'center'
+                }}
+                />
+              </View>
             )}
           />
+          <View
+            style={{
+              alignItems: 'flex-end',
+              width: '100%'
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                modalStore.setState({
+                  show: '',
+                  data: null
+                })
+              }}
+            >
+              <Aceptar style={{ width: 24, height: 24 }} />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     )
@@ -381,7 +477,9 @@ export default function EditProducts () {
   //   )
 }
 
-const Supply = ({ supply, index, productIndex, adjust }) => {
+const Supply = ({ supply, index, productIndex, adjust, onChangeCounter = () => {} }) => {
+  const [quantity, setQuantity] = useState(supply?.quantity)
+
   return (
     <View style={{ width: 250, marginBottom: 5, flexDirection: 'row', gap: 20 }}>
       <Text style={{ width: 100, color: '#005943', fontSize: 15, fontWeight: 'bold' }}>
@@ -390,13 +488,21 @@ const Supply = ({ supply, index, productIndex, adjust }) => {
       <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 20 }}>
         <TouchableOpacity
           onPress={() => {
+            setQuantity(prev => {
+              onChangeCounter({
+                quantity: prev - 1,
+                supplyId: supply.id
+              })
+
+              return prev - 1
+            })
             adjust(index, productIndex, '-')
           }}
         >
           <SignoMenos style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
         <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>
-          {supply?.quantity}
+          {quantity}
         </Text>
         <TouchableOpacity
           onPress={() => {

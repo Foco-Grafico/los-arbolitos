@@ -6,7 +6,7 @@ import { tableStore } from '../../../stores/waiter'
 import { TableList } from '../components/waiters/table-list'
 // import { useState } from 'react'
 import OrderSection from '../components/waiters/order-section'
-import EditProducts from '../components/waiters/edit-products'
+import { Products } from '../components/waiters/products'
 // import DishList from '../components/waiters/dish-list'
 // import { sendToCashier, sendTokitchen } from '../../lib/api-call/order/move-order'
 
@@ -26,14 +26,7 @@ export function Waiter () {
 
       <OrderSection />
 
-      <View
-        style={{
-          flex: 1,
-          position: 'relative'
-        }}
-      >
-        <EditProducts />
-      </View>
+      <Products />
 
       {/*
       <View style={{
