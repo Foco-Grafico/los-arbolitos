@@ -1,11 +1,17 @@
 import useWaiterGetTablesinZone from '../../hooks/getTablesbyZone'
 import { Text, View, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
-import { orderStore } from '../../../../stores/waiter'
+import { useEffect, useState } from 'react'
 
-export default function TableList () {
+export function TableList ({ onPressItem = () => {} }) {
   const { tables } = useWaiterGetTablesinZone()
-  const setTableSelected = orderStore((state) => state.setSelectedPostionTable)
-  const tableSelected = orderStore((state) => state.selectedPostionTable)
+  const [tableSelected, setTableSelected] = useState(0)
+
+  useEffect(() => {
+    if (tables.length === 0) {
+      return
+    }
+    onPressItem(tables[0])
+  }, [tables])
 
   return (
     <View style={{
@@ -18,7 +24,12 @@ export default function TableList () {
         data={tables}
         contentContainerStyle={{ gap: 10 }}
         renderItem={({ item: table, index: i }) => (
-          <TouchableOpacity onPress={() => { setTableSelected(i) }} style={tableSelected === i ? styles.selectedCircle : styles.circle} key={table.key}>
+          <TouchableOpacity
+            onPress={() => {
+              onPressItem(table)
+              setTableSelected(i)
+            }} style={tableSelected === i ? styles.selectedCircle : styles.circle} key={table.key}
+          >
             <Text style={styles.text}>
               {table.name}
             </Text>

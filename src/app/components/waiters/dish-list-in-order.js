@@ -1,127 +1,258 @@
-import { Text, View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native'
-import { orderStore } from '../../../../stores/waiter'
+import { Text, TouchableOpacity, StyleSheet, FlatList, View, ToastAndroid } from 'react-native'
+import { modalStore, tableStore } from '../../../../stores/waiter'
 
 import SignoMenos from '../../../../assets/signodemenos'
 import { removeDishFromOrder } from '../../func/remove-dish-from-order'
-import { useEffect, useState } from 'react'
 
-export default function DishListInOrder () {
-  const table = orderStore((state) => state.table)
-  const selectProduct = orderStore((state) => state.selectProduct)
-  const isDishSelected = orderStore((state) => state.isDishSelected)
-  const [dishes, setDishes] = useState([])
-
-  useEffect(() => {
-    setDishes(() => {
-      if (!table?.order?.dishes) return []
-
-      const groupDishes = table?.order?.dishes.reduce((acc, dish) => {
-        const isModified = dish.modified === 1
-
-        const objName = isModified ? `${dish.name}M` : dish.name
-        if (acc[objName]) {
-          acc[objName].quantity += 1
-          acc[objName].ids.push(dish.id)
-        } else {
-          acc[objName] = { ...dish, isModified, originalName: dish.name, name: `${isModified ? `${dish.name} (M)` : dish.name}`, quantity: 1, ids: [dish.id] }
-        }
-        return acc
-      }, {})
-
-      return Object.values(groupDishes)
-    })
-  }, [table])
-
-  const handleRemoveItem = (dishId, i) => () => {
-    removeDishFromOrder({ orderId: table?.order?.id, orderDishId: dishId })
-
-    setDishes(prev => {
-      const copyPrev = [...prev]
-
-      const dish = copyPrev[i]
-      const newDish = {
-        ...dish,
-        quantity: dish.quantity - 1
-      }
-
-      if (newDish.quantity === 0) {
-        copyPrev.splice(i, 1)
-      } else {
-        copyPrev[i] = newDish
-      }
-
-      return copyPrev
-    })
-  }
+export function DishListInOrder () {
+  const order = tableStore(state => state.order)
+  const setShow = modalStore(state => state.setShow)
 
   return (
-    <ScrollView
-      style={{ width: '100%' }}
+    <FlatList
+      data={order.pretty_list}
       contentContainerStyle={{
-        flex: 1
+        gap: 5
       }}
-    >
-      {dishes.map((dish, i) => (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 10 }} key={dish.key}>
+      renderItem={({ item, index }) => item.quantity > 0 && (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            gap: 20,
+            alignItems: 'center'
+          }}
+        >
           <TouchableOpacity
-            style={{ gap: 36, flexDirection: 'row' }}
-            onPress={() => selectProduct(dish.originalName, dish.isModified)}
-            disabled={isDishSelected}
+            onPress={() => {
+              const items = order.dishes.filter(dish => item.ids.includes(dish.id))
+
+              setShow('editDish', {
+                items,
+                prettyDish: {
+                  ...item,
+                  index
+                }
+              })
+            }}
+            style={{
+              flexDirection: 'row',
+              gap: 30,
+              marginLeft: 10
+            }}
           >
-            <Text style={styles.text2}>
-              {dish?.quantity}
+            <Text style={{
+              ...whiteText,
+              ...bold
+            }}
+            >
+              {item.quantity}
             </Text>
-            <Text style={styles.text2}>
-              {dish?.name}
+            <Text style={{
+              ...whiteText,
+              ...bold
+            }}
+            >
+              {item.name}
             </Text>
           </TouchableOpacity>
-          <View>
+          {(!item.modified || (item.modified && item.quantity === 1)) && (
             <TouchableOpacity
-              style={{ width: 24, height: 24 }} onPress={handleRemoveItem(dish.id, i)} disabled={isDishSelected}
+              onPress={() => {
+                const idToDelete = item.ids[0]
+                const dishesToDelete = order.dishes.find(dish => idToDelete === dish.id)
+
+                const newDishes = order.dishes.filter(dish => dish.id !== idToDelete)
+
+                const allExceptFirst = [...item.ids].slice(1)
+
+                const newPrettyDishes = [...order.pretty_list]
+
+                newPrettyDishes[index].quantity -= 1
+                newPrettyDishes[index].ids = allExceptFirst
+
+                const isEmpty = allExceptFirst.length === 0
+
+                if (isEmpty) {
+                  newPrettyDishes.splice(index, 1)
+                }
+
+                tableStore.setState({
+                  order: {
+                    ...order,
+                    dishes: newDishes,
+                    pretty_list: newPrettyDishes
+                  }
+                })
+
+                const ifError = () => {
+                  ToastAndroid.show('Error al eliminar platillo', ToastAndroid.SHORT)
+
+                  if (isEmpty) {
+                    console.log(item)
+                    newPrettyDishes.push(item)
+
+                    tableStore.setState({
+                      order: {
+                        ...order,
+                        dishes: [...newDishes, dishesToDelete],
+                        pretty_list: newPrettyDishes
+                      }
+                    })
+                    return
+                  }
+
+                  newPrettyDishes[index].quantity += 1
+                  newPrettyDishes[index].ids.push(idToDelete)
+
+                  tableStore.setState({
+                    order: {
+                      ...order,
+                      dishes: [...newDishes, dishesToDelete],
+                      pretty_list: newPrettyDishes
+                    }
+                  })
+                }
+
+                removeDishFromOrder({
+                  orderId: order.id,
+                  orderDishId: idToDelete
+                })
+                  .then(res => {
+                    if (res.ok) {
+                      ToastAndroid.show('Se ha eliminado el producto de la orden', ToastAndroid.SHORT)
+                      return
+                    }
+                    ifError()
+                  })
+                  .catch(() => {
+                    ifError()
+                  })
+              }}
             >
               <SignoMenos fill='#005942' style={{ width: 24, height: 24 }} />
             </TouchableOpacity>
-          </View>
+          )}
         </View>
-      ))}
-    </ScrollView>
-    // <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', width: '100%', paddingHorizontal: 20, flexDirection: 'column', gap: 10 }}>
-    //   <ScrollView contentContainerStyle={{ paddingBottom: 35, gap: 5 }}>
-    //     {dishes.map((dish, i) => {
-    //       return (
-    //         <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '90%' }} key={dish.key}>
-    //           <TouchableOpacity
-    //             style={{ gap: 20, justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '95%' }}
-    //             onPress={() => selectProduct(dish.originalName, dish.isModified)}
-    //             disabled={isDishSelected}
-    //           >
-    //             <Text style={styles.text2}>
-    //               {dish?.quantity}
-    //             </Text>
-    //             <Text style={styles.text2}>
-    //               {dish?.name}
-    //             </Text>
-    //           </TouchableOpacity>
-    //           <View>
-    //             <TouchableOpacity
-    //               style={{ width: 24, height: 24 }} onPress={handleRemoveItem(dish.id, i)} disabled={isDishSelected}
-    //             >
-    //               <SignoMenos fill='#005942' style={{ width: 24, height: 24 }} />
-    //             </TouchableOpacity>
-    //           </View>
-    //         </View>
-    //       )
-    //     })}
-    //   </ScrollView>
-    // </View>
+      )}
+    />
   )
+  // const table = orderStore((state) => state.table)
+  // const selectProduct = orderStore((state) => state.selectProduct)
+  // const isDishSelected = orderStore((state) => state.isDishSelected)
+  // const [dishes, setDishes] = useState([])
+
+  // useEffect(() => {
+  //   setDishes(() => {
+  //     if (!table?.order?.dishes) return []
+
+  //     const groupDishes = table?.order?.dishes.reduce((acc, dish) => {
+  //       const isModified = dish.modified === 1
+
+  //       const objName = isModified ? `${dish.name}M` : dish.name
+  //       if (acc[objName]) {
+  //         acc[objName].quantity += 1
+  //         acc[objName].ids.push(dish.id)
+  //       } else {
+  //         acc[objName] = { ...dish, isModified, originalName: dish.name, name: `${isModified ? `${dish.name} (M)` : dish.name}`, quantity: 1, ids: [dish.id] }
+  //       }
+  //       return acc
+  //     }, {})
+
+  //     return Object.values(groupDishes)
+  //   })
+  // }, [table])
+
+  // const handleRemoveItem = (dishId, i) => () => {
+  //   removeDishFromOrder({ orderId: table?.order?.id, orderDishId: dishId })
+
+  //   setDishes(prev => {
+  //     const copyPrev = [...prev]
+
+  //     const dish = copyPrev[i]
+  //     const newDish = {
+  //       ...dish,
+  //       quantity: dish.quantity - 1
+  //     }
+
+  //     if (newDish.quantity === 0) {
+  //       copyPrev.splice(i, 1)
+  //     } else {
+  //       copyPrev[i] = newDish
+  //     }
+
+  //     return copyPrev
+  //   })
+  // }
+
+  // return (
+  //   <ScrollView
+  //     style={{ width: '100%' }}
+  //     contentContainerStyle={{
+  //       flex: 1
+  //     }}
+  //   >
+  //     {dishes.map((dish, i) => (
+  //       <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 10 }} key={dish.key}>
+  //         <TouchableOpacity
+  //           style={{ gap: 36, flexDirection: 'row' }}
+  //           onPress={() => selectProduct(dish.originalName, dish.isModified)}
+  //           disabled={isDishSelected}
+  //         >
+  //           <Text style={styles.text2}>
+  //             {dish?.quantity}
+  //           </Text>
+  //           <Text style={styles.text2}>
+  //             {dish?.name}
+  //           </Text>
+  //         </TouchableOpacity>
+  //         <View>
+  //           <TouchableOpacity
+  //             style={{ width: 24, height: 24 }} onPress={handleRemoveItem(dish.id, i)} disabled={isDishSelected}
+  //           >
+  //             <SignoMenos fill='#005942' style={{ width: 24, height: 24 }} />
+  //           </TouchableOpacity>
+  //         </View>
+  //       </View>
+  //     ))}
+  //   </ScrollView>
+  //   // <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', width: '100%', paddingHorizontal: 20, flexDirection: 'column', gap: 10 }}>
+  //   //   <ScrollView contentContainerStyle={{ paddingBottom: 35, gap: 5 }}>
+  //   //     {dishes.map((dish, i) => {
+  //   //       return (
+  //   //         <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '90%' }} key={dish.key}>
+  //   //           <TouchableOpacity
+  //   //             style={{ gap: 20, justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', width: '95%' }}
+  //   //             onPress={() => selectProduct(dish.originalName, dish.isModified)}
+  //   //             disabled={isDishSelected}
+  //   //           >
+  //   //             <Text style={styles.text2}>
+  //   //               {dish?.quantity}
+  //   //             </Text>
+  //   //             <Text style={styles.text2}>
+  //   //               {dish?.name}
+  //   //             </Text>
+  //   //           </TouchableOpacity>
+  //   //           <View>
+  //   //             <TouchableOpacity
+  //   //               style={{ width: 24, height: 24 }} onPress={handleRemoveItem(dish.id, i)} disabled={isDishSelected}
+  //   //             >
+  //   //               <SignoMenos fill='#005942' style={{ width: 24, height: 24 }} />
+  //   //             </TouchableOpacity>
+  //   //           </View>
+  //   //         </View>
+  //   //       )
+  //   //     })}
+  //   //   </ScrollView>
+  //   // </View>
+  // )
 }
 
-const styles = StyleSheet.create({
-  text2: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-    textAlign: 'center'
+const { bold, whiteText } = StyleSheet.create({
+  bold: {
+    fontWeight: 'bold'
+  },
+  whiteText: {
+    color: 'white'
   }
 })
