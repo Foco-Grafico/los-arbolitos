@@ -2,7 +2,7 @@ import getOrdersInKitchen from '../func/get-orders-in-kitchen'
 import { useEffect, useState } from 'react'
 
 export default function useKitchenGetOrders () {
-  const [orders, setOrders] = useState()
+  const [orders, setOrders] = useState([])
 
   useEffect(() => {
     getOrdersInKitchen()
