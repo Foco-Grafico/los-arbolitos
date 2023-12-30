@@ -18,7 +18,6 @@ export default function Kitchen () {
       </View>
       <View style={styles.footer} />
     </View>
-
   )
 }
 
