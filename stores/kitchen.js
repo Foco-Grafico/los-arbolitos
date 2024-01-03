@@ -7,7 +7,9 @@ export const kitchenStore = create((set) => ({
     lastName: ''
   },
   orderId: 0,
-  selectedDish: {},
+  selectedDish: {
+    comments: []
+  },
   orderIndex: 0,
   table: 0,
   configNewInfo: ({ mesero, orderId, dish, orderIndex, table }) =>
