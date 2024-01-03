@@ -1,13 +1,17 @@
 import { StyleSheet, Text, View } from 'react-native'
+import { kitchenStore } from '../../../../stores/kitchen'
 
-export default function NavBarKitchen ({ mesero, mesa }) {
+export default function NavBarKitchen () {
+  const mesero = kitchenStore(state => state.mesero)
+  const table = kitchenStore(state => state.table)
+
   return (
     <View style={styles.bar}>
-      <Text style={styles.text}>MESERO {mesero}</Text>
+      <Text style={styles.text}>MESERO: {mesero?.name.toUpperCase()} {mesero?.lastName.toUpperCase()}</Text>
       <View style={styles.barright}>
         <Text style={styles.text}>ORDEN DE LA MESA</Text>
         <View style={styles.circle}>
-          <Text style={styles.circleText}>{mesa}</Text>
+          <Text style={styles.circleText}>{table}</Text>
         </View>
       </View>
     </View>

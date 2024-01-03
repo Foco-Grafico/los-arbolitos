@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { API_URL } from '../data'
 
-export const sendTokitchen = async (orderId) => {
+export const sendTokitchen = async (orderId, waiterId) => {
   const safeOrderId = z.number({
     coerce: true
   }).safeParse(orderId)
@@ -12,8 +12,16 @@ export const sendTokitchen = async (orderId) => {
 
   const id = safeOrderId.data
 
+  const headers = new Headers()
+  headers.append('Content-Type', 'application/json')
+  headers.append('Accept', 'application/json')
+
   await fetch(`${API_URL}/orders/${id}/to/kitchen`, {
-    method: 'PUT'
+    method: 'PUT',
+    headers,
+    body: JSON.stringify({
+      waiter_id: waiterId
+    })
   })
 }
 

@@ -6,7 +6,7 @@ import Estrella from '../../../../assets/estrella'
 import { useDeviceType, types } from '../../hooks/device'
 
 export default function OrderList ({ orders }) {
-  const setDish = kitchenStore(state => state.setSelectedDish)
+  const configNewInfo = kitchenStore(state => state.configNewInfo)
   const type = useDeviceType()
 
   return (
@@ -17,9 +17,19 @@ export default function OrderList ({ orders }) {
             <View style={{ flexDirection: 'row', gap: 15, alignItems: 'center' }}>
               {order?.dishes?.map((dish) => (
                 <TouchableOpacity
-                  key={i} style={{ flexDirection: 'column', flex: 1, position: 'relative' }}
+                  key={dish.key} style={{ flexDirection: 'column', flex: 1, position: 'relative' }}
                   onPress={() => {
-                    setDish({ ...dish, orderIndex: i })
+                    configNewInfo({
+                      mesero: {
+                        id: order?.user?.id,
+                        name: order?.user?.name,
+                        lastName: order?.user?.lastname
+                      },
+                      orderId: order?.id,
+                      dish,
+                      orderIndex: i,
+                      table: order?.table_id
+                    })
                   }}
                 >
                   <Image

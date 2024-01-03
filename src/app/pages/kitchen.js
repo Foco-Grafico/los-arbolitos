@@ -2,16 +2,14 @@ import { StyleSheet, View } from 'react-native'
 import NavBarKitchen from '../components/kitchen/navBar'
 import ActualDish from '../components/kitchen/actual-dish'
 import OrderList from '../components/kitchen/order-list'
-import { accountStore } from '../../../stores/account'
 import useKitchenGetOrders from '../hooks/getOrdersInKitchen'
 
 export default function Kitchen () {
-  const account = accountStore(state => state.account)
   const { orders, setOrders } = useKitchenGetOrders()
 
   return (
     <View style={styles.container}>
-      <NavBarKitchen mesero={account.name} />
+      <NavBarKitchen />
       <View style={styles.middle}>
         <ActualDish setOrders={setOrders} />
         <OrderList orders={orders} />

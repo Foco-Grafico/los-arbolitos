@@ -3,9 +3,11 @@ import Aceptar from '../../../../assets/aceptar'
 import { Cancelar } from '../../../../assets/cancelar'
 import { sendTokitchen } from '../../../lib/api-call/order/move-order'
 import { tableStore } from '../../../../stores/waiter'
+import { accountStore } from '../../../../stores/account'
 
 export const SendCommandModal = ({ orderId, visibleController }) => {
   const setStatus = tableStore(state => state.setStatus)
+  const account = accountStore(state => state.account)
 
   if (visibleController.isVisible) {
     return (
@@ -53,7 +55,7 @@ export const SendCommandModal = ({ orderId, visibleController }) => {
             <TouchableOpacity
               onPress={() => {
                 visibleController.setVisible(false)
-                sendTokitchen(orderId)
+                sendTokitchen(orderId, account?.id)
                   .then(() => {
                     setStatus(2)
                   })
