@@ -15,7 +15,7 @@ export default function OrderList ({ orders }) {
         {orders?.map((order, i) => (
           <View key={order.key} style={{ flexDirection: 'row', gap: 10 }}>
             <View style={{ flexDirection: 'row', gap: 15, alignItems: 'center' }}>
-              {order?.dishes?.map((dish) => (
+              {order?.pretty_list?.map((dish) => (
                 <TouchableOpacity
                   key={dish.key} style={{ flexDirection: 'column', flex: 1, position: 'relative' }}
                   onPress={() => {

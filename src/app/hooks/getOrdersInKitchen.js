@@ -28,7 +28,7 @@ export default function useKitchenGetOrders () {
             lastName: res.data[0]?.user?.lastname
           },
           orderId: res.data[0]?.id,
-          dish: res.data[0]?.dishes[0],
+          dish: res.data[0]?.pretty_list[0],
           orderIndex: 0,
           table: res.data[0]?.table_id
         })

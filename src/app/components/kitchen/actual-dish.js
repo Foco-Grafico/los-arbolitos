@@ -12,7 +12,9 @@ export default function ActualDish ({ setOrders }) {
   const setDish = kitchenStore(state => state.setSelectedDish)
 
   const handleFinish = () => {
-    finishOrderInKitchen(dish.id)
+    for (const id of dish?.ids) {
+      finishOrderInKitchen(id)
+    }
 
     // const dishId = dish.id
     // const nuevoArreglo = orders?.dishes?.filter((dish) => dish.id !== dishId)
@@ -66,7 +68,9 @@ export default function ActualDish ({ setOrders }) {
           </View>
           <View style={styles.observations}>
             <Text style={{ color: '#005943', fontWeight: 'black', fontSize: 12 }}>OBSERVACIONES</Text>
-            <Text style={styles.text}>{dish?.comment}</Text>
+            {dish?.comments.map((comment) => (
+              <Text style={styles.text} key={dish.key + comment}>{comment}</Text>
+            ))}
           </View>
           <View style={{ alignItems: 'flex-end' }}>
             <TouchableOpacity onPress={handleFinish}>

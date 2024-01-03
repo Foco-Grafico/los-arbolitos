@@ -7,7 +7,7 @@ export default function NavBarKitchen () {
 
   return (
     <View style={styles.bar}>
-      <Text style={styles.text}>MESERO: {mesero?.name.toUpperCase()} {mesero?.lastName.toUpperCase()}</Text>
+      {mesero.name != null && <Text style={styles.text}>MESERO: {mesero?.name.toUpperCase()} {mesero?.lastName.toUpperCase()}</Text>}
       <View style={styles.barright}>
         <Text style={styles.text}>ORDEN DE LA MESA</Text>
         <View style={styles.circle}>
@@ -26,31 +26,30 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     flexDirection: 'row',
     width: '100%',
-    paddingVertical: 15
+    paddingVertical: 20
   },
   circle: {
     width: 40,
-    height: 40,
     borderRadius: 100 / 2,
     justifyContent: 'center',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    alignItems: 'center'
   },
   circleText: {
-    textAlign: 'center',
-    alignItems: 'center',
     color: '#005942',
-    fontSize: 50
+    fontSize: 30,
+    fontWeight: 'bold'
   },
   text: {
     color: 'white',
     fontSize: 30,
-    marginRight: 20,
     fontWeight: 'bold',
     textAlign: 'center'
   },
   barright: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    gap: 10
   }
 })

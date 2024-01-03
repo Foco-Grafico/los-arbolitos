@@ -66,7 +66,9 @@ export default function EditProducts () {
 
   const setComment = debounce((comment, index) => {
     const items = [...data.items]
-    console.log(comment)
+    if (comment === '' || comment === 'null' || comment === 'undefined') {
+      comment = null
+    }
 
     items[index].comment = comment
 
