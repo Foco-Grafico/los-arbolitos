@@ -23,10 +23,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'space-around',
-    justifyContent: 'space-around',
-    width: '100%',
-    height: '100%',
     borderWidth: 1
   },
   footer: {
@@ -40,7 +36,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
-    height: '90%'
+    flex: 1
   }
 })
