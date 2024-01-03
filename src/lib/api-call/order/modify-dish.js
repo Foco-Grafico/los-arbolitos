@@ -42,7 +42,7 @@ export const modifyDish = async (orderId, dishId, listSupply, priority, comment)
   headers.append('Content-Type', 'application/json')
   headers.append('Accept', 'application/json')
 
-  const res = await fetch(`${API_URL}/orders/${safeOrderId}/dish/${safeDishId}?priority=${safePriority}`, {
+  const res = await fetch(`${API_URL}/orders/${safeOrderId}/dish/${safeDishId}?priority=${safePriority}&comment=${comment}`, {
     method: 'PUT',
     headers,
     body: JSON.stringify(safeListSupply)

@@ -11,5 +11,6 @@ export const kitchenStore = create((set) => ({
   orderIndex: 0,
   table: 0,
   configNewInfo: ({ mesero, orderId, dish, orderIndex, table }) =>
-    set(() => ({ mesero, orderId, selectedDish: dish, orderIndex, table }))
+    set(() => ({ mesero, orderId, selectedDish: dish, orderIndex, table })),
+  setSelectedDish: (dish) => set(() => ({ selectedDish: dish }))
 }))

@@ -8,9 +8,8 @@ import finishOrderInKitchen from '../../func/finish-order-in-kitchen'
 
 export default function ActualDish ({ setOrders }) {
   const dish = kitchenStore(state => state.selectedDish)
+  const orderIndex = kitchenStore(state => state.orderIndex)
   const setDish = kitchenStore(state => state.setSelectedDish)
-
-  console.log('dish', dish)
 
   const handleFinish = () => {
     finishOrderInKitchen(dish.id)
@@ -23,10 +22,10 @@ export default function ActualDish ({ setOrders }) {
     setOrders(orders => {
       const copyOrders = [...orders]
 
-      const newDishes = copyOrders[dish?.orderIndex].dishes.filter((dishInOrder) => dishInOrder.id !== dish.id)
+      const newDishes = copyOrders[orderIndex].dishes.filter((dishInOrder) => dishInOrder.id !== dish.id)
 
       if (newDishes.length === 0) {
-        const newOrders = copyOrders.filter((order, i) => i !== dish?.orderIndex)
+        const newOrders = copyOrders.filter((order, i) => i !== orderIndex)
 
         if (newOrders.length === 0) {
           setDish({})
@@ -43,14 +42,11 @@ export default function ActualDish ({ setOrders }) {
         return newOrders
       }
 
-      setDish({
-        ...newDishes[0],
-        orderIndex: dish?.orderIndex
-      })
+      setDish(newDishes[0])
 
-      copyOrders[dish?.orderIndex].dishes = newDishes
+      copyOrders[orderIndex].dishes = newDishes
 
-      console.log('copyOrders', dish?.orderIndex, JSON.stringify(copyOrders[dish?.orderIndex]))
+      // console.log('copyOrders', orderIndex, JSON.stringify(copyOrders[orderIndex]))
 
       return copyOrders
     })
@@ -70,7 +66,7 @@ export default function ActualDish ({ setOrders }) {
           </View>
           <View style={styles.observations}>
             <Text style={{ color: '#005943', fontWeight: 'black', fontSize: 12 }}>OBSERVACIONES</Text>
-            <Text style={styles.text}>{dish?.observations}</Text>
+            <Text style={styles.text}>{dish?.comment}</Text>
           </View>
           <View style={{ alignItems: 'flex-end' }}>
             <TouchableOpacity onPress={handleFinish}>

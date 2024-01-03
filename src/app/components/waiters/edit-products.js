@@ -16,6 +16,7 @@ import SignoMas from '../../../../assets/signodemas'
 import SignoMenos from '../../../../assets/signodemenos'
 import { v4 } from '../../../lib/uuid'
 import { useState } from 'react'
+import debounce from 'just-debounce-it'
 
 export default function EditProducts () {
   const {
@@ -62,6 +63,20 @@ export default function EditProducts () {
       }
     })
   }
+
+  const setComment = debounce((comment, index) => {
+    const items = [...data.items]
+    console.log(comment)
+
+    items[index].comment = comment
+
+    modalStore.setState({
+      data: {
+        ...data,
+        items
+      }
+    })
+  }, 500)
 
   if (show === 'editDish') {
     return (
@@ -188,6 +203,10 @@ export default function EditProducts () {
                     style={{
                       flexWrap: 'wrap'
                     }}
+                    defaultValue={item.comment}
+                    onChangeText={(text) => {
+                      setComment(text, index)
+                    }}
                   />
                 </View>
 
@@ -254,7 +273,9 @@ export default function EditProducts () {
                     quantity: supply.quantity
                   }))
 
-                  return modifyDish(data.orderId, product.id, supplies, product.priority)
+                  console.log(product.comment)
+
+                  return modifyDish(data.orderId, product.id, supplies, product.priority, product.comment)
                 })
 
                 await Promise.all(promiseArray)
