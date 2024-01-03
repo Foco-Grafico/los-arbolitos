@@ -1,12 +1,24 @@
 import { create } from 'zustand'
+import { getOrder } from '../src/lib/api-call/order/get-order'
 
-export const tableStore = create((set) => ({
+const ORDER_STATES = {
+  1: null,
+  2: {
+    label: 'ENVIADO A COCINA',
+    bgColor: '#FFA500', // Orange color
+    color: '#000'
+  }
+}
+
+export const tableStore = create((set, get) => ({
   table: {},
   order: {
     id: 0,
     dishes: [],
     pretty_list: []
   },
+  status: null,
+  allFinished: false,
 
   setTable: (table) => {
     set({
@@ -14,9 +26,24 @@ export const tableStore = create((set) => ({
       table: {
         ...table,
         order: undefined
-      }
+      },
+      status: ORDER_STATES[table?.order?.status?.id] ?? null,
+      allFinished: table?.order?.all_finished
     })
-  }
+  },
+
+  editProducts: async (orderId) => {
+    getOrder(orderId)
+      .then(order => {
+        set({
+          order
+        })
+      })
+  },
+
+  setStatus: status => set({
+    status: ORDER_STATES[status] ?? null
+  })
 }))
 
 export const modalStore = create((set) => ({

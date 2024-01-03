@@ -8,11 +8,13 @@ import { TableList } from '../components/waiters/table-list'
 import OrderSection from '../components/waiters/order-section'
 import { Products } from '../components/waiters/products'
 import { useState } from 'react'
+import { getOrder } from '../../lib/api-call/order/get-order'
 // import DishList from '../components/waiters/dish-list'
 // import { sendToCashier, sendTokitchen } from '../../lib/api-call/order/move-order'
 
 export function Waiter () {
   const setTable = tableStore(state => state.setTable)
+
   const [visibleSendCommand, setVisibleSendCommand] = useState(false)
 
   return (
@@ -22,16 +24,20 @@ export function Waiter () {
     }}
     >
       <TableList onPressItem={(table) => {
-        setTable(table)
+        getOrder(table.current_order)
+          .then(order => {
+            setTable({ ...table, order })
+          })
       }}
       />
 
       <OrderSection setShowSendCommand={setVisibleSendCommand} />
 
-      <Products isVisibleSendCommand={{
-        isVisible: visibleSendCommand,
-        setVisible: setVisibleSendCommand
-      }}
+      <Products
+        isVisibleSendCommand={{
+          isVisible: visibleSendCommand,
+          setVisible: setVisibleSendCommand
+        }}
       />
 
       {/*

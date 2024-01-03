@@ -1,5 +1,6 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native'
 import { DishListInOrder } from './dish-list-in-order'
+import { tableStore } from '../../../../stores/waiter'
 // import SwitchSlider from '../switch-slider'
 // import DishListInOrder from './dish-list-in-order'
 // import { orderStore } from '../../../../stores/waiter'
@@ -7,6 +8,9 @@ import { DishListInOrder } from './dish-list-in-order'
 // import { useEffect, useState } from 'react'
 
 export default function OrderSection ({ setShowSendCommand }) {
+  const status = tableStore(state => state.status)
+  const allFinished = tableStore(state => state.allFinished)
+
   return (
     <View style={{
       width: 'auto',
@@ -21,6 +25,9 @@ export default function OrderSection ({ setShowSendCommand }) {
       <TouchableOpacity
         style={sendButton}
         onPress={() => {
+          if (!allFinished) {
+            ToastAndroid.show('Peticion invalida, aun hay productos en cola', ToastAndroid.SHORT)
+          }
           // toggleEnviarCuenta(table?.order?.id)
         }}
       >
@@ -53,16 +60,31 @@ export default function OrderSection ({ setShowSendCommand }) {
       </View>
 
       <View>
-        <TouchableOpacity
-          onPress={() => {
-            setShowSendCommand?.(true)
-          }}
-          style={sendButton}
-        >
-          <Text style={buttonText}>
-            ENVIAR COMANDA
-          </Text>
-        </TouchableOpacity>
+        {status == null
+          ? (
+            <TouchableOpacity
+              onPress={() => {
+                setShowSendCommand?.(true)
+              }}
+              style={sendButton}
+            >
+              <Text style={buttonText}>
+                ENVIAR COMANDA
+              </Text>
+            </TouchableOpacity>
+            )
+          : (
+            <TouchableOpacity
+              onPress={() => {
+                ToastAndroid.show('Comanda enviada', ToastAndroid.SHORT)
+              }}
+              style={{ ...sendButton, backgroundColor: status.bgColor }}
+            >
+              <Text style={{ ...buttonText, color: status.color }}>
+                {status.label}
+              </Text>
+            </TouchableOpacity>
+            )}
       </View>
     </View>
   )

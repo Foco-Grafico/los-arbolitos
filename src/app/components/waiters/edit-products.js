@@ -8,10 +8,10 @@ import Eliminar from '../../../../assets/eliminar'
 // // import useGetSupplies from '../../hooks/getSupplies'
 // // import { useState } from 'react'
 // import debounce from 'just-debounce-it'
-// import { modifyDish } from '../../../lib/api-call/order/modify-dish'
+import { modifyDish } from '../../../lib/api-call/order/modify-dish'
 
 import { FlatList, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { modalStore } from '../../../../stores/waiter'
+import { modalStore, tableStore } from '../../../../stores/waiter'
 import SignoMas from '../../../../assets/signodemas'
 import SignoMenos from '../../../../assets/signodemenos'
 import { v4 } from '../../../lib/uuid'
@@ -23,6 +23,7 @@ export default function EditProducts () {
     data,
     show
   } = modalStore(state => state)
+  const editProducts = tableStore(state => state.editProducts)
 
   const adjustQuantity = (index, productIndex, type = '+') => {
     const items = [...data.items]
@@ -244,11 +245,22 @@ export default function EditProducts () {
             }}
           >
             <TouchableOpacity
-              onPress={() => {
-                modalStore.setState({
-                  show: '',
-                  data: null
+              onPress={async () => {
+                const newItems = [...data.items]
+
+                const promiseArray = newItems.map((product) => {
+                  const supplies = product.supplies.map(supply => ({
+                    id: supply.id,
+                    quantity: supply.quantity
+                  }))
+
+                  return modifyDish(data.orderId, product.id, supplies, product.priority)
                 })
+
+                await Promise.all(promiseArray)
+
+                editProducts(data.orderId)
+                setShow('', null)
               }}
             >
               <Aceptar style={{ width: 24, height: 24 }} />

@@ -23,7 +23,7 @@ const validateParams = z.object({
   }).int()
 })
 
-export const modifyDish = async (orderId, dishId, listSupply, priority) => {
+export const modifyDish = async (orderId, dishId, listSupply, priority, comment) => {
   const safeParams = validateParams.safeParse({ orderId, dishId, listSupply, priority })
 
   if (!safeParams.success) {
@@ -55,4 +55,15 @@ export const modifyDish = async (orderId, dishId, listSupply, priority) => {
 
     console.log(json)
   }
+}
+
+/**
+ *
+ * @param {number} orderDishId
+ * @returns {Promise<boolean>}
+ */
+export const isModified = (orderDishId) => {
+  return fetch(`${API_URL}/orders/dish/is-modified?order_dish_id=${orderDishId}`)
+    .then(res => res.json())
+    .then(json => json.modified)
 }

@@ -2,8 +2,11 @@ import { Text, TouchableOpacity, View } from 'react-native'
 import Aceptar from '../../../../assets/aceptar'
 import { Cancelar } from '../../../../assets/cancelar'
 import { sendTokitchen } from '../../../lib/api-call/order/move-order'
+import { tableStore } from '../../../../stores/waiter'
 
 export const SendCommandModal = ({ orderId, visibleController }) => {
+  const setStatus = tableStore(state => state.setStatus)
+
   if (visibleController.isVisible) {
     return (
       <View
@@ -51,6 +54,9 @@ export const SendCommandModal = ({ orderId, visibleController }) => {
               onPress={() => {
                 visibleController.setVisible(false)
                 sendTokitchen(orderId)
+                  .then(() => {
+                    setStatus(2)
+                  })
               }}
             >
               <Aceptar fill='#005942' style={{ width: 24, height: 24 }} />

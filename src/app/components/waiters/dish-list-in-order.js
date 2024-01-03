@@ -25,14 +25,14 @@ export function DishListInOrder () {
         >
           <TouchableOpacity
             onPress={() => {
-              const items = order.dishes.filter(dish => item.ids.includes(dish.id))
+              const items = order.dishes.filter(dish => item.ids.includes(dish.id)).map(dish => ({
+                ...dish,
+                index: order.dishes.findIndex(d => d.id === dish.id)
+              }))
 
               setShow('editDish', {
                 items,
-                prettyDish: {
-                  ...item,
-                  index
-                }
+                orderId: order.id
               })
             }}
             style={{
