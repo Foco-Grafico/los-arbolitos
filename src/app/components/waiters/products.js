@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react'
 import useWaiterGetProductsInCategory from '../../hooks/getProductsinCategory'
 import { tableStore } from '../../../../stores/waiter'
 import { SendCommandModal } from './send-command-modal'
+import { SendToCashModal } from './send-to-cash-modal'
 import { DishList } from './dish-list'
 
-export const Products = ({ isVisibleSendCommand }) => {
+export const Products = ({ isVisibleSendCommand, sendToCash }) => {
   const { dishes, setCategory, setSearch } = useWaiterGetProductsInCategory()
   const order = tableStore(state => state.order)
 
@@ -53,6 +54,7 @@ export const Products = ({ isVisibleSendCommand }) => {
       />
       <EditProducts />
       <SendCommandModal visibleController={isVisibleSendCommand} orderId={order.id} />
+      <SendToCashModal visibleController={sendToCash} orderId={order.id} />
     </View>
   )
 }

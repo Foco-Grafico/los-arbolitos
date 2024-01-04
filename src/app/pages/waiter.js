@@ -16,6 +16,7 @@ export function Waiter () {
   const setTable = tableStore(state => state.setTable)
 
   const [visibleSendCommand, setVisibleSendCommand] = useState(false)
+  const [visibleSendToCash, setVisibleSendToCash] = useState(false)
 
   return (
     <View style={{
@@ -31,12 +32,16 @@ export function Waiter () {
       }}
       />
 
-      <OrderSection setShowSendCommand={setVisibleSendCommand} />
+      <OrderSection setVisibleSendToCash={setVisibleSendToCash} setShowSendCommand={setVisibleSendCommand} />
 
       <Products
         isVisibleSendCommand={{
           isVisible: visibleSendCommand,
           setVisible: setVisibleSendCommand
+        }}
+        sendToCash={{
+          isVisible: visibleSendToCash,
+          setVisible: setVisibleSendToCash
         }}
       />
 

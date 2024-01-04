@@ -59,6 +59,20 @@ export default function ActualDish ({ setOrders }) {
     })
   }
 
+  if (dish == null) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>No hay platillos en preparacion</Text>
+      </View>
+    )
+  }
+
   return (
     <View
       style={{
@@ -89,14 +103,16 @@ export default function ActualDish ({ setOrders }) {
             gap: 20
           }}
         >
-          <Text
-            style={{
-              fontWeight: 'bold',
-              fontSize: 18
-            }}
-          >
-            {dish.name.toUpperCase()}
-          </Text>
+          {dish?.name != null && (
+            <Text
+              style={{
+                fontWeight: 'bold',
+                fontSize: 18
+              }}
+            >
+              {dish.name.toUpperCase()}
+            </Text>
+          )}
           <Text
             style={{
               fontSize: 18
@@ -108,7 +124,7 @@ export default function ActualDish ({ setOrders }) {
               }}
             >
               CANTIDAD
-            </Text> ({dish.quantity})
+            </Text> ({dish?.quantity})
           </Text>
         </View>
 

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { getOrder } from '../src/lib/api-call/order/get-order'
+import { ToastAndroid } from 'react-native'
 
 const ORDER_STATES = {
   1: {
@@ -18,13 +19,24 @@ const ORDER_STATES = {
     next: 3
   },
   3: {
-    label: 'FINALIZADA',
+    label: 'SOLICITAR CUENTA',
     bgColor: '#005943', // Green color
     color: '#fff',
     next: null,
-    click: ({ setShowSendToCash }) => {
-      setShowSendToCash?.(true)
+    click: ({ setVisibleSendToCash }) => {
+      if (typeof setVisibleSendToCash !== 'function') {
+        ToastAndroid.show('No se pudo enviar a caja', ToastAndroid.SHORT)
+        return
+      }
+
+      setVisibleSendToCash?.(true)
     }
+  },
+  4: {
+    label: 'EN CAJA',
+    bgColor: '#FFA500', // Orange color
+    color: '#000',
+    next: null
   }
 }
 

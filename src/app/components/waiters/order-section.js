@@ -1,14 +1,15 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
 import { DishListInOrder } from './dish-list-in-order'
 import { tableStore } from '../../../../stores/waiter'
 // import SwitchSlider from '../switch-slider'
 // import DishListInOrder from './dish-list-in-order'
 // import { orderStore } from '../../../../stores/waiter'
-// import { togglePriority } from '../../../lib/api-call/order/toggle'
+import { togglePriority } from '../../../lib/api-call/order/toggle'
 // import { useEffect, useState } from 'react'
 
-export default function OrderSection ({ setShowSendCommand }) {
+export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash }) {
   const status = tableStore(state => state.status)
+  const order = tableStore(state => state.order)
   console.log('status', status)
   // const allFinished = tableStore(state => state.allFinished)
 
@@ -61,24 +62,9 @@ export default function OrderSection ({ setShowSendCommand }) {
       </View>
 
       <View>
-        {/* {status == null
-          ? (
-            <TouchableOpacity
-              onPress={() => {
-                setShowSendCommand?.(true)
-              }}
-              style={sendButton}
-            >
-              <Text style={buttonText}>
-                ENVIAR COMANDA
-              </Text>
-            </TouchableOpacity>
-            )
-          : (
-            )} */}
         <TouchableOpacity
           onPress={() => {
-            status.click?.({ setShowSendCommand })
+            status.click?.({ setShowSendCommand, setVisibleSendToCash })
           }}
           style={{ ...sendButton, backgroundColor: status.bgColor }}
         >
@@ -86,6 +72,32 @@ export default function OrderSection ({ setShowSendCommand }) {
             {status.label}
           </Text>
         </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 10
+        }}
+      >
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 14
+          }}
+        >
+          COMANDA PRIORITARIA
+        </Text>
+        <Switch
+          value={order?.priority}
+          onValueChange={(priority) => {
+            togglePriority(order?.id, priority)
+            tableStore.setState({ order: { ...order, priority } })
+          }}
+          trackColor={{ false: '#fff', true: '#005943' }}
+          thumbColor={order?.priority ? '#fff' : '#005943'}
+
+        />
       </View>
     </View>
   )
