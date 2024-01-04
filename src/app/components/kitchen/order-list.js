@@ -5,7 +5,8 @@ import { kitchenStore } from '../../../../stores/kitchen'
 import Estrella from '../../../../assets/estrella'
 import { useDeviceType, types } from '../../hooks/device'
 
-export default function OrderList ({ orders }) {
+export default function OrderList ({ orders = [] }) {
+  console.log(orders)
   const configNewInfo = kitchenStore(state => state.configNewInfo)
   const type = useDeviceType()
 
