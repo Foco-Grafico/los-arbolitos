@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Svg, { G, Circle, Path } from 'react-native-svg'
 /* SVGR has dropped some elements not supported by react-native-svg: style */
-const Aceptar = (props, fill) => (
+const Aceptar = (props) => (
   <Svg
     baseProfile='basic'
     id='Capa_1'

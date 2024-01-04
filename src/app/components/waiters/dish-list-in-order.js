@@ -4,6 +4,7 @@ import { modalStore, tableStore } from '../../../../stores/waiter'
 import SignoMenos from '../../../../assets/signodemenos'
 import { removeDishFromOrder } from '../../func/remove-dish-from-order'
 import { Salero } from '../../../../assets/enpreparacion'
+import Accept from '../../../../assets/aceptar'
 
 export function DishListInOrder () {
   const order = tableStore(state => state.order)
@@ -136,6 +137,10 @@ export function DishListInOrder () {
           )}
           {item.status.id === 2 && (
             <Salero style={{ width: 24, height: 24 }} />
+          )}
+
+          {item.status.id === 3 && (
+            <Accept style={{ width: 24, height: 24 }} />
           )}
         </View>
       )}
