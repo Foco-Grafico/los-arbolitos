@@ -9,6 +9,7 @@ import { SetScreenOrientation } from './src/lib/orientation'
 import { LogBox, View } from 'react-native'
 import { routes } from './src/lib/data'
 import { StatusBar } from 'expo-status-bar'
+import Admin from './src/app/pages/admin'
 
 LogBox.ignoreLogs(['new NativeEventEmitter', 'Aborted'])
 
@@ -41,6 +42,9 @@ export default function App () {
       </Route>
       <Route name={routes[3]}>
         <Kitchen />
+      </Route>
+      <Route name='panel'>
+        <Admin />
       </Route>
 
     </View>
