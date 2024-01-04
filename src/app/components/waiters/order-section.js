@@ -66,7 +66,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
           onPress={() => {
             status.click?.({ setShowSendCommand, setVisibleSendToCash })
           }}
-          style={{ ...sendButton, backgroundColor: status.bgColor }}
+          style={{ ...sendButton, backgroundColor: status?.bgColor }}
         >
           <Text style={{ ...buttonText, color: status.color }}>
             {status.label}
