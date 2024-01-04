@@ -37,6 +37,12 @@ const ORDER_STATES = {
     bgColor: '#FFA500', // Orange color
     color: '#000',
     next: null
+  },
+  6: {
+    label: 'PAGADO',
+    bgColor: '#005943', // Green color
+    color: '#fff',
+    next: null
   }
 }
 
