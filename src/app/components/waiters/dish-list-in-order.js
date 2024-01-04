@@ -26,16 +26,16 @@ export function DishListInOrder () {
           }}
         >
           <TouchableOpacity
-            disabled={item.status.id !== 1}
+            disabled={item?.status?.id !== 1}
             onPress={() => {
-              const items = order.dishes.filter(dish => item.ids.includes(dish.id)).map(dish => ({
+              const items = order.dishes.filter(dish => item?.ids.includes(dish?.id)).map(dish => ({
                 ...dish,
-                index: order.dishes.findIndex(d => d.id === dish.id)
+                index: order.dishes.findIndex(d => d?.id === dish?.id)
               }))
 
               setShow('editDish', {
                 items,
-                orderId: order.id
+                orderId: order?.id
               })
             }}
             style={{
@@ -59,15 +59,15 @@ export function DishListInOrder () {
               {item.name}
             </Text>
           </TouchableOpacity>
-          {((!item.modified || (item.modified && item.quantity === 1)) && item.status.id === 1) && (
+          {((!item.modified || (item.modified && item.quantity === 1)) && item.status?.id === 1) && (
             <TouchableOpacity
               onPress={() => {
-                const idToDelete = item.ids[0]
-                const dishesToDelete = order.dishes.find(dish => idToDelete === dish.id)
+                const idToDelete = item?.ids[0]
+                const dishesToDelete = order.dishes.find(dish => idToDelete === dish?.id)
 
-                const newDishes = order.dishes.filter(dish => dish.id !== idToDelete)
+                const newDishes = order.dishes.filter(dish => dish?.id !== idToDelete)
 
-                const allExceptFirst = [...item.ids].slice(1)
+                const allExceptFirst = [...item?.ids].slice(1)
 
                 const newPrettyDishes = [...order.pretty_list]
 
@@ -136,11 +136,11 @@ export function DishListInOrder () {
               <SignoMenos fill='#005942' style={{ width: 24, height: 24 }} />
             </TouchableOpacity>
           )}
-          {item.status.id === 2 && (
+          {item.status?.id === 2 && (
             <Salero style={{ width: 24, height: 24 }} />
           )}
 
-          {item.status.id === 3 && (
+          {item.status?.id === 3 && (
             <Accept style={{ width: 24, height: 24 }} />
           )}
         </View>

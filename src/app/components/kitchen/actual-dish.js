@@ -28,7 +28,7 @@ export default function ActualDish ({ setOrders }) {
     setOrders(orders => {
       const copyOrders = [...orders]
 
-      const newDishes = copyOrders[orderIndex].pretty_list.filter((dishInOrder) => dishInOrder.ids[0] !== dish.ids[0])
+      const newDishes = copyOrders[orderIndex].pretty_list.filter((dishInOrder) => dishInOrder?.ids[0] !== dish?.ids[0])
 
       if (newDishes.length === 0) {
         const newOrders = copyOrders.filter((order, i) => i !== orderIndex)
@@ -57,6 +57,20 @@ export default function ActualDish ({ setOrders }) {
 
       return copyOrders
     })
+  }
+
+  if (dish == null) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>No hay platillos en preparacion</Text>
+      </View>
+    )
   }
 
   return (
@@ -89,14 +103,16 @@ export default function ActualDish ({ setOrders }) {
             gap: 20
           }}
         >
-          <Text
-            style={{
-              fontWeight: 'bold',
-              fontSize: 18
-            }}
-          >
-            {dish.name.toUpperCase()}
-          </Text>
+          {dish?.name != null && (
+            <Text
+              style={{
+                fontWeight: 'bold',
+                fontSize: 18
+              }}
+            >
+              {dish.name.toUpperCase()}
+            </Text>
+          )}
           <Text
             style={{
               fontSize: 18
@@ -108,7 +124,7 @@ export default function ActualDish ({ setOrders }) {
               }}
             >
               CANTIDAD
-            </Text> ({dish.quantity})
+            </Text> ({dish?.quantity})
           </Text>
         </View>
 

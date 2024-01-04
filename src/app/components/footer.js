@@ -16,7 +16,7 @@ export default function App () {
           style={selectedOption === index ? styles.selected : styles.notSelected}
           onPress={() => {
             setSelectedOption(index)
-            setSelectedCategory(option.id)
+            setSelectedCategory(option?.id)
           }}
         >
           <Text style={styles.text}>{option.name}</Text>

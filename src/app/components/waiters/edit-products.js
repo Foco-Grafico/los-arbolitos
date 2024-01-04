@@ -271,18 +271,18 @@ export default function EditProducts () {
 
                 const promiseArray = newItems.map((product) => {
                   const supplies = product.supplies.map(supply => ({
-                    id: supply.id,
-                    quantity: supply.quantity
+                    id: supply?.id,
+                    quantity: supply?.quantity
                   }))
 
                   console.log(product.comment)
 
-                  return modifyDish(data.orderId, product.id, supplies, product.priority, product.comment)
+                  return modifyDish(data?.orderId, product?.id, supplies, product?.priority, product?.comment)
                 })
 
                 await Promise.all(promiseArray)
 
-                editProducts(data.orderId)
+                editProducts(data?.orderId)
                 setShow('', null)
               }}
             >
