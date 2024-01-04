@@ -1,5 +1,6 @@
 import { kitchenStore } from '../../../stores/kitchen'
 import { markAsPreparation } from '../../lib/api-call/kitchen/mark-as-preparation'
+import { socket } from '../../services/socket'
 import getOrdersInKitchen from '../func/get-orders-in-kitchen'
 import { useEffect, useState } from 'react'
 
@@ -38,6 +39,33 @@ export default function useKitchenGetOrders () {
       .catch(err => {
         console.error(err)
       })
+  }, [])
+
+  useEffect(() => {
+    socket.on('new_kitchen_order', order => {
+      setOrders(prev => {
+        const copyOrder = [...prev]
+
+        if (order.priority) {
+          const lastOrderPriority = prev.reverse().find(o => o.priority)
+
+          if (lastOrderPriority == null) {
+            copyOrder.splice(1, 0, order)
+
+            return copyOrder
+          }
+
+          const index = prev.findIndex(o => o.id === lastOrderPriority.id)
+
+          copyOrder.splice(index, 0, order)
+          return copyOrder
+        }
+
+        copyOrder.push(order)
+
+        return copyOrder
+      })
+    })
   }, [])
 
   return {
