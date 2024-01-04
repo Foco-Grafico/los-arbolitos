@@ -1,7 +1,9 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { v4 } from '../../../lib/uuid'
+import { useState } from 'react'
 
 export default function CashierTables ({ onPressTable = (table) => {} }) {
+  const [selected, setSelected] = useState()
   const tables = [
     {
       id: 1,
@@ -83,20 +85,21 @@ export default function CashierTables ({ onPressTable = (table) => {} }) {
       key: v4()
     }
   ]
-
+  console.log(selected)
   return (
     <View style={styles.aside}>
       <ScrollView contentContainerStyle={{ height: '90%', gap: 20, paddingVertical: 15 }}>
         {tables?.map((table) => {
           return (
             <TouchableOpacity
-              style={styles.circle}
+              style={selected === table.id ? styles.selectedCircle : styles.circle}
               key={table?.key}
               onPress={() => {
                 onPressTable(table)
+                setSelected(table.id)
               }}
             >
-              <Text style={{ ...styles.text, fontSize: 24 }}>{table.name}</Text>
+              <Text style={selected === table.id ? styles.selectedText : styles.text}>{table.name}</Text>
             </TouchableOpacity>
           )
         })}
@@ -125,9 +128,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  selectedCircle: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  selectedText: {
+    color: '#005943',
+    fontWeight: 'bold',
+    fontSize: 20
+  },
   text: {
-    color: 'black',
-    fontWeight: 'bold'
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 20
   },
   buttons: {
     width: 150,
