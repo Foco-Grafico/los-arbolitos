@@ -50,19 +50,38 @@ export const tableStore = create((set, get) => ({
     const { order } = get()
     const newOrder = { ...order }
 
-    for (const product of newOrder.dishes) {
+    const productsArr = newOrder.dishes.map(dish => ({
+      ...dish,
+      status: {
+        id: 1,
+        name: 'EN ESPERA'
+      }
+    }))
+
+    for (const product of productsArr) {
       if (productsIds.includes(product.id)) {
         product.status = status
       }
     }
 
-    for (const product of newOrder.pretty_list) {
+    const prettyArr = newOrder.pretty_list.map((product) => ({
+      ...product,
+      status: {
+        id: 1,
+        name: 'EN ESPERA'
+      }
+    }))
+
+    for (const product of prettyArr) {
       const selectedProducts = product.ids.find(id => productsIds.includes(id))
 
       if (selectedProducts) {
         product.status = status
       }
     }
+
+    newOrder.dishes = productsArr
+    newOrder.pretty_list = prettyArr
 
     set({ order: newOrder })
   },
