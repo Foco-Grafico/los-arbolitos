@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import getOrdersInCashier from '../func/get-orders-in-cashier'
+import { socket } from '../../services/socket'
 
 export default function useGetOrdersInCashier () {
   const [data, setData] = useState([])
@@ -23,6 +24,12 @@ export default function useGetOrdersInCashier () {
       .catch(err => {
         console.error(err)
       })
+  }, [])
+
+  useEffect(() => {
+    socket.on('new_cash_order', order => {
+      setData(prev => [...prev, order])
+    })
   }, [])
 
   return {
