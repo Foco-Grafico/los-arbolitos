@@ -8,7 +8,8 @@ export const kitchenStore = create((set) => ({
   },
   orderId: 0,
   selectedDish: {
-    comments: []
+    comments: [],
+    name: ''
   },
   orderIndex: 0,
   table: 0,
