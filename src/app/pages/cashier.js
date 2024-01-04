@@ -4,22 +4,32 @@ import * as ScreenOrientation from 'expo-screen-orientation'
 import Tables from '../components/cashier/tables'
 import Products from '../components/cashier/products'
 
+const priceFormatter = new Intl.NumberFormat('es-MX', {
+  style: 'currency',
+  currency: 'MXN'
+})
+
 export default function Cashier () {
   const [selectedTable, setSelectedTable] = useState({})
+  const [originalTotal, setOriginalTotal] = useState(0)
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
       .catch((err) => {
         console.log(err)
       })
-
-    return () => {
-      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE)
-        .catch((err) => {
-          console.log(err)
-        })
-    }
   }, [])
+
+  const handleDiscount = (text) => {
+    const discount = Number(text)
+    const total = text ? Number(originalTotal) - discount : Number(originalTotal)
+
+    setSelectedTable({
+      ...selectedTable,
+      discount: text,
+      total
+    })
+  }
 
   return (
     <View style={styles.container}>
@@ -28,8 +38,9 @@ export default function Cashier () {
       </View>
       <View style={styles.main}>
         <Tables
-          onPressTable={(table) => {
-            setSelectedTable(table)
+          onPressTable={(order) => {
+            setSelectedTable(order)
+            setOriginalTotal(order.total)
           }}
         />
         <View style={{ width: '70%', backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', gap: 20 }}>
@@ -37,13 +48,16 @@ export default function Cashier () {
           <View style={{ justifyContent: 'center', alignItems: 'center', gap: 5 }}>
             <Text style={styles.text}>DESCUENTO</Text>
             <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ color: '#005943' }}>$</Text>
-              <TextInput style={{ width: 150, height: 30, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }} keyboardType='numeric' />
+              <TextInput
+                style={{ width: 150, paddingVertical: 5, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }} keyboardType='numeric' onChangeText={handleDiscount}
+              />
             </View>
             <Text style={styles.text}>TOTAL</Text>
             <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ color: '#005943' }}>$</Text>
-              <Text style={{ width: 150, height: 30, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }} keyboardType='numeric' />
+
+              <Text style={{ width: 150, paddingVertical: 5, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }}>
+                {priceFormatter.format(selectedTable?.total)}
+              </Text>
             </View>
             <TouchableOpacity style={styles.buttons}>
               <Text style={{ color: '#fff', fontWeight: 'bold' }}>IMPRIMIR</Text>
@@ -54,9 +68,7 @@ export default function Cashier () {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.footer}>
-        <Text>FOOT</Text>
-      </View>
+      <View style={styles.footer} />
     </View>
   )
 }
@@ -67,8 +79,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   main: {
-    flexDirection: 'row'
-
+    flexDirection: 'row',
+    flex: 1
   },
   header: {
     backgroundColor: '#005942',
@@ -77,7 +89,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   footer: {
-    backgroundColor: '#462f27'
+    backgroundColor: '#462f27',
+    height: '6%'
   },
 
   buttons: {

@@ -1,105 +1,26 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { v4 } from '../../../lib/uuid'
+// import { v4 } from '../../../lib/uuid'
 import { useState } from 'react'
+import useGetOrdersInCashier from '../../hooks/getOrdersInCashier'
 
-export default function CashierTables ({ onPressTable = (table) => {} }) {
+export default function CashierTables ({ onPressTable = (order) => {} }) {
   const [selected, setSelected] = useState()
-  const tables = [
-    {
-      id: 1,
-      status: 'ocupada',
-      name: 'M-1',
-      order: {
-        id: 1,
-        mesa: 'M-1',
-        productos: [
-          { id: 1, name: 'tacos', price: 20, quantity: 2 },
-          { id: 2, name: 'perico', price: 20, quantity: 2 },
-          { id: 3, name: 'carne', price: 20, quantity: 2 },
-          { id: 4, name: 'machaca', price: 20, quantity: 2 }
-        ]
-      },
-      key: v4()
-    },
-    {
-      id: 2,
-      status: 'ocupada',
-      name: 'M-2',
-      order: {
-        id: 1,
-        mesa: 'M-1',
-        productos: [
-          { id: 1, name: 'tacos', price: 20, quantity: 2 },
-          { id: 2, name: 'perico', price: 20, quantity: 2 },
-          { id: 4, name: 'machaca', price: 20, quantity: 2 }
-        ]
-      },
-      key: v4()
-    },
-    {
-      id: 3,
-      status: 'ocupada',
-      name: 'M-3',
-      order: {
-        id: 1,
-        mesa: 'M-1',
-        productos: [
-          { id: 1, name: 'tacos', price: 20, quantity: 2 },
-          { id: 2, name: 'perico', price: 20, quantity: 2 },
-          { id: 3, name: 'carne', price: 20, quantity: 2 },
-          { id: 4, name: 'machaca', price: 20, quantity: 2 }
-        ]
-      },
-      key: v4()
-    },
-    {
-      id: 4,
-      status: 'ocupada',
-      name: 'M-4',
-      order: {
-        id: 1,
-        mesa: 'M-1',
-        productos: [
-          { id: 1, name: 'tacos', price: 20, quantity: 2 },
-          { id: 2, name: 'perico', price: 20, quantity: 2 },
-          { id: 3, name: 'carne', price: 20, quantity: 2 },
-          { id: 4, name: 'machaca', price: 20, quantity: 2 }
-        ]
-      },
-      key: v4()
-    },
-    {
-      id: 5,
-      status: 'ocupada',
-      name: 'M-5',
-      order: {
-        id: 1,
-        mesa: 'M-1',
-        productos: [
-          { id: 1, name: 'tacos', price: 20, quantity: 2 },
-          { id: 2, name: 'perico', price: 20, quantity: 2 },
-          { id: 3, name: 'carne', price: 20, quantity: 2 },
-          { id: 4, name: 'machaca', price: 20, quantity: 2 }
-        ]
-      },
-      key: v4()
-    }
-  ]
-  console.log(selected)
+  const { data } = useGetOrdersInCashier()
+
   return (
     <View style={styles.aside}>
       <ScrollView contentContainerStyle={{ height: '90%', gap: 20, paddingVertical: 15 }}>
-        {tables?.map((table) => {
+        {data?.map((order) => {
           return (
             <TouchableOpacity
-              style={selected === table.id ? styles.selectedCircle : styles.circle}
-              key={table?.key}
+              style={selected === order.id ? styles.selectedCircle : styles.circle}
+              key={order?.key}
               onPress={() => {
-                onPressTable(table)
-                setSelected(table.id)
+                onPressTable(order)
+                setSelected(order.id)
               }}
             >
-              <Text style={selected === table.id ? styles.selectedText : styles.text}>{table.name}</Text>
+              <Text style={selected === order.id ? styles.selectedText : styles.text}>{order?.table?.name}</Text>
             </TouchableOpacity>
           )
         })}
