@@ -1,10 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import Tables from '../components/cashier/tables'
 import Products from '../components/cashier/products'
 
-export default function Cashier ({ setSelected }) {
+export default function Cashier () {
+  const [selectedTable, setSelectedTable] = useState({})
+
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
       .catch((err) => {
@@ -25,9 +27,13 @@ export default function Cashier ({ setSelected }) {
         <Text style={{ color: 'white', fontSize: 25, fontWeight: 'bold' }}>CAJA</Text>
       </View>
       <View style={styles.main}>
-        <Tables />
+        <Tables
+          onPressTable={(table) => {
+            setSelectedTable(table)
+          }}
+        />
         <View style={{ width: '70%', backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', gap: 20 }}>
-          <Products />
+          <Products table={selectedTable} />
           <View style={{ justifyContent: 'center', alignItems: 'center', gap: 5 }}>
             <Text style={styles.text}>DESCUENTO</Text>
             <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
@@ -71,9 +77,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   footer: {
-    backgroundColor: '#462f27',
-    justifyContent: 'center',
-    alignItems: 'center'
+    backgroundColor: '#462f27'
   },
 
   buttons: {
