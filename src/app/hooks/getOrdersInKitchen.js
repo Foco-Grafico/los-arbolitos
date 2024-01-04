@@ -1,4 +1,5 @@
 import { kitchenStore } from '../../../stores/kitchen'
+import { markAsPreparation } from '../../lib/api-call/kitchen/mark-as-preparation'
 import getOrdersInKitchen from '../func/get-orders-in-kitchen'
 import { useEffect, useState } from 'react'
 
@@ -32,6 +33,7 @@ export default function useKitchenGetOrders () {
           orderIndex: 0,
           table: res.data[0]?.table_id
         })
+        markAsPreparation(res.data[0]?.id, res.data[0]?.pretty_list[0].ids)
       })
       .catch(err => {
         console.error(err)
