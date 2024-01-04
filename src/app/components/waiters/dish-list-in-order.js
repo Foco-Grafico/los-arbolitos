@@ -26,6 +26,7 @@ export function DishListInOrder () {
           }}
         >
           <TouchableOpacity
+            disabled={item.status.id !== 1}
             onPress={() => {
               const items = order.dishes.filter(dish => item.ids.includes(dish.id)).map(dish => ({
                 ...dish,
