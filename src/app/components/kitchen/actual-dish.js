@@ -6,6 +6,7 @@ import { API_URL } from '../../../lib/api-call/data'
 import finishOrderInKitchen from '../../func/finish-order-in-kitchen'
 import { v4 } from '../../../lib/uuid'
 import { useDeviceType, types } from '../../hooks/device'
+import { markAsPreparation } from '../../../lib/api-call/kitchen/mark-as-preparation'
 // import useKitchenGetOrders from '../../hooks/getOrdersInKitchen'
 
 export default function ActualDish ({ setOrders }) {
@@ -51,6 +52,8 @@ export default function ActualDish ({ setOrders }) {
       copyOrders[orderIndex].pretty_list = newDishes
 
       // console.log('copyOrders', orderIndex, JSON.stringify(copyOrders[orderIndex]))
+
+      markAsPreparation(copyOrders[orderIndex]?.id, copyOrders[orderIndex]?.pretty_list[0]?.ids)
 
       return copyOrders
     })

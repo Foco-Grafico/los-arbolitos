@@ -7,6 +7,11 @@ const ORDER_STATES = {
     label: 'ENVIADO A COCINA',
     bgColor: '#FFA500', // Orange color
     color: '#000'
+  },
+  3: {
+    label: 'FINALIZADA',
+    bgColor: '#3ab54a', // Green color
+    color: '#fff'
   }
 }
 
