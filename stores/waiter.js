@@ -56,6 +56,14 @@ export const tableStore = create((set, get) => ({
       }
     }
 
+    for (const product of newOrder.pretty_list) {
+      const selectedProducts = product.ids.find(id => productsIds.includes(id))
+
+      if (selectedProducts) {
+        product.status = status
+      }
+    }
+
     set({ order: newOrder })
   },
 

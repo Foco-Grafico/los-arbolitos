@@ -3,6 +3,7 @@ import { modalStore, tableStore } from '../../../../stores/waiter'
 
 import SignoMenos from '../../../../assets/signodemenos'
 import { removeDishFromOrder } from '../../func/remove-dish-from-order'
+import { Salero } from '../../../../assets/enpreparacion'
 
 export function DishListInOrder () {
   const order = tableStore(state => state.order)
@@ -19,7 +20,7 @@ export function DishListInOrder () {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            gap: 20,
+            gap: 25,
             alignItems: 'center'
           }}
         >
@@ -56,7 +57,7 @@ export function DishListInOrder () {
               {item.name}
             </Text>
           </TouchableOpacity>
-          {(!item.modified || (item.modified && item.quantity === 1)) && (
+          {((!item.modified || (item.modified && item.quantity === 1)) && item.status.id === 1) && (
             <TouchableOpacity
               onPress={() => {
                 const idToDelete = item.ids[0]
@@ -132,6 +133,9 @@ export function DishListInOrder () {
             >
               <SignoMenos fill='#005942' style={{ width: 24, height: 24 }} />
             </TouchableOpacity>
+          )}
+          {item.status.id === 2 && (
+            <Salero style={{ width: 24, height: 24 }} />
           )}
         </View>
       )}
