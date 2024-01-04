@@ -2,16 +2,29 @@ import { create } from 'zustand'
 import { getOrder } from '../src/lib/api-call/order/get-order'
 
 const ORDER_STATES = {
-  1: null,
+  1: {
+    label: 'ENVIAR A COCINA',
+    bgColor: '#005943', // Green color
+    color: '#fff',
+    next: 2,
+    click: ({ setShowSendCommand }) => {
+      setShowSendCommand?.(true)
+    }
+  },
   2: {
     label: 'ENVIADO A COCINA',
     bgColor: '#FFA500', // Orange color
-    color: '#000'
+    color: '#000',
+    next: 3
   },
   3: {
     label: 'FINALIZADA',
-    bgColor: '#3ab54a', // Green color
-    color: '#fff'
+    bgColor: '#005943', // Green color
+    color: '#fff',
+    next: null,
+    click: ({ setShowSendToCash }) => {
+      setShowSendToCash?.(true)
+    }
   }
 }
 
@@ -22,7 +35,7 @@ export const tableStore = create((set, get) => ({
     dishes: [],
     pretty_list: []
   },
-  status: null,
+  status: ORDER_STATES[1],
   allFinished: false,
 
   setTable: (table) => {

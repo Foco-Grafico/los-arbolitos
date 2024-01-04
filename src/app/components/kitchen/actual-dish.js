@@ -28,7 +28,7 @@ export default function ActualDish ({ setOrders }) {
     setOrders(orders => {
       const copyOrders = [...orders]
 
-      const newDishes = copyOrders[orderIndex].pretty_list.filter((dishInOrder) => dishInOrder.ids[0] !== dish.ids[0])
+      const newDishes = copyOrders[orderIndex].pretty_list.filter((dishInOrder) => dishInOrder?.ids[0] !== dish?.ids[0])
 
       if (newDishes.length === 0) {
         const newOrders = copyOrders.filter((order, i) => i !== orderIndex)

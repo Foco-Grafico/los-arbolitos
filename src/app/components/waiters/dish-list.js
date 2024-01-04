@@ -29,6 +29,8 @@ export function DishList ({ dishes }) {
     if (isExistInPrettyList) {
       prettyDishesInOrder[prettyIndex].quantity++
     } else {
+      console.log('32')
+
       prettyDishesInOrder.push({
         ids: [],
         quantity: 1,
@@ -36,6 +38,8 @@ export function DishList ({ dishes }) {
         key: v4()
       })
     }
+
+    console.log('42')
 
     dishesInOrder.push({
       ...dish,
@@ -56,6 +60,8 @@ export function DishList ({ dishes }) {
       key: v4()
     })
 
+    console.log('63')
+
     tableStore.setState({
       order: {
         ...order,
@@ -64,14 +70,16 @@ export function DishList ({ dishes }) {
       }
     })
 
+    console.log('73')
+
     return new Promise((resolve) => {
       addDishToOrder({
-        dishId: item.id,
-        supplies: item.supplies.map(supply => ({
-          id: supply.id,
-          quantity: supply.quantity
+        dishId: item?.id,
+        supplies: item?.supplies.map(supply => ({
+          id: supply?.id,
+          quantity: supply?.quantity
         })),
-        orderId: order.id
+        orderId: order?.id
       })
         .then(res => {
           if (res.ok) {
@@ -81,7 +89,12 @@ export function DishList ({ dishes }) {
         .then(json => {
           const { id } = json.data
 
-          dishesInOrder[newIndex].id = id
+          const product = {
+            ...dishesInOrder[newIndex],
+            id
+          }
+
+          dishesInOrder[newIndex] = product
 
           if (isExistInPrettyList) {
             prettyDishesInOrder[prettyIndex].ids.push(id)
@@ -162,9 +175,11 @@ export function DishList ({ dishes }) {
                 onPress={() => {
                   addProduct(item)
                     .then(product => {
+                      console.log(product)
+
                       setShow('editDish', {
                         items: [product],
-                        orderId: order.id
+                        orderId: order?.id
                       })
                     })
                 }}

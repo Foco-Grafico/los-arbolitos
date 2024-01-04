@@ -92,14 +92,14 @@ export default function CashierTables ({ onPressTable = (table) => {} }) {
         {tables?.map((table) => {
           return (
             <TouchableOpacity
-              style={selected === table.id ? styles.selectedCircle : styles.circle}
+              style={selected === table?.id ? styles.selectedCircle : styles.circle}
               key={table?.key}
               onPress={() => {
                 onPressTable(table)
-                setSelected(table.id)
+                setSelected(table?.id)
               }}
             >
-              <Text style={selected === table.id ? styles.selectedText : styles.text}>{table.name}</Text>
+              <Text style={selected === table?.id ? styles.selectedText : styles.text}>{table.name}</Text>
             </TouchableOpacity>
           )
         })}

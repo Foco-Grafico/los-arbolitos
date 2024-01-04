@@ -1,4 +1,4 @@
-import { StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { DishListInOrder } from './dish-list-in-order'
 import { tableStore } from '../../../../stores/waiter'
 // import SwitchSlider from '../switch-slider'
@@ -9,7 +9,8 @@ import { tableStore } from '../../../../stores/waiter'
 
 export default function OrderSection ({ setShowSendCommand }) {
   const status = tableStore(state => state.status)
-  const allFinished = tableStore(state => state.allFinished)
+  console.log('status', status)
+  // const allFinished = tableStore(state => state.allFinished)
 
   return (
     <View style={{
@@ -22,7 +23,7 @@ export default function OrderSection ({ setShowSendCommand }) {
       paddingHorizontal: 15
     }}
     >
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={sendButton}
         onPress={() => {
           if (!allFinished) {
@@ -34,7 +35,7 @@ export default function OrderSection ({ setShowSendCommand }) {
         <Text style={buttonText}>
           SOLICITAR CUENTA
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <View
         style={{
@@ -60,7 +61,7 @@ export default function OrderSection ({ setShowSendCommand }) {
       </View>
 
       <View>
-        {status == null
+        {/* {status == null
           ? (
             <TouchableOpacity
               onPress={() => {
@@ -74,17 +75,17 @@ export default function OrderSection ({ setShowSendCommand }) {
             </TouchableOpacity>
             )
           : (
-            <TouchableOpacity
-              onPress={() => {
-                ToastAndroid.show('Comanda enviada', ToastAndroid.SHORT)
-              }}
-              style={{ ...sendButton, backgroundColor: status.bgColor }}
-            >
-              <Text style={{ ...buttonText, color: status.color }}>
-                {status.label}
-              </Text>
-            </TouchableOpacity>
-            )}
+            )} */}
+        <TouchableOpacity
+          onPress={() => {
+            status.click?.({ setShowSendCommand })
+          }}
+          style={{ ...sendButton, backgroundColor: status.bgColor }}
+        >
+          <Text style={{ ...buttonText, color: status.color }}>
+            {status.label}
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   )
