@@ -52,10 +52,12 @@ export const tableStore = create((set, get) => ({
 
     const productsArr = newOrder.dishes.map(dish => ({
       ...dish,
-      status: {
-        id: 1,
-        name: 'EN ESPERA'
-      }
+      status: dish.status.id === 2
+        ? {
+            id: 1,
+            name: 'EN ESPERA'
+          }
+        : dish.status
     }))
 
     for (const product of productsArr) {
@@ -66,10 +68,12 @@ export const tableStore = create((set, get) => ({
 
     const prettyArr = newOrder.pretty_list.map((product) => ({
       ...product,
-      status: {
-        id: 1,
-        name: 'EN ESPERA'
-      }
+      status: product.status.id === 2
+        ? {
+            id: 1,
+            name: 'EN ESPERA'
+          }
+        : product.status
     }))
 
     for (const product of prettyArr) {
