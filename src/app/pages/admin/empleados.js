@@ -1,11 +1,12 @@
 import { useEffect } from 'react'
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import * as ScreenOrientation from 'expo-screen-orientation'
-import { routerStore } from '../../../stores/router'
+import useGetUsers from '../../hooks/getUsers'
 
-export default function Admin () {
-  const nav = routerStore(state => state.nav)
+export default function Empleados () {
+  const { users } = useGetUsers()
 
+  console.log((users))
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
       .catch((err) => {
@@ -19,60 +20,20 @@ export default function Admin () {
         })
     }
   }, [])
-
-  const sections = [
-    {
-      id: 1,
-      name: 'REPORTE DE VENTAS',
-      route: 'reporteVentas'
-    },
-    {
-      id: 2,
-      name: 'REPORTE DE VENTA DE PRODUCTOS',
-      route: 'reporteVentaProductos'
-    },
-    {
-      id: 3,
-      name: 'RENDIMIENTO DE MESERO',
-      route: 'rendimientoMesero'
-    },
-    {
-      id: 4,
-      name: 'EMPLEADOS',
-      route: 'empleados'
-    },
-    {
-      id: 5,
-      name: 'INSUMOS',
-      route: 'insumos'
-    },
-    {
-      id: 6,
-      name: 'PRODUCTOS',
-      route: 'productos'
-    },
-    {
-      id: 7,
-      name: 'ACTUALIZAR STOCK',
-      route: 'actualizarStock'
-    }
-  ]
-
   return (
     <View style={styles.main}>
       <View style={styles.header}>
-        <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold' }}>PANEL ADMINISTRATIVO</Text>
+        <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold' }}>EMPLEADOS</Text>
       </View>
-      <FlatList
-        data={sections}
-        numColumns={2}
-        contentContainerStyle={{ alignItems: 'center', columnGap: 20, paddingHorizontal: 40 }}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.product} onPress={() => nav(item?.route)}>
-            <Text style={styles.text}>{item.name}</Text>
-          </TouchableOpacity>
-        )}
-      />
+      <View style={styles.container}>
+        <FlatList
+          data={users}
+          renderItem={({ item, index }) =>
+            <View>
+              <Text style={{ ...styles.text, color: index % 2 === 0 ? 'green' : 'blue' }}>{item?.name} {item?.lastname}</Text>
+            </View>}
+        />
+      </View>
       <View style={styles.footer} />
     </View>
   )

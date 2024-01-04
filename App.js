@@ -2,14 +2,15 @@ import { useEffect } from 'react'
 import { Route } from './src/app/components/route'
 import Home from './src/app/home'
 import Login from './src/app/pages/login'
-import { Waiter } from './src/app/pages/waiter'
 import Cashier from './src/app/pages/cashier'
+import Admin from './src/app/pages/admin'
 import Kitchen from './src/app/pages/kitchen'
 import { SetScreenOrientation } from './src/lib/orientation'
 import { LogBox, View } from 'react-native'
+import { Waiter } from './src/app/pages/waiter'
 import { routes } from './src/lib/data'
 import { StatusBar } from 'expo-status-bar'
-import Admin from './src/app/pages/admin'
+import Empleados from './src/app/pages/admin/empleados'
 
 LogBox.ignoreLogs(['new NativeEventEmitter', 'Aborted'])
 
@@ -43,8 +44,11 @@ export default function App () {
       <Route name={routes[3]}>
         <Kitchen />
       </Route>
-      <Route name='panel'>
+      <Route name={routes[1]}>
         <Admin />
+      </Route>
+      <Route name='empleados'>
+        <Empleados />
       </Route>
 
     </View>
