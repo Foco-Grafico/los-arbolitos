@@ -57,7 +57,9 @@ export const tableStore = create((set, get) => ({
     }
 
     set({ order: newOrder })
-  }
+  },
+
+  getOrderId: () => get().order.id
 }))
 
 export const modalStore = create((set) => ({

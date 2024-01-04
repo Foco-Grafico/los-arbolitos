@@ -9,7 +9,7 @@ export default function useWaiterGetTablesinZone () {
   const account = accountStore(state => state.account)
   const [tables, setTables] = useState([])
   const setProductsStatus = tableStore(state => state.setProductsStatus)
-  const order = tableStore(state => state.order)
+  const getOrderId = tableStore(state => state.getOrderId)
   // const tableSelected = orderStore((state) => state.selectedPostionTable)
   // const setTable = orderStore((state) => state.setTable)
 
@@ -37,8 +37,15 @@ export default function useWaiterGetTablesinZone () {
 
   useEffect(() => {
     socket.on('product_status', data => {
-      if (order.id !== data.order_id) return
-      setProductsStatus(data.products_ids, data.status)
+      const orderId = getOrderId()
+      console.log(
+        'product_status',
+        orderId,
+        { data }
+      )
+
+      if (orderId !== data.order_id) return
+      setProductsStatus(data.product_ids, data.status)
     })
 
     return () => {
