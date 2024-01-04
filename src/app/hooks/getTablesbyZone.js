@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react'
 import { accountStore } from '../../../stores/account'
 import GetTablesbyZone from '../func/get-tablesby-zone'
 // import { orderStore } from '../../../stores/waiter'
-// import { SOCKETS, socket } from '../../services/socket'
+import { socket } from '../../services/socket'
+import { tableStore } from '../../../stores/waiter'
 
 export default function useWaiterGetTablesinZone () {
   const account = accountStore(state => state.account)
   const [tables, setTables] = useState([])
+  const setProductsStatus = tableStore(state => state.setProductsStatus)
+  const order = tableStore(state => state.order)
   // const tableSelected = orderStore((state) => state.selectedPostionTable)
   // const setTable = orderStore((state) => state.setTable)
 
@@ -30,6 +33,17 @@ export default function useWaiterGetTablesinZone () {
       .catch((err) => {
         console.error(err)
       })
+  }, [])
+
+  useEffect(() => {
+    socket.on('product_status', data => {
+      if (order.id !== data.order_id) return
+      setProductsStatus(data.products_ids, data.status)
+    })
+
+    return () => {
+      socket.disconnect()
+    }
   }, [])
 
   // useEffect(() => {

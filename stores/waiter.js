@@ -43,7 +43,21 @@ export const tableStore = create((set, get) => ({
 
   setStatus: status => set({
     status: ORDER_STATES[status] ?? null
-  })
+  }),
+
+  setProductsStatus: (productsIds, status) => {
+    console.log('setProductsStatus', productsIds, status)
+    const { order } = get()
+    const newOrder = { ...order }
+
+    for (const product of newOrder.dishes) {
+      if (productsIds.includes(product.id)) {
+        product.status = status
+      }
+    }
+
+    set({ order: newOrder })
+  }
 }))
 
 export const modalStore = create((set) => ({
