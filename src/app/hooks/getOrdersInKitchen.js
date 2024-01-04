@@ -67,6 +67,10 @@ export default function useKitchenGetOrders () {
         return copyOrder
       })
     })
+
+    return () => {
+      socket.off('new_kitchen_order')
+    }
   }, [])
 
   return {

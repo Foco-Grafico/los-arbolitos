@@ -53,7 +53,8 @@ export default function useWaiterGetTablesinZone () {
     })
 
     return () => {
-      socket.disconnect()
+      socket.off('product_status')
+      socket.off('order_status')
     }
   }, [])
 
