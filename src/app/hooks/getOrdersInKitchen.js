@@ -57,7 +57,8 @@ export default function useKitchenGetOrders () {
 
           const index = prev.findIndex(o => o.id === lastOrderPriority.id)
 
-          copyOrder.splice(index, 0, order)
+          copyOrder.splice(index + 1, 0, order)
+
           return copyOrder
         }
 
