@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     flexDirection: 'row',
     width: '100%',
-    paddingVertical: 30
+    paddingVertical: 5
   },
   circle: {
     width: 40,
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: 'bold'
   },
   barright: {
