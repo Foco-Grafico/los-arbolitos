@@ -12,8 +12,8 @@ export default function OrderList ({ orders = [], bar = false }) {
   const configNewInfo = kitchenStore(state => state.configNewInfo)
   const type = useDeviceType()
   const pretty = bar
-    ? orders?.map((order, i) => order?.pretty_list?.map((dish) => ({ ...dish, orderIndex: i })).filter((dish) => dish?.type === 5))
-    : orders?.map((order, i) => order?.pretty_list?.map((dish) => ({ ...dish, orderIndex: i })).filter((dish) => dish?.type !== 5))
+    ? orders?.map((order, i) => order?.pretty_list?.map((dish) => ({ ...dish, orderIndex: i })).filter((dish) => dish?.type === 1))
+    : orders?.map((order, i) => order?.pretty_list?.map((dish) => ({ ...dish, orderIndex: i })).filter((dish) => dish?.type !== 1))
 
   console.log('pretty', JSON.stringify(pretty))
 

@@ -31,8 +31,8 @@ export default function useKitchenGetOrders (bar = false) {
           },
           orderId: res.data[0]?.id,
           dish: bar
-            ? res.data[0]?.pretty_list.find(dish => dish.type === 5)
-            : res.data[0]?.pretty_list.find(dish => dish.type !== 5),
+            ? res.data[0]?.pretty_list.find(dish => dish.type === 1)
+            : res.data[0]?.pretty_list.find(dish => dish.type !== 1),
           orderIndex: 0,
           table: res.data[0]?.table_id
         })
