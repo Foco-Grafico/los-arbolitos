@@ -53,7 +53,7 @@ export const SendToCashModal = ({ visibleController, orderId }) => {
             <TouchableOpacity
               onPress={() => {
                 sendToCashier(orderId)
-                setStatus(4)
+                setStatus(5)
                 visibleController.setVisible(false)
               }}
             >
