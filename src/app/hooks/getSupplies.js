@@ -3,10 +3,9 @@ import getSupplies from '../func/get-supplies'
 
 export default function useGetSupplies ({ q }) {
   const [supplies, setSupplies] = useState([])
-  const [view, setView] = useState(false)
 
   useEffect(() => {
-    if (!view) {
+    if (q === '') {
       setSupplies([])
       return
     }
@@ -29,10 +28,9 @@ export default function useGetSupplies ({ q }) {
       .catch(err => {
         console.error(err)
       })
-  }, [q, view])
+  }, [q])
 
   return {
-    supplies,
-    setView
+    supplies
   }
 }

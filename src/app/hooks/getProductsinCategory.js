@@ -1,16 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import GetDishesCategories from '../func/get-dishes-category'
 import { API_URL } from '../../lib/api-call/data'
+import { searchDish } from '../../lib/api-call/order/search-dish'
+import debounce from 'just-debounce-it'
 
 export default function useWaiterGetProductsInCategory () {
   // const selectedCategory = waiterStore(state => state.selectedCategory)
   // const search = waiterStore(state => state.search)
-  const [search, setSearch] = useState('')
+  const [search, setSearchUndebounce] = useState('')
   const [dishes, setDishes] = useState([])
   const [err, setErr] = useState(null)
   const [category, setCategory] = useState(null)
   const abortController = useRef(new AbortController())
   const [dishesF, setDishesF] = useState([])
+
+  const setSearch = debounce(setSearchUndebounce, 500)
 
   useEffect(() => {
     if (category == null) {
@@ -50,7 +54,15 @@ export default function useWaiterGetProductsInCategory () {
   }, [category])
 
   useEffect(() => {
-    setDishesF(dishes.filter(dish => dish.name.toLowerCase().includes(search.toLowerCase())))
+    if (search === '') {
+      setDishesF(dishes)
+      return
+    }
+
+    searchDish(search)
+      .then(data => {
+        setDishesF(data)
+      })
   }, [search, dishes])
 
   return {

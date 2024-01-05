@@ -37,6 +37,20 @@ const ORDER_STATES = {
     bgColor: '#FFA500', // Orange color
     color: '#000',
     next: null
+  },
+  6: {
+    label: 'LIBERAR MESA',
+    bgColor: '#005943', // Green color
+    color: '#fff',
+    next: null,
+    click: ({ setVisibleFreeTable }) => {
+      if (typeof setVisibleFreeTable !== 'function') {
+        ToastAndroid.show('No se pudo liberar la mesa', ToastAndroid.SHORT)
+        return
+      }
+
+      setVisibleFreeTable?.(true)
+    }
   }
 }
 
