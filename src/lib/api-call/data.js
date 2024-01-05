@@ -1,4 +1,4 @@
-export const API_URL = 'http://74.208.129.103:8001'
+export const API_URL = 'http://vps.focograficomx.com:8001'
 
 export const APIENDPOINTS = {
   getProducts: `${API_URL}/dishes`,
