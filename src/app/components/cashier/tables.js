@@ -2,16 +2,20 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 // import { v4 } from '../../../lib/uuid'
 import { useEffect, useState } from 'react'
 
-export default function CashierTables ({ onPressTable = (order) => {}, data }) {
+export default function CashierTables ({ onPressTable = (order) => {}, data, hasSelected }) {
   const [selected, setSelected] = useState(0)
 
   useEffect(() => {
+    if (hasSelected) {
+      return
+    }
+
     if (data?.length > 0) {
       onPressTable(data[0])
       return
     }
     onPressTable({})
-  }, [data])
+  }, [data, hasSelected])
 
   return (
     <View style={styles.aside}>

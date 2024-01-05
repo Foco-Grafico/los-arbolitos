@@ -16,13 +16,14 @@ export default function Cashier () {
   const [selectedTable, setSelectedTable] = useState({})
   const [originalTotal, setOriginalTotal] = useState(0)
   const { data, setData } = useGetOrdersInCashier()
+  const [discount, setDiscount] = useState(0)
+  const [totalWithDiscount, setTotalDis] = useState(0)
 
-  console.log(selectedTable.discount)
   const print = async () => {
-    const descuento = ((selectedTable?.discount !== '0' && selectedTable?.discount !== '' && selectedTable?.discount != null) ? selectedTable?.discount : 0)
-    const subtotal = (Number(selectedTable?.total) + Number(descuento))
-    const iva = (Number(selectedTable?.total) * 0.16)
-    const total = selectedTable?.total
+    const descuento = ((discount !== '0' && discount !== '' && discount != null) ? discount : 0)
+    const subtotal = Number(originalTotal)
+    const iva = (Number(totalWithDiscount) * 0.16)
+    const total = totalWithDiscount
 
     const html = `
     <html>
@@ -74,7 +75,7 @@ export default function Cashier () {
 
         </table>
         <p style=" font-family: Helvetica Neue; font-weight: normal;">
-        ${(selectedTable?.discount !== '0' && selectedTable?.discount !== '' && selectedTable?.discount != null)
+        ${(discount !== '0' && discount !== '' && discount != null && discount !== 0)
        ? `SubTotal: ${priceFormatter.format(subtotal)}<br>
           Descuento: ${priceFormatter.format(descuento)}<br>
           IVA: ${priceFormatter.format(iva)}<br>
@@ -127,18 +128,20 @@ export default function Cashier () {
     const discount = Number(text)
     const total = text ? Number(originalTotal) - discount : Number(originalTotal)
 
-    setSelectedTable({
-      ...selectedTable,
-      discount: text,
-      total
-    })
+    if (isNaN(discount)) {
+      setDiscount(0)
+      setTotalDis(originalTotal)
+      return
+    }
+
+    setTotalDis(total)
+    setDiscount(discount)
   }
 
   const handleFinishOrder = () => {
-    const currentTable = { ...selectedTable }
     finishOrderInCashier(selectedTable?.id, selectedTable?.discount ? selectedTable?.discount : 0)
     setData(prev => prev.filter(order => order.id !== selectedTable?.id))
-    setSelectedTable(currentTable)
+    setSelectedTable({})
   }
 
   return (
@@ -148,10 +151,13 @@ export default function Cashier () {
       </View>
       <View style={styles.main}>
         <Tables
+          hasSelected={selectedTable?.id != null}
           data={data}
           onPressTable={(order) => {
             setSelectedTable(order)
             setOriginalTotal(order.total)
+            setTotalDis(order.total)
+            setDiscount(0)
           }}
         />
         <View style={{ width: '70%', backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', gap: 20 }}>
@@ -160,14 +166,14 @@ export default function Cashier () {
             <Text style={styles.text}>DESCUENTO</Text>
             <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
               <TextInput
-                style={{ width: 150, paddingVertical: 5, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }} keyboardType='numeric' onChangeText={handleDiscount}
+                style={{ width: 150, paddingVertical: 5, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }} keyboardType='numeric' value={discount.toString()} onChangeText={handleDiscount}
               />
             </View>
             <Text style={styles.text}>TOTAL</Text>
             <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
 
               <Text style={{ width: 150, paddingVertical: 5, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }}>
-                {selectedTable?.total ? priceFormatter.format(selectedTable?.total) : '$0.00'}
+                {totalWithDiscount ? priceFormatter.format(totalWithDiscount) : '$0.00'}
               </Text>
             </View>
             <TouchableOpacity style={styles.buttons} onPress={print}>
