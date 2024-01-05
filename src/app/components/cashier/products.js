@@ -6,7 +6,6 @@ const priceFormatter = new Intl.NumberFormat('es-MX', {
 })
 
 export default function CashierProducts ({ table }) {
-  console.log(JSON.stringify(table))
   return (
     <View style={styles.products}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

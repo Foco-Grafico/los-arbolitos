@@ -17,11 +17,12 @@ export default function Cashier () {
   const [originalTotal, setOriginalTotal] = useState(0)
   const { data, setData } = useGetOrdersInCashier()
 
+  console.log(selectedTable.discount)
   const print = async () => {
     const descuento = ((selectedTable?.discount !== '0' && selectedTable?.discount !== '' && selectedTable?.discount != null) ? selectedTable?.discount : 0)
-    const subtotal = (Number(selectedTable?.total) + (descuento))
+    const subtotal = (Number(selectedTable?.total) + Number(descuento))
     const iva = (Number(selectedTable?.total) * 0.16)
-    const total = (selectedTable?.total)
+    const total = selectedTable?.total
 
     const html = `
     <html>
@@ -134,9 +135,10 @@ export default function Cashier () {
   }
 
   const handleFinishOrder = () => {
+    const currentTable = { ...selectedTable }
     finishOrderInCashier(selectedTable?.id, selectedTable?.discount ? selectedTable?.discount : 0)
     setData(prev => prev.filter(order => order.id !== selectedTable?.id))
-    setSelectedTable({})
+    setSelectedTable(currentTable)
   }
 
   return (
