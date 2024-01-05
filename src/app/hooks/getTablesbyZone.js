@@ -29,7 +29,12 @@ export default function useWaiterGetTablesinZone () {
       })
       .then(res => {
         // setTable(res.data[tableSelected])
-        setTables(res.data)
+        setTables(() => {
+          return res.data.map((table) => ({
+            ...table,
+            finalized: false
+          }))
+        })
       })
       .catch((err) => {
         console.error(err)
@@ -46,6 +51,23 @@ export default function useWaiterGetTablesinZone () {
 
     socket.on('order_status', data => {
       const orderId = getOrderId()
+
+      if (data.status.id === 3) {
+        setTables(prev => {
+          const copyPrev = [...prev]
+          const tableIndex = copyPrev.findIndex((table) => table.order.id === data.order_id)
+
+          const table = copyPrev[tableIndex]
+          const newTable = {
+            ...table,
+            finalized: true
+          }
+
+          copyPrev[tableIndex] = newTable
+
+          return copyPrev
+        })
+      }
 
       if (orderId !== data.order_id) return
 
