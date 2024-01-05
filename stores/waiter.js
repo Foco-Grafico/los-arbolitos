@@ -4,6 +4,7 @@ import { ToastAndroid } from 'react-native'
 
 const ORDER_STATES = {
   1: {
+    id: 1,
     label: 'ENVIAR A COCINA',
     bgColor: '#005943', // Green color
     color: '#fff',
@@ -13,12 +14,14 @@ const ORDER_STATES = {
     }
   },
   2: {
+    id: 2,
     label: 'ENVIADO A COCINA',
     bgColor: '#FFA500', // Orange color
     color: '#000',
     next: 3
   },
   3: {
+    id: 3,
     label: 'SOLICITAR CUENTA',
     bgColor: '#005943', // Green color
     color: '#fff',
@@ -33,12 +36,14 @@ const ORDER_STATES = {
     }
   },
   5: {
+    id: 5,
     label: 'EN CAJA',
     bgColor: '#FFA500', // Orange color
     color: '#000',
     next: null
   },
   6: {
+    id: 6,
     label: 'LIBERAR MESA',
     bgColor: '#005943', // Green color
     color: '#fff',

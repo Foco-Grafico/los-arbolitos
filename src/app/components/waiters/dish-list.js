@@ -29,17 +29,17 @@ export function DishList ({ dishes }) {
     if (isExistInPrettyList) {
       prettyDishesInOrder[prettyIndex].quantity++
     } else {
-      console.log('32')
-
       prettyDishesInOrder.push({
         ids: [],
         quantity: 1,
         name: item.name,
-        key: v4()
+        key: v4(),
+        status: {
+          id: 1,
+          name: 'pending'
+        }
       })
     }
-
-    console.log('42')
 
     dishesInOrder.push({
       ...dish,
@@ -60,8 +60,6 @@ export function DishList ({ dishes }) {
       key: v4()
     })
 
-    console.log('63')
-
     tableStore.setState({
       order: {
         ...order,
@@ -69,8 +67,6 @@ export function DishList ({ dishes }) {
         pretty_list: prettyDishesInOrder
       }
     })
-
-    console.log('73')
 
     return new Promise((resolve) => {
       addDishToOrder({

@@ -24,20 +24,6 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
       paddingHorizontal: 15
     }}
     >
-      {/* <TouchableOpacity
-        style={sendButton}
-        onPress={() => {
-          if (!allFinished) {
-            ToastAndroid.show('Peticion invalida, aun hay productos en cola', ToastAndroid.SHORT)
-          }
-          // toggleEnviarCuenta(table?.order?.id)
-        }}
-      >
-        <Text style={buttonText}>
-          SOLICITAR CUENTA
-        </Text>
-      </TouchableOpacity> */}
-
       <View
         style={{
           flex: 1,
@@ -73,32 +59,35 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
           </Text>
         </TouchableOpacity>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 10
-        }}
-      >
-        <Text
-          style={{
-            fontWeight: 'bold',
-            fontSize: 14
-          }}
-        >
-          COMANDA PRIORITARIA
-        </Text>
-        <Switch
-          value={order?.priority}
-          onValueChange={(priority) => {
-            togglePriority(order?.id, priority)
-            tableStore.setState({ order: { ...order, priority } })
-          }}
-          trackColor={{ false: '#fff', true: '#005943' }}
-          thumbColor={order?.priority ? '#fff' : '#005943'}
-
-        />
-      </View>
+      {
+        status.id === 1 && (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 10
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: 'bold',
+                fontSize: 14
+              }}
+            >
+              COMANDA PRIORITARIA
+            </Text>
+            <Switch
+              value={order?.priority}
+              onValueChange={(priority) => {
+                togglePriority(order?.id, priority)
+                tableStore.setState({ order: { ...order, priority } })
+              }}
+              trackColor={{ false: '#fff', true: '#005943' }}
+              thumbColor={order?.priority ? '#fff' : '#005943'}
+            />
+          </View>
+        )
+      }
     </View>
   )
 }
