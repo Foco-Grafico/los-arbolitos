@@ -8,10 +8,14 @@ import { Fragment } from 'react'
 import { v4 } from '../../../lib/uuid'
 import { markAsPreparation } from '../../../lib/api-call/kitchen/mark-as-preparation'
 
-export default function OrderList ({ orders = [] }) {
+export default function OrderList ({ orders = [], bar = false }) {
   const configNewInfo = kitchenStore(state => state.configNewInfo)
   const type = useDeviceType()
-  const pretty = orders?.map((order, i) => order?.pretty_list?.map((dish) => ({ ...dish, orderIndex: i })))
+  const pretty = bar
+    ? orders?.map((order, i) => order?.pretty_list?.map((dish) => ({ ...dish, orderIndex: i })).filter((dish) => dish?.type === 5))
+    : orders?.map((order, i) => order?.pretty_list?.map((dish) => ({ ...dish, orderIndex: i })).filter((dish) => dish?.type !== 5))
+
+  console.log('pretty', JSON.stringify(pretty))
 
   return (
     <ScrollView

@@ -4,15 +4,15 @@ import ActualDish from '../components/kitchen/actual-dish'
 import OrderList from '../components/kitchen/order-list'
 import useKitchenGetOrders from '../hooks/getOrdersInKitchen'
 
-export default function Kitchen () {
-  const { orders, setOrders } = useKitchenGetOrders()
+export default function Kitchen ({ bar = false }) {
+  const { orders, setOrders } = useKitchenGetOrders(bar)
 
   return (
     <View style={styles.container}>
       <NavBarKitchen />
       <View style={styles.middle}>
         <ActualDish setOrders={setOrders} />
-        <OrderList orders={orders} />
+        <OrderList bar={bar} orders={orders} />
       </View>
       <View style={styles.footer} />
     </View>

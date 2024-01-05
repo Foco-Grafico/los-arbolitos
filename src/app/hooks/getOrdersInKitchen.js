@@ -4,7 +4,7 @@ import { socket } from '../../services/socket'
 import getOrdersInKitchen from '../func/get-orders-in-kitchen'
 import { useEffect, useState } from 'react'
 
-export default function useKitchenGetOrders () {
+export default function useKitchenGetOrders (bar = false) {
   const [orders, setOrders] = useState([])
   const configNewInfo = kitchenStore(state => state.configNewInfo)
 
@@ -30,7 +30,9 @@ export default function useKitchenGetOrders () {
             lastName: res.data[0]?.user?.lastname
           },
           orderId: res.data[0]?.id,
-          dish: res.data[0]?.pretty_list[0],
+          dish: bar
+            ? res.data[0]?.pretty_list.find(dish => dish.type === 5)
+            : res.data[0]?.pretty_list.find(dish => dish.type !== 5),
           orderIndex: 0,
           table: res.data[0]?.table_id
         })
@@ -39,7 +41,7 @@ export default function useKitchenGetOrders () {
       .catch(err => {
         console.error(err)
       })
-  }, [])
+  }, [bar])
 
   useEffect(() => {
     socket.on('new_kitchen_order', order => {

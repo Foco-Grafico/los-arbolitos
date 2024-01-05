@@ -47,6 +47,9 @@ export default function App () {
       <Route name={routes[1]}>
         <Admin />
       </Route>
+      <Route name={routes['5']}>
+        <Kitchen bar />
+      </Route>
       <Route name='empleados'>
         <Empleados />
       </Route>
