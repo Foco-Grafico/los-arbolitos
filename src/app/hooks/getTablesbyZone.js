@@ -69,7 +69,7 @@ export default function useWaiterGetTablesinZone () {
         })
       }
 
-      if (orderId !== data.order_id) return
+      if (orderId !== Number(data.order_id)) return
 
       setStatus(data.status.id)
     })
