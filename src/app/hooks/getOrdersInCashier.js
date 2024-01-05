@@ -19,7 +19,10 @@ export default function useGetOrdersInCashier () {
         throw new Error('Error al obtener las ordenes')
       })
       .then(res => {
-        setData(res.data)
+        setData(res.data.map(order => ({
+          ...order,
+          requested: false
+        })))
       })
       .catch(err => {
         console.error(err)
@@ -28,7 +31,10 @@ export default function useGetOrdersInCashier () {
 
   useEffect(() => {
     socket.on('new_cash_order', order => {
-      setData(prev => [...prev, order])
+      setData(prev => [...prev, {
+        ...order,
+        requested: false
+      }])
     })
   }, [])
 
