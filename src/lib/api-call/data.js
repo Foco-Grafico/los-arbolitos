@@ -1,4 +1,4 @@
-export const API_URL = 'http://vps.focograficomx.com:8001'
+export const API_URL = 'https://ed76-74-208-129-103.ngrok-free.app'
 
 export const APIENDPOINTS = {
   getProducts: `${API_URL}/dishes`,
