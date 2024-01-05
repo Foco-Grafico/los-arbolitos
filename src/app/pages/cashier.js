@@ -68,7 +68,7 @@ export default function Cashier () {
         </table>
         <p style=" font-family: Helvetica Neue; font-weight: normal;">
           SubTotal: ${priceFormatter.format(Number(selectedTable?.total) + Number(selectedTable?.discount))}<br>
-          ${selectedTable.discount !== '0' && selectedTable.discount !== '' ? `Descuento: ${priceFormatter.format(selectedTable?.discount)}<br>` : ''}
+          ${(selectedTable?.discount !== '0' && selectedTable?.discount !== '' && selectedTable?.discount != null) ? `Descuento: ${priceFormatter.format(selectedTable?.discount)}<br>` : ''}
           IVA: ${priceFormatter.format(((selectedTable?.total) * 0.16))}<br>
           Total: ${priceFormatter.format(selectedTable?.total)}<br>
           Gracias por su preferencia<br>
