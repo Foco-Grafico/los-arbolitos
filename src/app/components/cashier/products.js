@@ -32,7 +32,7 @@ export default function CashierProducts ({ table }) {
                 })}
               </View>
               <View style={{ justifyContent: 'center', alignItems: 'flex-end', gap: 5 }}>
-                <Text style={styles.textProduct}>{priceFormatter.format(dish?.total?.all)}</Text>
+                <Text style={styles.textProduct}>{priceFormatter.format(dish?.price * dish?.quantity)}</Text>
                 {Object.keys(dish?.supplies_modified).map(key => {
                   return dish?.supplies_modified[key].map(supply => {
                     return (

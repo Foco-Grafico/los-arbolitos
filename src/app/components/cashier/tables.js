@@ -1,11 +1,9 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 // import { v4 } from '../../../lib/uuid'
 import { useState } from 'react'
-import useGetOrdersInCashier from '../../hooks/getOrdersInCashier'
 
-export default function CashierTables ({ onPressTable = (order) => {} }) {
+export default function CashierTables ({ onPressTable = (order) => {}, data }) {
   const [selected, setSelected] = useState()
-  const { data } = useGetOrdersInCashier()
 
   return (
     <View style={styles.aside}>
