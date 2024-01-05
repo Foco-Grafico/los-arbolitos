@@ -32,7 +32,8 @@
         "NSAppTransportSecurity" : {
           "NSAllowsArbitraryLoads" : true
         }
-      }
+      },
+      "package": "com.focografico.losarbolitos"
     },
     "web": {
       "favicon": "./assets/favicon.png"
