@@ -17,6 +17,7 @@ import SignoMenos from '../../../../assets/signodemenos'
 import { v4 } from '../../../lib/uuid'
 import { useState } from 'react'
 import debounce from 'just-debounce-it'
+import useGetSupplies from '../../hooks/getSupplies'
 
 export default function EditProducts () {
   const {
@@ -159,34 +160,45 @@ export default function EditProducts () {
                     <Eliminar style={{ width: 24, height: 24 }} />
                   </View>
 
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      gap: 5
+                  <SearchBarSupply
+                    onAddSupplyClick={(supply) => {
+                      const items = [...data.items]
+
+                      const supplyIndex = items[index].supplies.findIndex(s => s.id === supply.id)
+
+                      if (supplyIndex !== -1) {
+                        adjustQuantity(supplyIndex, index, '+')
+                        return
+                      }
+
+                      const supplies = [...data.items[index].supplies]
+
+                      const newSupply = {
+                        ...supply,
+                        quantity: 1
+                      }
+
+                      supplies.push(newSupply)
+
+                      const product = {
+                        ...items[index],
+                        supplies
+                      }
+
+                      items[index] = product
+
+                      modalStore.setState({
+                        data: {
+                          ...data,
+                          items
+                        }
+                      })
                     }}
-                  >
-                    <TextInput
-                      style={{
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        color: '#000',
-                        paddingHorizontal: 10,
-                        width: 200
-                      }}
-                      onChangeText={(text) => {
-
-                      }}
-                      placeholder='BUSCAR'
-                      placeholderTextColor='#005943'
-                    />
-
-                    <SignoMas style={{ width: 24, height: 24 }} />
-                  </View>
+                  />
 
                 </View>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', width: '70%' }}>
                   {item.supplies.map((supply, i) => <Supply adjust={adjustQuantity} key={v4()} supply={supply} productIndex={index} index={i} />)}
                 </View>
 
@@ -275,9 +287,9 @@ export default function EditProducts () {
                     quantity: supply?.quantity
                   }))
 
-                  console.log(product.comment)
+                  const comment = product.comment === '' || product.comment === 'null' || product.comment === 'undefined' ? null : product.comment
 
-                  return modifyDish(data?.orderId, product?.id, supplies, product?.priority, product?.comment)
+                  return modifyDish(data?.orderId, product?.id, supplies, product?.priority, comment)
                 })
 
                 await Promise.all(promiseArray)
@@ -293,223 +305,80 @@ export default function EditProducts () {
       </View>
     )
   }
+}
+const SearchBarSupply = ({ onAddSupplyClick }) => {
+  const [q, setQ] = useState('')
+  const { supplies } = useGetSupplies({ q })
 
-  // const { isDishSelected, setIsDishSelected, selectedProducts, addSupplyToProduct, table, editPriority } = orderStore((state) => ({
-  //   isDishSelected: state.isDishSelected,
-  //   setIsDishSelected: state.setIsDishSelected,
-  //   selectedProducts: state.selectedProducts,
-  //   addSupplyToProduct: state.addSupplyToProduct,
-  //   table: state.table,
-  //   editPriority: state.editPriority
-  // }))
-  // const [query, setQuery] = useState(null)
-  // const { supplies, setView } = useGetSupplies({ q: query })
+  const setQuery = debounce(setQ, 500)
 
-  // console.log(selectedProducts)
-
-  // const toggleModificarPlatillo = () => {
-  //   setIsDishSelected(false)
-
-  // if (!Array.isArray(selectedProducts)) {
-  //   const supplies = selectedProducts.supplies.map(supply => ({
-  //     id: supply.id,
-  //     quantity: supply.quantity
-  //   }))
-
-  //   addDishToOrder({
-  //     dishId: selectedProducts.id,
-  //     orderId: table?.order?.id,
-  //     supplies
-  //   })
-
-  //   return
-  // }
-  //   for (const product of selectedProducts) {
-  //     const supplies = product.supplies.map(supply => ({
-  //       id: supply.id,
-  //       quantity: supply.quantity
-  //     }))
-
-  //     console.log(supplies)
-
-  //     modifyDish(table?.order?.id, product.id, supplies, product.priority)
-  //       .catch((error) => {
-  //         console.log(error)
-  //       })
-  //   }
-  // }
-
-  // const debouncedSetQ = debounce(setQuery, 400)
-
-  //   if (isDishSelected) {
-  //     return (
-  //       <View
-  //         style={{
-  //           position: 'absolute',
-  //           width: '100%',
-  //           height: '100%'
-  //         }}
-  //       >
-
-  //         <View style={styles.modal}>
-  //           <View style={styles.modalEditProduct}>
-  //             <ScrollView
-  //               onScroll={() => {
-  //                 setView(false)
-  //               }}
-  //               contentContainerStyle={{ }}
-  //             >
-  //               {
-  //                 selectedProducts.map((item, i) => (
-  //                   <Product
-  //                     setPriority={editPriority}
-  //                     addSupplyToProduct={addSupplyToProduct}
-  //                     suppliesSetView={setView} setQ={debouncedSetQ}
-  //                     supplies={supplies}
-  //                     key={item.key}
-  //                     product={item}
-  //                     index={i}
-  //                   />
-  //                 ))
-  // }
-  //             </ScrollView>
-  //             <TouchableOpacity
-  //               onPress={toggleModificarPlatillo}
-  //             >
-  //               <Aceptar style={{ width: 24, height: 24 }} />
-  //             </TouchableOpacity>
-  //           </View>
-  //         </View>
-  //       </View>
-  //     )
-  //   }
-  // }
-
-  // const Product = ({ product, index, setQ, supplies, suppliesSetView, addSupplyToProduct, setPriority }) => {
-  //   return (
-  //     <View style={styles.modalObject}>
-  //       <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-  //         <View style={{ flexDirection: 'row', gap: 5 }}>
-  //           <Text style={{ backgroundColor: '#005943', color: '#fff', borderRadius: 10, paddingHorizontal: 15, paddingVertical: 2, fontWeight: 'bold', fontSize: 15 }}>
-  //             {product.name}
-  //           </Text>
-  //           <Eliminar style={{ width: 24, height: 24 }} />
-  //         </View>
-  //         <View style={{ flexDirection: 'row', paddingHorizontal: 20, position: 'relative' }}>
-  //           <TextInput
-  //             onChangeText={(text) => {
-  //               suppliesSetView(true)
-  //               setQ(text)
-  //             }}
-  //             placeholder='BUSCAR'
-  //             placeholderTextColor='#005943'
-  //             style={styles.buscador}
-  //           />
-  //           {supplies.length > 0 && (
-  //             <View style={{
-  //               position: 'absolute',
-  //               top: '105%',
-  //               width: '100%',
-  //               left: 20,
-  //               maxHeight: 110,
-  //               backgroundColor: '#8d89898a',
-  //               borderRadius: 5,
-  //               gap: 5,
-  //               paddingVertical: 5,
-  //               overflow: 'hidden'
-  //             }}
-  //             >
-  //               {supplies.map((supply, i) => {
-  //                 return (
-  //                   <TouchableOpacity
-  //                     onPress={() => {
-  //                       const newSupply = {
-  //                         extra_cost: 0,
-  //                         id: supply.id,
-  //                         key: `${supply.key + i}`,
-  //                         name: supply.name,
-  //                         quantity: 1
-  //                       }
-
-  //                       addSupplyToProduct(newSupply, index)
-  //                       suppliesSetView(false)
-  //                     }}
-  //                     style={{ width: '100%', paddingHorizontal: 10 }} key={supply.key}
-  //                   >
-  //                     {supply != null
-  //                       ? (
-  //                         <Text style={{
-  //                           fontSize: 15,
-  //                           fontWeight: 'bold'
-  //                         }}
-  //                         >
-  //                           {supply?.name}
-  //                         </Text>
-  //                         )
-  //                       : null}
-  //                   </TouchableOpacity>
-  //                 )
-  //               })}
-  //               {supplies?.name}
-  //             </View>
-  //           )}
-  //         </View>
-  //       </View>
-  //       <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
-  //         {product.supplies.map((supply, i) => <Supply key={supply.key} supply={supply} productIndex={index} index={i} />)}
-  //       </View>
-  //       <View style={styles.textinput}>
-  //         <TextInput style={styles.modalText} placeholderTextColor='#005943' placeholder='Observaciones' />
-  //       </View>
-
-  //       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 15 }}>
-  //         <Text style={styles.modalText}>
-  //           PLATILLO PRIORITARIO
-  //         </Text>
-  //         <SwitchSlider
-  //           defaultValue={product?.priority}
-  //           onPress={(value) => {
-  //             setPriority(value, index)
-  //           }}
-  //         />
-  //       </View>
-  //       <View style={{ backgroundColor: '#005943', width: '90%', height: 5, alignContent: 'center' }} />
-  //     </View>
-  //   )
-  // }
-
-  // const Supply = ({ supply, index, productIndex }) => {
-  //   const { incrementSupplyQuantity, decrementSupplyQuantity } = orderStore((state) => ({
-  //     incrementSupplyQuantity: state.incrementSupplyQuantity,
-  //     decrementSupplyQuantity: state.decrementSupplyQuantity
-  //   }))
-
-  //   return (
-  //     <View style={{ width: 250, marginBottom: 5, flexDirection: 'row', gap: 20 }}>
-  //       <Text style={{ width: 100, color: '#005943', fontSize: 15, fontWeight: 'bold' }}>
-  //         {supply?.name}
-  //       </Text>
-  //       <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 20 }}>
-  //         <TouchableOpacity
-  //           onPress={() => {
-  //             decrementSupplyQuantity(index, productIndex)
-  //           }}
-  //         >
-  //           <SignoMenos style={{ width: 24, height: 24 }} />
-  //         </TouchableOpacity>
-  //         <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>
-  //           {supply?.quantity}
-  //         </Text>
-  //         <TouchableOpacity
-  //           onPress={() => {
-  //             incrementSupplyQuantity(index, productIndex)
-  //           }}
-  //         >
-  //           <SignoMas style={{ width: 24, height: 24 }} />
-  //         </TouchableOpacity>
-  //       </View>
-  //     </View>
-  //   )
+  return (
+    <View
+      style={{
+        position: 'relative'
+      }}
+    >
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 5
+        }}
+      >
+        <TextInput
+          style={{
+            borderWidth: 1,
+            borderRadius: 10,
+            color: '#000',
+            paddingHorizontal: 10,
+            width: 200
+          }}
+          onChangeText={setQuery}
+          placeholder='BUSCAR'
+          placeholderTextColor='#005943'
+        />
+        {/* <SignoMas style={{ width: 24, height: 24 }} /> */}
+      </View>
+      {supplies.length > 0 && (
+        <View
+          style={{
+            position: 'absolute',
+            top: '105%',
+            width: '100%',
+            maxHeight: 110,
+            borderRadius: 5,
+            gap: 5,
+            paddingVertical: 5,
+            overflow: 'hidden',
+            backgroundColor: '#8d89898a'
+          }}
+        >
+          {supplies.map((supply) => (
+            <TouchableOpacity
+              key={supply.id}
+              onPress={() => {
+                onAddSupplyClick?.(supply)
+              }}
+              style={{
+                width: '100%',
+                paddingHorizontal: 10
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: 'bold',
+                  paddingHorizontal: 10
+                }}
+              >
+                {supply.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+    </View>
+  )
 }
 
 const Supply = ({ supply, index, productIndex, adjust, onChangeCounter = () => {} }) => {
@@ -550,6 +419,223 @@ const Supply = ({ supply, index, productIndex, adjust, onChangeCounter = () => {
     </View>
   )
 }
+
+// const { isDishSelected, setIsDishSelected, selectedProducts, addSupplyToProduct, table, editPriority } = orderStore((state) => ({
+//   isDishSelected: state.isDishSelected,
+//   setIsDishSelected: state.setIsDishSelected,
+//   selectedProducts: state.selectedProducts,
+//   addSupplyToProduct: state.addSupplyToProduct,
+//   table: state.table,
+//   editPriority: state.editPriority
+// }))
+// const [query, setQuery] = useState(null)
+// const { supplies, setView } = useGetSupplies({ q: query })
+
+// console.log(selectedProducts)
+
+// const toggleModificarPlatillo = () => {
+//   setIsDishSelected(false)
+
+// if (!Array.isArray(selectedProducts)) {
+//   const supplies = selectedProducts.supplies.map(supply => ({
+//     id: supply.id,
+//     quantity: supply.quantity
+//   }))
+
+//   addDishToOrder({
+//     dishId: selectedProducts.id,
+//     orderId: table?.order?.id,
+//     supplies
+//   })
+
+//   return
+// }
+//   for (const product of selectedProducts) {
+//     const supplies = product.supplies.map(supply => ({
+//       id: supply.id,
+//       quantity: supply.quantity
+//     }))
+
+//     console.log(supplies)
+
+//     modifyDish(table?.order?.id, product.id, supplies, product.priority)
+//       .catch((error) => {
+//         console.log(error)
+//       })
+//   }
+// }
+
+// const debouncedSetQ = debounce(setQuery, 400)
+
+//   if (isDishSelected) {
+//     return (
+//       <View
+//         style={{
+//           position: 'absolute',
+//           width: '100%',
+//           height: '100%'
+//         }}
+//       >
+
+//         <View style={styles.modal}>
+//           <View style={styles.modalEditProduct}>
+//             <ScrollView
+//               onScroll={() => {
+//                 setView(false)
+//               }}
+//               contentContainerStyle={{ }}
+//             >
+//               {
+//                 selectedProducts.map((item, i) => (
+//                   <Product
+//                     setPriority={editPriority}
+//                     addSupplyToProduct={addSupplyToProduct}
+//                     suppliesSetView={setView} setQ={debouncedSetQ}
+//                     supplies={supplies}
+//                     key={item.key}
+//                     product={item}
+//                     index={i}
+//                   />
+//                 ))
+// }
+//             </ScrollView>
+//             <TouchableOpacity
+//               onPress={toggleModificarPlatillo}
+//             >
+//               <Aceptar style={{ width: 24, height: 24 }} />
+//             </TouchableOpacity>
+//           </View>
+//         </View>
+//       </View>
+//     )
+//   }
+// }
+
+// const Product = ({ product, index, setQ, supplies, suppliesSetView, addSupplyToProduct, setPriority }) => {
+//   return (
+//     <View style={styles.modalObject}>
+//       <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+//         <View style={{ flexDirection: 'row', gap: 5 }}>
+//           <Text style={{ backgroundColor: '#005943', color: '#fff', borderRadius: 10, paddingHorizontal: 15, paddingVertical: 2, fontWeight: 'bold', fontSize: 15 }}>
+//             {product.name}
+//           </Text>
+//           <Eliminar style={{ width: 24, height: 24 }} />
+//         </View>
+//         <View style={{ flexDirection: 'row', paddingHorizontal: 20, position: 'relative' }}>
+//           <TextInput
+//             onChangeText={(text) => {
+//               suppliesSetView(true)
+//               setQ(text)
+//             }}
+//             placeholder='BUSCAR'
+//             placeholderTextColor='#005943'
+//             style={styles.buscador}
+//           />
+//           {supplies.length > 0 && (
+//             <View style={{
+//               position: 'absolute',
+//               top: '105%',
+//               width: '100%',
+//               left: 20,
+//               maxHeight: 110,
+//               backgroundColor: '#8d89898a',
+//               borderRadius: 5,
+//               gap: 5,
+//               paddingVertical: 5,
+//               overflow: 'hidden'
+//             }}
+//             >
+//               {supplies.map((supply, i) => {
+//                 return (
+//                   <TouchableOpacity
+//                     onPress={() => {
+//                       const newSupply = {
+//                         extra_cost: 0,
+//                         id: supply.id,
+//                         key: `${supply.key + i}`,
+//                         name: supply.name,
+//                         quantity: 1
+//                       }
+
+//                       addSupplyToProduct(newSupply, index)
+//                       suppliesSetView(false)
+//                     }}
+//                     style={{ width: '100%', paddingHorizontal: 10 }} key={supply.key}
+//                   >
+//                     {supply != null
+//                       ? (
+//                         <Text style={{
+//                           fontSize: 15,
+//                           fontWeight: 'bold'
+//                         }}
+//                         >
+//                           {supply?.name}
+//                         </Text>
+//                         )
+//                       : null}
+//                   </TouchableOpacity>
+//                 )
+//               })}
+//               {supplies?.name}
+//             </View>
+//           )}
+//         </View>
+//       </View>
+//       <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
+//         {product.supplies.map((supply, i) => <Supply key={supply.key} supply={supply} productIndex={index} index={i} />)}
+//       </View>
+//       <View style={styles.textinput}>
+//         <TextInput style={styles.modalText} placeholderTextColor='#005943' placeholder='Observaciones' />
+//       </View>
+
+//       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 15 }}>
+//         <Text style={styles.modalText}>
+//           PLATILLO PRIORITARIO
+//         </Text>
+//         <SwitchSlider
+//           defaultValue={product?.priority}
+//           onPress={(value) => {
+//             setPriority(value, index)
+//           }}
+//         />
+//       </View>
+//       <View style={{ backgroundColor: '#005943', width: '90%', height: 5, alignContent: 'center' }} />
+//     </View>
+//   )
+// }
+
+// const Supply = ({ supply, index, productIndex }) => {
+//   const { incrementSupplyQuantity, decrementSupplyQuantity } = orderStore((state) => ({
+//     incrementSupplyQuantity: state.incrementSupplyQuantity,
+//     decrementSupplyQuantity: state.decrementSupplyQuantity
+//   }))
+
+//   return (
+//     <View style={{ width: 250, marginBottom: 5, flexDirection: 'row', gap: 20 }}>
+//       <Text style={{ width: 100, color: '#005943', fontSize: 15, fontWeight: 'bold' }}>
+//         {supply?.name}
+//       </Text>
+//       <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 20 }}>
+//         <TouchableOpacity
+//           onPress={() => {
+//             decrementSupplyQuantity(index, productIndex)
+//           }}
+//         >
+//           <SignoMenos style={{ width: 24, height: 24 }} />
+//         </TouchableOpacity>
+//         <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>
+//           {supply?.quantity}
+//         </Text>
+//         <TouchableOpacity
+//           onPress={() => {
+//             incrementSupplyQuantity(index, productIndex)
+//           }}
+//         >
+//           <SignoMas style={{ width: 24, height: 24 }} />
+//         </TouchableOpacity>
+//       </View>
+//     </View>
+//   )
 
 // const styles = StyleSheet.create({
 //   modal: {
