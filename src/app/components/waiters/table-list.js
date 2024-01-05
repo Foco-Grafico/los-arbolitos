@@ -1,10 +1,8 @@
-import useWaiterGetTablesinZone from '../../hooks/getTablesbyZone'
 import { Text, View, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
 import { useEffect, useState } from 'react'
 import { AlimentoPreparado } from '../../../../assets/alimento-preparado'
 
-export function TableList ({ onPressItem = () => {} }) {
-  const { tables } = useWaiterGetTablesinZone()
+export function TableList ({ onPressItem = () => {}, data: tables = [] }) {
   const [tableSelected, setTableSelected] = useState(0)
 
   console.log('tables', tables[0])

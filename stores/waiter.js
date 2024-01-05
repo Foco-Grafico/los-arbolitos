@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { getOrder } from '../src/lib/api-call/order/get-order'
 import { ToastAndroid } from 'react-native'
+import { liberateTable } from '../src/lib/api-call/order/liberate'
 
 const ORDER_STATES = {
   1: {
@@ -48,13 +49,14 @@ const ORDER_STATES = {
     bgColor: '#005943', // Green color
     color: '#fff',
     next: null,
-    click: ({ setVisibleFreeTable }) => {
-      if (typeof setVisibleFreeTable !== 'function') {
-        ToastAndroid.show('No se pudo liberar la mesa', ToastAndroid.SHORT)
-        return
-      }
-
-      setVisibleFreeTable?.(true)
+    click: ({ orderId, cb }) => {
+      liberateTable(orderId)
+        .then(({ new_current_order: newCurrentOrder }) => {
+          getOrder(newCurrentOrder)
+            .then(order => {
+              cb?.(order)
+            })
+        })
     }
   }
 }

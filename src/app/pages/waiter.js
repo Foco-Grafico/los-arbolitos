@@ -9,11 +9,13 @@ import OrderSection from '../components/waiters/order-section'
 import { Products } from '../components/waiters/products'
 import { useState } from 'react'
 import { getOrder } from '../../lib/api-call/order/get-order'
+import useWaiterGetTablesinZone from '../hooks/getTablesbyZone'
 // import DishList from '../components/waiters/dish-list'
 // import { sendToCashier, sendTokitchen } from '../../lib/api-call/order/move-order'
 
 export function Waiter () {
   const setTable = tableStore(state => state.setTable)
+  const { tables, setTables } = useWaiterGetTablesinZone()
 
   const [visibleSendCommand, setVisibleSendCommand] = useState(false)
   const [visibleSendToCash, setVisibleSendToCash] = useState(false)
@@ -24,15 +26,16 @@ export function Waiter () {
       flex: 1
     }}
     >
-      <TableList onPressItem={(table) => {
-        getOrder(table.current_order)
-          .then(order => {
-            setTable({ ...table, order })
-          })
-      }}
+      <TableList
+        data={tables} onPressItem={(table) => {
+          getOrder(table.current_order)
+            .then(order => {
+              setTable({ ...table, order })
+            })
+        }}
       />
 
-      <OrderSection setVisibleSendToCash={setVisibleSendToCash} setShowSendCommand={setVisibleSendCommand} />
+      <OrderSection setTables={setTables} setVisibleSendToCash={setVisibleSendToCash} setShowSendCommand={setVisibleSendCommand} />
 
       <Products
         isVisibleSendCommand={{

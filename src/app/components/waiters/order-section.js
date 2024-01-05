@@ -7,9 +7,11 @@ import { tableStore } from '../../../../stores/waiter'
 import { togglePriority } from '../../../lib/api-call/order/toggle'
 // import { useEffect, useState } from 'react'
 
-export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash }) {
+export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash, setTables }) {
   const status = tableStore(state => state.status)
   const order = tableStore(state => state.order)
+  const setTable = tableStore(state => state.setTable)
+  const table = tableStore(state => state.table)
   console.log('status', status)
   // const allFinished = tableStore(state => state.allFinished)
 
@@ -50,7 +52,27 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
       <View>
         <TouchableOpacity
           onPress={() => {
-            status.click?.({ setShowSendCommand, setVisibleSendToCash })
+            status.click?.({
+              setShowSendCommand,
+              setVisibleSendToCash,
+              orderId: order?.id,
+              cb: order => {
+                setTable({
+                  ...table,
+                  order
+                })
+                setTables(prev => {
+                  const copyPrev = [...prev]
+
+                  copyPrev[table.tableIndex] = {
+                    ...copyPrev[table.tableIndex],
+                    current_order: order.id
+                  }
+
+                  return copyPrev
+                })
+              }
+            })
           }}
           style={{ ...sendButton, backgroundColor: status?.bgColor }}
         >

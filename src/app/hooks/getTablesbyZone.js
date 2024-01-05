@@ -30,9 +30,10 @@ export default function useWaiterGetTablesinZone () {
       .then(res => {
         // setTable(res.data[tableSelected])
         setTables(() => {
-          return res.data.map((table) => ({
+          return res.data.map((table, index) => ({
             ...table,
-            finalized: false
+            finalized: false,
+            tableIndex: index
           }))
         })
       })
@@ -131,6 +132,7 @@ export default function useWaiterGetTablesinZone () {
   // }, [])
 
   return {
-    tables
+    tables,
+    setTables
   }
 }
