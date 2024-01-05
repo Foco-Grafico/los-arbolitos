@@ -1,25 +1,34 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 // import { v4 } from '../../../lib/uuid'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function CashierTables ({ onPressTable = (order) => {}, data }) {
-  const [selected, setSelected] = useState()
+  const [selected, setSelected] = useState(0)
+
+  useEffect(() => {
+    if (data?.length > 0) {
+      onPressTable(data[0])
+      return
+    }
+    onPressTable({})
+  }, [data])
 
   return (
     <View style={styles.aside}>
       <ScrollView contentContainerStyle={{ height: '90%', gap: 20, paddingVertical: 15 }}>
-        {data?.map((order) => {
+        {data?.map((order, i) => {
           return (
-            <TouchableOpacity
-              style={selected === order.id ? styles.selectedCircle : styles.circle}
-              key={order?.key}
-              onPress={() => {
-                onPressTable(order)
-                setSelected(order.id)
-              }}
-            >
-              <Text style={selected === order.id ? styles.selectedText : styles.text}>{order?.table?.name}</Text>
-            </TouchableOpacity>
+            <View key={order?.key} style={{ position: 'relative' }}>
+              <TouchableOpacity
+                style={selected === i ? styles.selectedCircle : styles.circle} onPress={() => {
+                  onPressTable(order)
+                  setSelected(i)
+                }}
+              >
+                <Text style={selected === i ? styles.selectedText : styles.text}>{order?.table?.name}</Text>
+              </TouchableOpacity>
+              {order.requested ? <View style={{ position: 'absolute', borderWidth: 1, width: 30, height: 30, borderRadius: 100, top: 0, right: 0, backgroundColor: 'red' }} /> : null}
+            </View>
           )
         })}
       </ScrollView>

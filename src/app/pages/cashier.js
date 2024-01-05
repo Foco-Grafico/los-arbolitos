@@ -17,17 +17,23 @@ export default function Cashier () {
   const [originalTotal, setOriginalTotal] = useState(0)
   const { data, setData } = useGetOrdersInCashier()
 
-  console.log(selectedTable)
   const print = async () => {
+    const descuento = ((selectedTable?.discount !== '0' && selectedTable?.discount !== '' && selectedTable?.discount != null) ? selectedTable?.discount : 0)
+    const subtotal = (Number(selectedTable?.total) + (descuento))
+    const iva = (Number(selectedTable?.total) * 0.16)
+    const total = (selectedTable?.total)
+
     const html = `
     <html>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
       </head>
-      <body style="text-align: center;">
+      <body style="text-align: center; justify-content:space-around;">
         <p style=" font-family: Helvetica Neue; font-weight: normal;">
          RESTAURANT "LOS ARBOLITOS"<br>
-          Cuenta<br>
+         DIRECCIÓN: AV. ANTONIO TOLEDO CORRO #14 HUERTOS FAMILIARES<br>
+         MAZATLÁN, SINALOA CP. 82137<br>
+          MESA ${selectedTable?.table?.name}<br>
           ${new Date().toLocaleDateString()}
         </p>
         <table style="width: 100%; border-collapse: collapse;">
@@ -67,12 +73,21 @@ export default function Cashier () {
 
         </table>
         <p style=" font-family: Helvetica Neue; font-weight: normal;">
-          SubTotal: ${priceFormatter.format(Number(selectedTable?.total) + Number(selectedTable?.discount))}<br>
-          ${(selectedTable?.discount !== '0' && selectedTable?.discount !== '' && selectedTable?.discount != null) ? `Descuento: ${priceFormatter.format(selectedTable?.discount)}<br>` : ''}
-          IVA: ${priceFormatter.format(((selectedTable?.total) * 0.16))}<br>
-          Total: ${priceFormatter.format(selectedTable?.total)}<br>
+        ${(selectedTable?.discount !== '0' && selectedTable?.discount !== '' && selectedTable?.discount != null)
+       ? `SubTotal: ${priceFormatter.format(subtotal)}<br>
+          Descuento: ${priceFormatter.format(descuento)}<br>
+          IVA: ${priceFormatter.format(iva)}<br>
+          Total: ${priceFormatter.format(total)} (IVA incluido)<br>
           Gracias por su preferencia<br>
           ¡Vuelva pronto!
+          `
+        : `SubTotal: ${priceFormatter.format(subtotal)}<br>
+          IVA: ${priceFormatter.format(iva)}<br>
+          Total: ${priceFormatter.format(total)} (IVA incluido)<br>
+          Gracias por su preferencia<br>
+          ¡Vuelva pronto!
+          `
+      }
         </p>
 
       </body>
@@ -81,6 +96,19 @@ export default function Cashier () {
     try {
       await Print.printAsync({
         html
+      })
+      setData(prev => {
+        const copyPrev = [...prev]
+        const index = copyPrev.findIndex(order => order.id === selectedTable?.id)
+
+        const newOrder = {
+          ...copyPrev[index],
+          requested: true
+        }
+
+        copyPrev[index] = newOrder
+
+        return copyPrev
       })
     } catch (e) {
       console.log(e)
@@ -144,8 +172,10 @@ export default function Cashier () {
               <Text style={{ color: '#fff', fontWeight: 'bold' }}>IMPRIMIR</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.buttons} onPress={handleFinishOrder}>
-            <Text style={{ color: '#fff', fontWeight: 'bold' }}>CERRAR CUENTA</Text>
+          <TouchableOpacity style={styles.buttons} onPress={handleFinishOrder} disabled={!selectedTable?.requested}>
+            {selectedTable?.requested
+              ? <Text style={{ color: '#fff', fontWeight: 'bold' }}>CERRAR CUENTA</Text>
+              : <Text style={{ color: '#fff', fontWeight: 'bold' }}>ESPERE...</Text>}
           </TouchableOpacity>
         </View>
       </View>
