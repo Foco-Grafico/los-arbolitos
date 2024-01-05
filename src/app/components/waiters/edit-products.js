@@ -79,7 +79,7 @@ export default function EditProducts () {
         items
       }
     })
-  }, 500)
+  }, 3000)
 
   if (show === 'editDish') {
     return (
@@ -91,7 +91,7 @@ export default function EditProducts () {
           backgroundColor: '#377c6a90',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: 80
+          padding: 50
         }}
       >
         <View
@@ -217,7 +217,7 @@ export default function EditProducts () {
                     style={{
                       flexWrap: 'wrap'
                     }}
-                    defaultValue={item.comment}
+                    defaultValue={item.comment === 'null' || item.comment === 'undefined' ? '' : item.comment}
                     onChangeText={(text) => {
                       setComment(text, index)
                     }}

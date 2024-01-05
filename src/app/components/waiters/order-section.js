@@ -76,8 +76,8 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
           }}
           style={{ ...sendButton, backgroundColor: status?.bgColor }}
         >
-          <Text style={{ ...buttonText, color: status.color }}>
-            {status.label}
+          <Text style={{ ...buttonText, color: status?.color }}>
+            {status?.label}
           </Text>
         </TouchableOpacity>
       </View>

@@ -1,6 +1,6 @@
 import { APIENDPOINTS } from '../../lib/api-call/data'
 
-export default function getOrdersInKitchen () {
+export default function getOrdersInKitchen (bar) {
   const headers = new Headers()
   headers.append('accept', 'application/json')
 
@@ -9,5 +9,5 @@ export default function getOrdersInKitchen () {
     headers
   }
 
-  return fetch(`${APIENDPOINTS.getOrdersKitchen}`, options)
+  return fetch(`${APIENDPOINTS.getOrdersKitchen}?bar=${bar}`, options)
 }

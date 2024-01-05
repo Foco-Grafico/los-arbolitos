@@ -11,7 +11,7 @@ export default function Kitchen ({ bar = false }) {
     <View style={styles.container}>
       <NavBarKitchen />
       <View style={styles.middle}>
-        <ActualDish setOrders={setOrders} />
+        <ActualDish bar={bar} setOrders={setOrders} />
         <OrderList bar={bar} orders={orders} />
       </View>
       <View style={styles.footer} />

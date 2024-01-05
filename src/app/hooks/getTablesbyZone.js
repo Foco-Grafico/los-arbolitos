@@ -53,26 +53,28 @@ export default function useWaiterGetTablesinZone () {
     socket.on('order_status', data => {
       const orderId = getOrderId()
 
-      if (data.status.id === 3) {
-        setTables(prev => {
-          const copyPrev = [...prev]
-          const tableIndex = copyPrev.findIndex((table) => table.order.id === data.order_id)
+      // if (data?.status?.id === 3) {
+      //   ToastAndroid.show('La orden ha sido finalizada', ToastAndroid.SHORT)
 
-          const table = copyPrev[tableIndex]
-          const newTable = {
-            ...table,
-            finalized: true
-          }
+      //   setTables(prev => {
+      //     const copyPrev = [...prev]
+      //     const tableIndex = copyPrev.findIndex((table) => table?.order?.id === data.order_id)
 
-          copyPrev[tableIndex] = newTable
+      //     const table = copyPrev[tableIndex]
+      //     const newTable = {
+      //       ...table,
+      //       finalized: true
+      //     }
 
-          return copyPrev
-        })
-      }
+      //     copyPrev[tableIndex] = newTable
 
-      if (orderId !== Number(data.order_id)) return
+      //     return copyPrev
+      //   })
+      // }
 
-      setStatus(data.status.id)
+      if (orderId !== Number(data?.order_id)) return
+
+      setStatus(data?.status?.id)
     })
   }, [])
 

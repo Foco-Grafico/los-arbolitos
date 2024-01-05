@@ -5,7 +5,7 @@ import SignoMas from '../../../../assets/signodemas'
 import Editar from '../../../../assets/editar'
 import addDishToOrder from '../../../lib/api-call/order/add-dish-to-order'
 import { modalStore, tableStore } from '../../../../stores/waiter'
-import { Image } from 'expo-image'
+// import { Image } from 'expo-image'
 import { v4 } from '../../../lib/uuid'
 
 export function DishList ({ dishes }) {
@@ -130,11 +130,19 @@ export function DishList ({ dishes }) {
             flexDirection: 'row'
           }}
         >
-          <Image
+          {/* <Image
             source={item.picture}
             style={{
               width: 110,
               height: 110
+            }}
+          /> */}
+          <View
+            style={{
+              width: 110,
+              height: 110,
+              borderWidth: 1,
+              borderColor: '#000'
             }}
           />
           <View
@@ -156,9 +164,9 @@ export function DishList ({ dishes }) {
               >
                 {item?.name}
               </Text>
-              <Text>
+              {/* <Text>
                 {item?.description}
-              </Text>
+              </Text> */}
             </View>
             <View
               style={{

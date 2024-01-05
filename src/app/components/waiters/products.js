@@ -1,4 +1,4 @@
-import { Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import EditProducts from './edit-products'
 import useGetCategories from '../../hooks/useGetCategories'
 import { useEffect, useState } from 'react'
@@ -76,33 +76,39 @@ const Footer = ({ onPressInCat = () => {} }) => {
         backgroundColor: '#462f27'
       }}
     >
-      {categories.map((category, i) => (
-        <TouchableOpacity
-          onPress={() => {
-            setSelected(i)
-            onPressInCat(category)
-          }}
-          key={category?.key}
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingVertical: 10,
-            backgroundColor: selected === i ? '#005942' : '#462f27'
-          }}
-        >
-          <Text
+      <ScrollView
+        horizontal
+        contentContainerStyle={{
+          gap: 20
+        }}
+      >
+        {categories.map((category, i) => (
+          <TouchableOpacity
+            onPress={() => {
+              setSelected(i)
+              onPressInCat(category)
+            }}
+            key={category?.key}
             style={{
-              fontSize: 16,
-              color: '#fff',
-              textAlign: 'center',
-              fontWeight: 'bold'
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingVertical: 10,
+              backgroundColor: selected === i ? '#005942' : '#462f27'
             }}
           >
-            {category?.name}
-          </Text>
-        </TouchableOpacity>
-      ))}
+            <Text
+              style={{
+                fontSize: 16,
+                color: '#fff',
+                textAlign: 'center',
+                fontWeight: 'bold'
+              }}
+            >
+              {category?.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </View>
   )
 }

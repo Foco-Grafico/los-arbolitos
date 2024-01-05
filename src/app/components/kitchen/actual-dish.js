@@ -1,62 +1,92 @@
-import { Image } from 'expo-image'
+// import { Image } from 'expo-image'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import Aceptar from '../../../../assets/aceptar'
 import { kitchenStore } from '../../../../stores/kitchen'
-import { API_URL } from '../../../lib/api-call/data'
 import finishOrderInKitchen from '../../func/finish-order-in-kitchen'
 import { v4 } from '../../../lib/uuid'
 import { useDeviceType, types } from '../../hooks/device'
 import { markAsPreparation } from '../../../lib/api-call/kitchen/mark-as-preparation'
-// import useKitchenGetOrders from '../../hooks/getOrdersInKitchen'
 
-export default function ActualDish ({ setOrders }) {
+export default function ActualDish ({ setOrders, bar = false }) {
   const dish = kitchenStore(state => state.selectedDish)
-  const orderIndex = kitchenStore(state => state.orderIndex)
   const setDish = kitchenStore(state => state.setSelectedDish)
   const type = useDeviceType()
 
   const handleFinish = () => {
-    for (const id of dish?.ids) {
+    for (const id of dish.ids) {
       finishOrderInKitchen(id)
     }
+
+    setOrders(prev => {
+      const copyPrev = [...prev]
+
+      const newPrettyDishes = copyPrev[0].pretty_list.filter((dishInOrder) => dishInOrder?.ids[0] !== dish?.ids[0])
+
+      const newDishes = copyPrev[0].dishes.filter((dishInOrder) => !dish.ids.find(id => id === dishInOrder.id))
+
+      if (newDishes.length === 0) {
+        const newOrders = copyPrev.slice(1)
+
+        if (newOrders.length === 0) {
+          setDish(null)
+        } else {
+          setDish(newOrders[0]?.pretty_list[0])
+          markAsPreparation(newOrders[0]?.id, newOrders[0]?.pretty_list[0]?.ids)
+        }
+
+        return newOrders
+      }
+
+      copyPrev[0].pretty_list = newPrettyDishes
+      copyPrev[0].dishes = newDishes
+
+      markAsPreparation(copyPrev[0]?.id, copyPrev[0]?.pretty_list[0]?.ids)
+      setDish(copyPrev[0]?.pretty_list[0])
+
+      return copyPrev
+    })
+
+    // for (const id of dish?.ids) {
+    //   finishOrderInKitchen(id)
+    // }
 
     // const dishId = dish.id
     // const nuevoArreglo = orders?.dishes?.filter((dish) => dish.id !== dishId)
 
     // setOrders({ ...orders, dishes: nuevoArreglo })
 
-    setOrders(orders => {
-      const copyOrders = [...orders]
+    // setOrders(orders => {
+    //   const copyOrders = [...orders]
 
-      const newDishes = copyOrders[orderIndex].pretty_list.filter((dishInOrder) => dishInOrder?.ids[0] !== dish?.ids[0])
+    //   const newDishes = copyOrders[orderIndex].pretty_list.filter((dishInOrder) => dishInOrder?.ids[0] !== dish?.ids[0])
 
-      if (newDishes.length === 0) {
-        const newOrders = copyOrders.filter((order, i) => i !== orderIndex)
+    //   if (newDishes.length === 0) {
+    //     const newOrders = copyOrders.filter((order, i) => i !== orderIndex)
 
-        if (newOrders.length === 0) {
-          setDish({
-            comments: []
-          })
-          return []
-        }
+    //     // if (newOrders.length === 0) {
+    //     //   setDish({
+    //     //     comments: []
+    //     //   })
+    //     //   return []
+    //     // }
 
-        const newSelectedDish = newOrders[0]?.pretty_list[0]
+    //     // const newSelectedDish = newOrders[0]?.pretty_list[0]
 
-        setDish(newSelectedDish)
+    //     // setDish(newSelectedDish)
 
-        return newOrders
-      }
+    //     return newOrders
+    //   }
 
-      setDish(newDishes[0])
+    //   setDish(newDishes[0])
 
-      copyOrders[orderIndex].pretty_list = newDishes
+    //   copyOrders[orderIndex].pretty_list = newDishes
 
-      // console.log('copyOrders', orderIndex, JSON.stringify(copyOrders[orderIndex]))
+    //   // console.log('copyOrders', orderIndex, JSON.stringify(copyOrders[orderIndex]))
 
-      markAsPreparation(copyOrders[orderIndex]?.id, copyOrders[orderIndex]?.pretty_list[0]?.ids)
+    //   markAsPreparation(copyOrders[orderIndex]?.id, copyOrders[orderIndex]?.pretty_list[0]?.ids)
 
-      return copyOrders
-    })
+    //   return copyOrders
+    // })
   }
 
   if (dish == null) {
@@ -68,7 +98,13 @@ export default function ActualDish ({ setOrders }) {
           alignItems: 'center'
         }}
       >
-        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>No hay platillos en preparacion</Text>
+        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
+          {
+            bar
+              ? 'No hay bebidas en preparación'
+              : 'No hay platillos en preparación'
+          }
+        </Text>
       </View>
     )
   }
@@ -81,7 +117,7 @@ export default function ActualDish ({ setOrders }) {
         gap: 30
       }}
     >
-      {dish?.picture != null && (
+      {/* {dish?.picture != null && (
         <Image
           source={dish?.picture?.startsWith('http') ? dish?.picture : `${API_URL}/${dish?.picture}`}
           style={{
@@ -89,7 +125,15 @@ export default function ActualDish ({ setOrders }) {
             height: type === types.TABLET ? '100%' : 100
           }}
         />
-      )}
+      )} */}
+
+      <View
+        style={{
+          width: type === types.TABLET ? 240 : 100,
+          height: type === types.TABLET ? '100%' : 100,
+          borderWidth: 1
+        }}
+      />
 
       <View
         style={{

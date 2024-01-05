@@ -53,7 +53,10 @@ export function DishListInOrder () {
             </Text>
             <Text style={{
               ...whiteText,
-              ...bold
+              ...bold,
+              width: 100,
+              flexWrap: 'wrap',
+              textAlign: 'left'
             }}
             >
               {item.name}
@@ -118,7 +121,7 @@ export function DishListInOrder () {
                 }
 
                 removeDishFromOrder({
-                  orderId: order.id,
+                  orderId: order?.id,
                   orderDishId: idToDelete
                 })
                   .then(res => {

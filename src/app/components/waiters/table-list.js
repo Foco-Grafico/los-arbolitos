@@ -1,18 +1,48 @@
-import { Text, View, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, FlatList, ToastAndroid } from 'react-native'
 import { useEffect, useState } from 'react'
 import { AlimentoPreparado } from '../../../../assets/alimento-preparado'
+import { socket } from '../../../services/socket'
 
-export function TableList ({ onPressItem = () => {}, data: tables = [] }) {
+export function TableList ({ onPressItem = () => {}, data = [], hasSelected = false }) {
   const [tableSelected, setTableSelected] = useState(0)
+  const [tables, setTables] = useState([])
 
-  console.log('tables', tables[0])
+  useEffect(() => {
+    setTables(data)
+  }, [data])
+
+  useEffect(() => {
+    socket.on('order_status', ({ table, order_id: orderId, status }) => {
+      if (status?.id !== 3) return
+
+      ToastAndroid.show('La orden ha sido finalizada', ToastAndroid.SHORT)
+
+      setTables(prev => {
+        const copyPrev = [...prev]
+        const tableIndex = copyPrev.findIndex((t) => t.id === table.id)
+
+        const newTable = {
+          ...copyPrev[tableIndex],
+          finalized: true,
+          current_order: orderId
+        }
+
+        copyPrev[tableIndex] = newTable
+
+        return copyPrev
+      })
+    })
+  }, [])
 
   useEffect(() => {
     if (tables.length === 0) {
       return
     }
+    if (hasSelected) {
+      return
+    }
     onPressItem(tables[0])
-  }, [tables])
+  }, [tables, hasSelected])
 
   return (
     <View style={{
@@ -33,6 +63,19 @@ export function TableList ({ onPressItem = () => {}, data: tables = [] }) {
             onPress={() => {
               onPressItem(table)
               setTableSelected(i)
+              setTables(prev => {
+                const copyPrev = [...prev]
+                const tableIndex = copyPrev.findIndex((t) => t.id === table.id)
+
+                const newTable = {
+                  ...copyPrev[tableIndex],
+                  finalized: false
+                }
+
+                copyPrev[tableIndex] = newTable
+
+                return copyPrev
+              })
             }} style={{
               borderRadius: 100,
               backgroundColor: tableSelected === i ? '#fff' : '#fe8c00',

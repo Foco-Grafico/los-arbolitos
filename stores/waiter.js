@@ -80,7 +80,7 @@ export const tableStore = create((set, get) => ({
         ...table,
         order: undefined
       },
-      status: ORDER_STATES[table?.order?.status?.id] ?? null,
+      status: ORDER_STATES[table?.order?.status?.id] ?? ORDER_STATES[1],
       allFinished: table?.order?.all_finished
     })
   },
@@ -103,15 +103,7 @@ export const tableStore = create((set, get) => ({
     const { order } = get()
     const newOrder = { ...order }
 
-    const productsArr = newOrder.dishes.map(dish => ({
-      ...dish,
-      status: dish.status.id === 2
-        ? {
-            id: 1,
-            name: 'EN ESPERA'
-          }
-        : dish.status
-    }))
+    const productsArr = [...newOrder.dishes]
 
     for (const product of productsArr) {
       if (productsIds.includes(product.id)) {
@@ -119,15 +111,7 @@ export const tableStore = create((set, get) => ({
       }
     }
 
-    const prettyArr = newOrder.pretty_list.map((product) => ({
-      ...product,
-      status: product.status.id === 2
-        ? {
-            id: 1,
-            name: 'EN ESPERA'
-          }
-        : product.status
-    }))
+    const prettyArr = [...newOrder.pretty_list]
 
     for (const product of prettyArr) {
       const selectedProducts = product.ids.find(id => productsIds.includes(id))

@@ -16,6 +16,9 @@ import useWaiterGetTablesinZone from '../hooks/getTablesbyZone'
 export function Waiter () {
   const setTable = tableStore(state => state.setTable)
   const { tables, setTables } = useWaiterGetTablesinZone()
+  const table = tableStore(state => state.table)
+
+  console.log('table', table)
 
   const [visibleSendCommand, setVisibleSendCommand] = useState(false)
   const [visibleSendToCash, setVisibleSendToCash] = useState(false)
@@ -33,6 +36,7 @@ export function Waiter () {
               setTable({ ...table, order })
             })
         }}
+        hasSelected={table?.id != null}
       />
 
       <OrderSection setTables={setTables} setVisibleSendToCash={setVisibleSendToCash} setShowSendCommand={setVisibleSendCommand} />

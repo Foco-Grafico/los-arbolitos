@@ -9,7 +9,7 @@ export default function useKitchenGetOrders (bar = false) {
   const configNewInfo = kitchenStore(state => state.configNewInfo)
 
   useEffect(() => {
-    getOrdersInKitchen()
+    getOrdersInKitchen(bar)
       .then(res => {
         if (res.ok) {
           return res.json()
@@ -30,9 +30,7 @@ export default function useKitchenGetOrders (bar = false) {
             lastName: res.data[0]?.user?.lastname
           },
           orderId: res.data[0]?.id,
-          dish: bar
-            ? res.data[0]?.pretty_list.find(dish => dish.type === 1)
-            : res.data[0]?.pretty_list.find(dish => dish.type !== 1),
+          dish: res.data[0]?.pretty_list[0],
           orderIndex: 0,
           table: res.data[0]?.table_id
         })
@@ -45,30 +43,96 @@ export default function useKitchenGetOrders (bar = false) {
 
   useEffect(() => {
     socket.on('new_kitchen_order', order => {
+      const newOrder = {
+        ...order,
+        dishes:
+          bar
+            ? order.dishes.filter(dish => dish.category === 1)
+            : order.dishes.filter(dish => dish.category !== 1),
+        pretty_list:
+          bar
+            ? order.pretty_list.filter(dish => dish.type === 1)
+            : order.pretty_list.filter(dish => dish.type !== 1)
+      }
+
+      if (newOrder.dishes.length === 0) {
+        return
+      }
+
       setOrders(prev => {
         const copyOrder = [...prev]
 
+        const isExistOrder = copyOrder.find(o => o.id === newOrder.id)
+
+        if (isExistOrder) {
+          return copyOrder
+        }
+
+        if (copyOrder.length === 0) {
+          copyOrder.push(newOrder)
+          configNewInfo({
+            mesero: {
+              id: newOrder?.user?.id,
+              name: newOrder?.user?.name,
+              lastName: newOrder?.user?.lastname
+            },
+            orderId: newOrder?.id,
+            dish: newOrder?.pretty_list[0],
+            orderIndex: 0,
+            table: newOrder?.table_id
+          })
+          markAsPreparation(newOrder?.id, newOrder?.pretty_list[0].ids)
+          return copyOrder
+        }
+
         if (order.priority) {
-          const lastOrderPriority = prev.reverse().find(o => o.priority)
+          const lastOrderPriority = copyOrder.reduce((acc, curr, index) => {
+            if (curr.priority) {
+              return index
+            }
 
-          if (lastOrderPriority == null) {
-            copyOrder.splice(1, 0, order)
+            return acc
+          }, -1)
 
-            return copyOrder
+          if (lastOrderPriority === -1) {
+            copyOrder.splice(1, 0, newOrder)
+          } else {
+            copyOrder.splice(lastOrderPriority + 1, 0, newOrder)
           }
-
-          const index = prev.findIndex(o => o.id === lastOrderPriority.id)
-
-          copyOrder.splice(index + 1, 0, order)
 
           return copyOrder
         }
 
-        copyOrder.push(order)
+        copyOrder.push(newOrder)
 
         return copyOrder
       })
     })
+
+    // socket.on('finish_product', ({ order_id: orderId, product_id: productId }) => {
+    //   console.log('finish_product', orderId, productId)
+    //   setOrders(prev => {
+    //     const copyPrev = [...prev]
+
+    //     const orderIndex = copyPrev.findIndex((order) => order.id === orderId)
+
+    //     const order = copyPrev[orderIndex]
+    //     const newOrder = {
+    //       ...order,
+    //       pretty_list: order.pretty_list.filter((dish) => !dish?.ids.find(id => id === productId)),
+    //       dishes: order.dishes.filter((dish) => dish?.id !== productId)
+    //     }
+
+    //     if (newOrder.pretty_list.length === 0) {
+    //       copyPrev.splice(orderIndex, 1)
+    //       return copyPrev
+    //     }
+
+    //     copyPrev[orderIndex] = newOrder
+
+    //     return copyPrev
+    //   })
+    // })
   }, [])
 
   return {
