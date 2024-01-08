@@ -12,8 +12,6 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
   const order = tableStore(state => state.order)
   const setTable = tableStore(state => state.setTable)
   const table = tableStore(state => state.table)
-  console.log('status', status)
-  // const allFinished = tableStore(state => state.allFinished)
 
   return (
     <View style={{

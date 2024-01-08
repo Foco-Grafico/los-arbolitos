@@ -72,8 +72,6 @@ export const tableStore = create((set, get) => ({
   allFinished: false,
 
   setTable: (table) => {
-    console.log(table?.order?.status)
-
     set({
       order: table?.order ?? {},
       table: {
@@ -99,7 +97,6 @@ export const tableStore = create((set, get) => ({
   }),
 
   setProductsStatus: (productsIds, status) => {
-    console.log('setProductsStatus', productsIds, status)
     const { order } = get()
     const newOrder = { ...order }
 

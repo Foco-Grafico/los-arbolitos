@@ -18,8 +18,6 @@ export function Waiter () {
   const { tables, setTables } = useWaiterGetTablesinZone()
   const table = tableStore(state => state.table)
 
-  console.log('table', table)
-
   const [visibleSendCommand, setVisibleSendCommand] = useState(false)
   const [visibleSendToCash, setVisibleSendToCash] = useState(false)
 

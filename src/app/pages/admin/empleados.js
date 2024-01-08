@@ -6,7 +6,6 @@ import useGetUsers from '../../hooks/getUsers'
 export default function Empleados () {
   const { users } = useGetUsers()
 
-  console.log((users))
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
       .catch((err) => {

@@ -45,48 +45,6 @@ export default function ActualDish ({ setOrders, bar = false }) {
 
       return copyPrev
     })
-
-    // for (const id of dish?.ids) {
-    //   finishOrderInKitchen(id)
-    // }
-
-    // const dishId = dish.id
-    // const nuevoArreglo = orders?.dishes?.filter((dish) => dish.id !== dishId)
-
-    // setOrders({ ...orders, dishes: nuevoArreglo })
-
-    // setOrders(orders => {
-    //   const copyOrders = [...orders]
-
-    //   const newDishes = copyOrders[orderIndex].pretty_list.filter((dishInOrder) => dishInOrder?.ids[0] !== dish?.ids[0])
-
-    //   if (newDishes.length === 0) {
-    //     const newOrders = copyOrders.filter((order, i) => i !== orderIndex)
-
-    //     // if (newOrders.length === 0) {
-    //     //   setDish({
-    //     //     comments: []
-    //     //   })
-    //     //   return []
-    //     // }
-
-    //     // const newSelectedDish = newOrders[0]?.pretty_list[0]
-
-    //     // setDish(newSelectedDish)
-
-    //     return newOrders
-    //   }
-
-    //   setDish(newDishes[0])
-
-    //   copyOrders[orderIndex].pretty_list = newDishes
-
-    //   // console.log('copyOrders', orderIndex, JSON.stringify(copyOrders[orderIndex]))
-
-    //   markAsPreparation(copyOrders[orderIndex]?.id, copyOrders[orderIndex]?.pretty_list[0]?.ids)
-
-    //   return copyOrders
-    // })
   }
 
   if (dish == null) {

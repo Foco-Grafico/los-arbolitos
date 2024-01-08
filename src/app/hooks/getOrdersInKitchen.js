@@ -108,31 +108,6 @@ export default function useKitchenGetOrders (bar = false) {
         return copyOrder
       })
     })
-
-    // socket.on('finish_product', ({ order_id: orderId, product_id: productId }) => {
-    //   console.log('finish_product', orderId, productId)
-    //   setOrders(prev => {
-    //     const copyPrev = [...prev]
-
-    //     const orderIndex = copyPrev.findIndex((order) => order.id === orderId)
-
-    //     const order = copyPrev[orderIndex]
-    //     const newOrder = {
-    //       ...order,
-    //       pretty_list: order.pretty_list.filter((dish) => !dish?.ids.find(id => id === productId)),
-    //       dishes: order.dishes.filter((dish) => dish?.id !== productId)
-    //     }
-
-    //     if (newOrder.pretty_list.length === 0) {
-    //       copyPrev.splice(orderIndex, 1)
-    //       return copyPrev
-    //     }
-
-    //     copyPrev[orderIndex] = newOrder
-
-    //     return copyPrev
-    //   })
-    // })
   }, [])
 
   return {

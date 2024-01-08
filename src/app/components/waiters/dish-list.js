@@ -14,7 +14,6 @@ export function DishList ({ dishes }) {
 
   const addProduct = (item) => {
     const dish = { ...item }
-    console.log('dish', JSON.stringify(dish))
     const dishesInOrder = [...order.dishes]
     const prettyDishesInOrder = [...order.pretty_list]
 
@@ -22,7 +21,6 @@ export function DishList ({ dishes }) {
     const lastPrettyIndex = prettyDishesInOrder.length
 
     const prettyIndex = prettyDishesInOrder.findIndex(dish => dish.name === item.name)
-    console.log('prettyIndex', prettyIndex)
 
     const isExistInPrettyList = prettyIndex !== -1
 
@@ -179,8 +177,6 @@ export function DishList ({ dishes }) {
                 onPress={() => {
                   addProduct(item)
                     .then(product => {
-                      console.log(product)
-
                       setShow('editDish', {
                         items: [product],
                         orderId: order?.id

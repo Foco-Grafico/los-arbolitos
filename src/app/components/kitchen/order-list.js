@@ -52,7 +52,6 @@ export default function OrderList ({ orders = [] }) {
                 alignItems: 'center'
               }}
               onPress={() => {
-                console.log('dish.orderIndex', dish.orderIndex)
                 if (dish.orderIndex > 0) {
                   ToastAndroid.show('No puedes seleccionar productos de otra orden', ToastAndroid.SHORT)
                   return
