@@ -7,9 +7,11 @@ import addDishToOrder from '../../../lib/api-call/order/add-dish-to-order'
 import { modalStore, tableStore } from '../../../../stores/waiter'
 // import { Image } from 'expo-image'
 import { v4 } from '../../../lib/uuid'
+import { togglePriority } from '../../../lib/api-call/order/toggle'
 
 export function DishList ({ dishes }) {
   const order = tableStore(state => state.order)
+  const setStatus = tableStore(state => state.setStatus)
   const setShow = modalStore(state => state.setShow)
 
   const addProduct = (item) => {
@@ -20,11 +22,11 @@ export function DishList ({ dishes }) {
     const newIndex = dishesInOrder.length
     const lastPrettyIndex = prettyDishesInOrder.length
 
-    const prettyIndex = prettyDishesInOrder.findIndex(dish => dish.name === item.name)
+    const prettyIndex = prettyDishesInOrder.findIndex(dish => dish.name === item.name && dish.status.id === 1)
 
     const isExistInPrettyList = prettyIndex !== -1
 
-    if (isExistInPrettyList) {
+    if (isExistInPrettyList && prettyDishesInOrder[prettyIndex].status.id === 1) {
       prettyDishesInOrder[prettyIndex].quantity++
     } else {
       prettyDishesInOrder.push({
@@ -65,6 +67,18 @@ export function DishList ({ dishes }) {
         pretty_list: prettyDishesInOrder
       }
     })
+
+    if (order.status.id !== 1) {
+      setStatus(1)
+      togglePriority(order.id, true)
+      tableStore.setState(state => ({
+        order: {
+          ...state.order,
+          priority: true
+        },
+        alwaysPriority: true
+      }))
+    }
 
     return new Promise((resolve) => {
       addDishToOrder({

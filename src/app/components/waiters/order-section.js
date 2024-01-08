@@ -12,6 +12,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
   const order = tableStore(state => state.order)
   const setTable = tableStore(state => state.setTable)
   const table = tableStore(state => state.table)
+  const alwaysPriority = tableStore(state => state.alwaysPriority)
 
   return (
     <View style={{
@@ -99,6 +100,8 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
             <Switch
               value={order?.priority}
               onValueChange={(priority) => {
+                if (alwaysPriority) return
+
                 togglePriority(order?.id, priority)
                 tableStore.setState({ order: { ...order, priority } })
               }}

@@ -70,6 +70,7 @@ export const tableStore = create((set, get) => ({
   },
   status: ORDER_STATES[1],
   allFinished: false,
+  alwaysPriority: false,
 
   setTable: (table) => {
     set({
