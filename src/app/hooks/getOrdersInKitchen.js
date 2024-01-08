@@ -30,11 +30,11 @@ export default function useKitchenGetOrders (bar = false) {
             lastName: res.data[0]?.user?.lastname
           },
           orderId: res.data[0]?.id,
-          dish: res.data[0]?.pretty_list[0],
+          dish: res.data[0]?.pending_list[0],
           orderIndex: 0,
           table: res.data[0]?.table_id
         })
-        markAsPreparation(res.data[0]?.id, res.data[0]?.pretty_list[0].ids)
+        markAsPreparation(res.data[0]?.id, res.data[0]?.pending_list[0].ids)
       })
       .catch(err => {
         console.error(err)
@@ -49,10 +49,10 @@ export default function useKitchenGetOrders (bar = false) {
           bar
             ? order.dishes.filter(dish => dish.category === 1)
             : order.dishes.filter(dish => dish.category !== 1),
-        pretty_list:
+        pending_list:
           bar
-            ? order.pretty_list.filter(dish => dish.type === 1)
-            : order.pretty_list.filter(dish => dish.type !== 1)
+            ? order.pending_list.filter(dish => dish.type === 1)
+            : order.pending_list.filter(dish => dish.type !== 1)
       }
 
       if (newOrder.dishes.length === 0) {
@@ -65,6 +65,10 @@ export default function useKitchenGetOrders (bar = false) {
         const isExistOrder = copyOrder.find(o => o.id === newOrder.id)
 
         if (isExistOrder) {
+          const index = copyOrder.findIndex(o => o.id === newOrder.id)
+
+          copyOrder[index] = newOrder
+
           return copyOrder
         }
 
@@ -77,11 +81,11 @@ export default function useKitchenGetOrders (bar = false) {
               lastName: newOrder?.user?.lastname
             },
             orderId: newOrder?.id,
-            dish: newOrder?.pretty_list[0],
+            dish: newOrder?.pending_list[0],
             orderIndex: 0,
             table: newOrder?.table_id
           })
-          markAsPreparation(newOrder?.id, newOrder?.pretty_list[0].ids)
+          markAsPreparation(newOrder?.id, newOrder?.pending_list[0].ids)
           return copyOrder
         }
 

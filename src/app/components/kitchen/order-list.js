@@ -11,7 +11,7 @@ import { markAsPreparation } from '../../../lib/api-call/kitchen/mark-as-prepara
 export default function OrderList ({ orders = [] }) {
   const configNewInfo = kitchenStore(state => state.configNewInfo)
   const type = useDeviceType()
-  const pretty = orders?.map((order, i) => order?.pretty_list.map((dish) => ({ ...dish, orderIndex: i })))
+  const pretty = orders?.map((order, i) => order?.pending_list.map((dish) => ({ ...dish, orderIndex: i })))
 
   // const pretty = bar
   //   ? orders?.filter(order => order?.pretty_list.length > 0)
@@ -52,7 +52,7 @@ export default function OrderList ({ orders = [] }) {
                 alignItems: 'center'
               }}
               onPress={() => {
-                if (dish.orderIndex > 0) {
+                if (dish.orderIndex > 1) {
                   ToastAndroid.show('No puedes seleccionar productos de otra orden', ToastAndroid.SHORT)
                   return
                 }
