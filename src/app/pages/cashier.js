@@ -80,13 +80,13 @@ export default function Cashier () {
        ? `SubTotal: ${priceFormatter.format(subtotal)}<br>
           Descuento: ${priceFormatter.format(descuento)}<br>
           IVA: ${priceFormatter.format(iva)}<br>
-          Total: ${priceFormatter.format(total)} (IVA incluido)<br>
+          <b>Total: </b>${priceFormatter.format(total)} (IVA incluido)<br><br>
           Gracias por su preferencia<br>
           ¡Vuelva pronto!
           `
         : `SubTotal: ${priceFormatter.format(subtotal)}<br>
           IVA: ${priceFormatter.format(iva)}<br>
-          Total: ${priceFormatter.format(total)} (IVA incluido)<br>
+          <b>Total: </b>${priceFormatter.format(total)} (IVA incluido)<br><br>
           Gracias por su preferencia<br>
           ¡Vuelva pronto!
           `
