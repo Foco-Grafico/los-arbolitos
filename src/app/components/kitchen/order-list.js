@@ -46,10 +46,10 @@ export default function OrderList ({ orders = [] }) {
             <TouchableOpacity
               key={dish.key}
               style={{
-                flexDirection: 'column',
                 flex: 1,
                 position: 'relative',
-                alignItems: 'center'
+                alignItems: 'center',
+                height: '100%'
               }}
               onPress={() => {
                 if (dish.orderIndex > 1) {
@@ -86,14 +86,14 @@ export default function OrderList ({ orders = [] }) {
                     height: type === types.TABLET ? 120 : 60
                   }}
                 />
-                <View
+                {/* <View
                   style={{
                     width: type === types.TABLET ? 120 : 60,
                     height: type === types.TABLET ? 120 : 60,
                     borderWidth: 1,
                     borderColor: '#000'
                   }}
-                />
+                /> */}
                 {orders[dish.orderIndex].priority && <Estrella style={{ width: 24, height: 24, position: 'absolute', right: 0, top: 0 }} condition={false} />}
                 {dish.priority && <Estrella style={{ width: 24, height: 24, position: 'absolute', right: 0, top: 0 }} condition />}
               </View>

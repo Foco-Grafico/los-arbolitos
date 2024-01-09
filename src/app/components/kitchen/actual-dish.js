@@ -94,14 +94,6 @@ export default function ActualDish ({ setOrders, bar = false }) {
         />
       )}
 
-      {/* <View
-        style={{
-          width: type === types.TABLET ? 240 : 100,
-          height: type === types.TABLET ? '100%' : 100,
-          borderWidth: 1
-        }}
-      /> */}
-
       <View
         style={{
           gap: 15,
@@ -111,32 +103,39 @@ export default function ActualDish ({ setOrders, bar = false }) {
         <View
           style={{
             flexDirection: 'row',
-            gap: 20
+            gap: 20,
+            flexWrap: 'wrap'
           }}
         >
           {dish?.name != null && (
-            <Text
+            <View
               style={{
-                fontWeight: 'bold',
-                fontSize: 18
+                flex: 1
               }}
             >
-              {dish.name.toUpperCase()}
-            </Text>
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: 18
+                }}
+              >
+                {dish.name.toUpperCase()}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 18
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: 'bold'
+                  }}
+                >
+                  CANTIDAD
+                </Text> ({dish?.quantity})
+              </Text>
+            </View>
           )}
-          <Text
-            style={{
-              fontSize: 18
-            }}
-          >
-            <Text
-              style={{
-                fontWeight: 'bold'
-              }}
-            >
-              CANTIDAD
-            </Text> ({dish?.quantity})
-          </Text>
         </View>
 
         <FlatList
