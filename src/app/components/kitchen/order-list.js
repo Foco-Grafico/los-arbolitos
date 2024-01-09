@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, ScrollView, View, ToastAndroid } from 'react-native'
-// import { Image } from 'expo-image'
-// import { API_URL } from '../../../lib/api-call/data'
+import { Image } from 'expo-image'
+import { API_URL } from '../../../lib/api-call/data'
 import { kitchenStore } from '../../../../stores/kitchen'
 import Estrella from '../../../../assets/estrella'
 import { useDeviceType, types } from '../../hooks/device'
@@ -80,12 +80,12 @@ export default function OrderList ({ orders = [] }) {
                   overflow: 'visible'
                 }}
               >
-                {/* <Image
+                <Image
                   source={dish?.picture?.startsWith('http') ? dish?.picture : `${API_URL}/${dish.picture}`} style={{
                     width: type === types.TABLET ? 120 : 60,
                     height: type === types.TABLET ? 120 : 60
                   }}
-                /> */}
+                />
                 <View
                   style={{
                     width: type === types.TABLET ? 120 : 60,

@@ -1,4 +1,4 @@
-// import { Image } from 'expo-image'
+import { Image } from 'expo-image'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import Aceptar from '../../../../assets/aceptar'
 import { kitchenStore } from '../../../../stores/kitchen'
@@ -6,6 +6,7 @@ import finishOrderInKitchen from '../../func/finish-order-in-kitchen'
 import { v4 } from '../../../lib/uuid'
 import { useDeviceType, types } from '../../hooks/device'
 import { markAsPreparation } from '../../../lib/api-call/kitchen/mark-as-preparation'
+import { API_URL } from '../../../lib/api-call/data'
 
 export default function ActualDish ({ setOrders, bar = false }) {
   const dish = kitchenStore(state => state.selectedDish)
@@ -83,7 +84,7 @@ export default function ActualDish ({ setOrders, bar = false }) {
         gap: 30
       }}
     >
-      {/* {dish?.picture != null && (
+      {dish?.picture != null && (
         <Image
           source={dish?.picture?.startsWith('http') ? dish?.picture : `${API_URL}/${dish?.picture}`}
           style={{
@@ -91,15 +92,15 @@ export default function ActualDish ({ setOrders, bar = false }) {
             height: type === types.TABLET ? '100%' : 100
           }}
         />
-      )} */}
+      )}
 
-      <View
+      {/* <View
         style={{
           width: type === types.TABLET ? 240 : 100,
           height: type === types.TABLET ? '100%' : 100,
           borderWidth: 1
         }}
-      />
+      /> */}
 
       <View
         style={{
