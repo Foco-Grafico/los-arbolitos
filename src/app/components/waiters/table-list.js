@@ -1,11 +1,30 @@
 import { Text, View, TouchableOpacity, StyleSheet, FlatList, ToastAndroid } from 'react-native'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AlimentoPreparado } from '../../../../assets/alimento-preparado'
 import { socket } from '../../../services/socket'
+import { Audio } from 'expo-av'
 
 export function TableList ({ onPressItem = () => {}, data = [], hasSelected = false }) {
   const [tableSelected, setTableSelected] = useState(0)
   const [tables, setTables] = useState([])
+  const abortController = useRef(new AbortController())
+  const [horribleSound, setHorribleSound] = useState()
+
+  const playHorribleSound = () => {
+    console.log('load horrible sound')
+    Audio.Sound.createAsync(require('../../../../assets/horrible-sound.mp3'))
+      .then(({ sound }) => {
+        console.log('play horrible sound')
+        sound.playAsync()
+        setHorribleSound(sound)
+      })
+  }
+
+  useEffect(() => {
+    return () => {
+      horribleSound?.unloadAsync()
+    }
+  }, [horribleSound])
 
   useEffect(() => {
     setTables(data)
@@ -14,6 +33,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
   useEffect(() => {
     socket.on('order_status', ({ table, order_id: orderId, status }) => {
       if (status?.id !== 3) return
+      playHorribleSound()
 
       ToastAndroid.show('La orden ha sido finalizada', ToastAndroid.SHORT)
 
@@ -41,7 +61,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
     if (hasSelected) {
       return
     }
-    onPressItem(tables[0])
+    onPressItem(tables[0], abortController)
   }, [tables, hasSelected])
 
   return (
@@ -61,7 +81,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
         renderItem={({ item: table, index: i }) => (
           <TouchableOpacity
             onPress={() => {
-              onPressItem(table)
+              onPressItem(table, abortController)
               setTableSelected(i)
               setTables(prev => {
                 const copyPrev = [...prev]
