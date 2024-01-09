@@ -1,5 +1,5 @@
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import EditProducts from './edit-products'
+import EditProducts from './edit-product-modal/edit-products'
 import useGetCategories from '../../hooks/useGetCategories'
 import { useEffect, useState } from 'react'
 import useWaiterGetProductsInCategory from '../../hooks/getProductsinCategory'
@@ -8,7 +8,7 @@ import { SendCommandModal } from './send-command-modal'
 import { SendToCashModal } from './send-to-cash-modal'
 import { DishList } from './dish-list'
 
-export const Products = ({ isVisibleSendCommand, sendToCash }) => {
+export const Products = ({ isVisibleSendCommand, sendToCash, editProductController }) => {
   const { dishes, setCategory, setSearch } = useWaiterGetProductsInCategory()
   const order = tableStore(state => state.order)
 
@@ -45,14 +45,14 @@ export const Products = ({ isVisibleSendCommand, sendToCash }) => {
             }}
           />
         </View>
-        <DishList dishes={dishes} />
+        <DishList editProductController={editProductController} dishes={dishes} />
       </View>
       <Footer
         onPressInCat={(category) => {
           setCategory(category?.id)
         }}
       />
-      <EditProducts />
+      <EditProducts editProductController={editProductController} />
       <SendCommandModal visibleController={isVisibleSendCommand} orderId={order.id} />
       <SendToCashModal visibleController={sendToCash} orderId={order.id} />
     </View>

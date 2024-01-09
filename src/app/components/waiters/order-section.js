@@ -7,7 +7,7 @@ import { tableStore } from '../../../../stores/waiter'
 import { togglePriority } from '../../../lib/api-call/order/toggle'
 // import { useEffect, useState } from 'react'
 
-export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash, setTables }) {
+export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash, setTables, editProductController }) {
   const status = tableStore(state => state.status)
   const order = tableStore(state => state.order)
   const setTable = tableStore(state => state.setTable)
@@ -45,7 +45,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
           </Text>
         </View>
 
-        <DishListInOrder />
+        <DishListInOrder editProductController={editProductController} />
       </View>
 
       <View>
