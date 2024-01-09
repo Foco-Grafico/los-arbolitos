@@ -37,6 +37,7 @@ export default function Cashier () {
          MAZATLÁN, SINALOA CP. 82137<br>
           MESA ${selectedTable?.table?.name}<br>
           ${new Date().toLocaleDateString()}
+          <p>-------------------------------</p>
         </p>
         <table style="width: 100%; border-collapse: collapse;">
           <thead>
@@ -185,6 +186,9 @@ export default function Cashier () {
               ? <Text style={{ color: '#fff', fontWeight: 'bold' }}>CERRAR CUENTA</Text>
               : <Text style={{ color: '#fff', fontWeight: 'bold' }}>ESPERE...</Text>}
           </TouchableOpacity>
+          {/* <TouchableOpacity>
+            <Printer />
+          </TouchableOpacity> */}
         </View>
       </View>
       <View style={styles.footer} />
