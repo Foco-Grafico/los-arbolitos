@@ -95,7 +95,6 @@ export function DishListInOrder () {
                   ToastAndroid.show('Error al eliminar platillo', ToastAndroid.SHORT)
 
                   if (isEmpty) {
-                    console.log(item)
                     newPrettyDishes.push(item)
 
                     tableStore.setState({

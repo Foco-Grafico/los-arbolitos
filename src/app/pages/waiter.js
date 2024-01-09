@@ -18,8 +18,6 @@ export function Waiter () {
   const { tables, setTables } = useWaiterGetTablesinZone()
   const table = tableStore(state => state.table)
 
-  console.log('table', table)
-
   const [visibleSendCommand, setVisibleSendCommand] = useState(false)
   const [visibleSendToCash, setVisibleSendToCash] = useState(false)
 
@@ -30,8 +28,16 @@ export function Waiter () {
     }}
     >
       <TableList
-        data={tables} onPressItem={(table) => {
-          getOrder(table.current_order)
+        data={tables}
+        onPressItem={(table, abortController) => {
+          try {
+            abortController.current.abort('Previous request cancelled')
+            abortController.current = new AbortController()
+          } catch {
+          }
+          getOrder(table.current_order, {
+            signal: abortController.current.signal
+          })
             .then(order => {
               setTable({ ...table, order })
             })

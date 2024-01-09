@@ -9,6 +9,7 @@ import { markAsPreparation } from '../../../lib/api-call/kitchen/mark-as-prepara
 
 export default function ActualDish ({ setOrders, bar = false }) {
   const dish = kitchenStore(state => state.selectedDish)
+  const orderIndex = kitchenStore(state => state.orderIndex)
   const setDish = kitchenStore(state => state.setSelectedDish)
   const type = useDeviceType()
 
@@ -20,73 +21,38 @@ export default function ActualDish ({ setOrders, bar = false }) {
     setOrders(prev => {
       const copyPrev = [...prev]
 
-      const newPrettyDishes = copyPrev[0].pretty_list.filter((dishInOrder) => dishInOrder?.ids[0] !== dish?.ids[0])
+      const newPrettyDishes = copyPrev[orderIndex].pending_list.filter((dishInOrder) => dishInOrder?.ids[0] !== dish?.ids[0])
 
-      const newDishes = copyPrev[0].dishes.filter((dishInOrder) => !dish.ids.find(id => id === dishInOrder.id))
+      const newDishes = copyPrev[orderIndex].dishes.filter((dishInOrder) => !dish.ids.find(id => id === dishInOrder.id))
 
-      if (newDishes.length === 0) {
-        const newOrders = copyPrev.slice(1)
+      if (newPrettyDishes.length === 0) {
+        const newOrders = copyPrev.filter((order, index) => index !== orderIndex)
 
         if (newOrders.length === 0) {
           setDish(null)
         } else {
-          setDish(newOrders[0]?.pretty_list[0])
-          markAsPreparation(newOrders[0]?.id, newOrders[0]?.pretty_list[0]?.ids)
+          kitchenStore.setState({
+            orderIndex: 0
+          })
+          setDish(newOrders[0]?.pending_list[0])
+          markAsPreparation(newOrders[0]?.id, newOrders[0]?.pending_list[0]?.ids)
         }
 
         return newOrders
       }
 
-      copyPrev[0].pretty_list = newPrettyDishes
-      copyPrev[0].dishes = newDishes
+      copyPrev[orderIndex].pending_list = newPrettyDishes
+      copyPrev[orderIndex].dishes = newDishes
 
-      markAsPreparation(copyPrev[0]?.id, copyPrev[0]?.pretty_list[0]?.ids)
-      setDish(copyPrev[0]?.pretty_list[0])
+      markAsPreparation(copyPrev[0]?.id, copyPrev[orderIndex]?.pending_list[0]?.ids)
+      setDish(copyPrev[0]?.pending_list[0])
+
+      kitchenStore.setState({
+        orderIndex: 0
+      })
 
       return copyPrev
     })
-
-    // for (const id of dish?.ids) {
-    //   finishOrderInKitchen(id)
-    // }
-
-    // const dishId = dish.id
-    // const nuevoArreglo = orders?.dishes?.filter((dish) => dish.id !== dishId)
-
-    // setOrders({ ...orders, dishes: nuevoArreglo })
-
-    // setOrders(orders => {
-    //   const copyOrders = [...orders]
-
-    //   const newDishes = copyOrders[orderIndex].pretty_list.filter((dishInOrder) => dishInOrder?.ids[0] !== dish?.ids[0])
-
-    //   if (newDishes.length === 0) {
-    //     const newOrders = copyOrders.filter((order, i) => i !== orderIndex)
-
-    //     // if (newOrders.length === 0) {
-    //     //   setDish({
-    //     //     comments: []
-    //     //   })
-    //     //   return []
-    //     // }
-
-    //     // const newSelectedDish = newOrders[0]?.pretty_list[0]
-
-    //     // setDish(newSelectedDish)
-
-    //     return newOrders
-    //   }
-
-    //   setDish(newDishes[0])
-
-    //   copyOrders[orderIndex].pretty_list = newDishes
-
-    //   // console.log('copyOrders', orderIndex, JSON.stringify(copyOrders[orderIndex]))
-
-    //   markAsPreparation(copyOrders[orderIndex]?.id, copyOrders[orderIndex]?.pretty_list[0]?.ids)
-
-    //   return copyOrders
-    // })
   }
 
   if (dish == null) {

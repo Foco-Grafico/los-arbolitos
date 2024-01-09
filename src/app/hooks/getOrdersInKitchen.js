@@ -3,10 +3,12 @@ import { markAsPreparation } from '../../lib/api-call/kitchen/mark-as-preparatio
 import { socket } from '../../services/socket'
 import getOrdersInKitchen from '../func/get-orders-in-kitchen'
 import { useEffect, useState } from 'react'
+import { Audio } from 'expo-av'
 
 export default function useKitchenGetOrders (bar = false) {
   const [orders, setOrders] = useState([])
   const configNewInfo = kitchenStore(state => state.configNewInfo)
+  const [horribleSound, setHorribleSound] = useState()
 
   useEffect(() => {
     getOrdersInKitchen(bar)
@@ -30,16 +32,32 @@ export default function useKitchenGetOrders (bar = false) {
             lastName: res.data[0]?.user?.lastname
           },
           orderId: res.data[0]?.id,
-          dish: res.data[0]?.pretty_list[0],
+          dish: res.data[0]?.pending_list[0],
           orderIndex: 0,
           table: res.data[0]?.table_id
         })
-        markAsPreparation(res.data[0]?.id, res.data[0]?.pretty_list[0].ids)
+        markAsPreparation(res.data[0]?.id, res.data[0]?.pending_list[0].ids)
       })
       .catch(err => {
         console.error(err)
       })
   }, [bar])
+
+  const playHorribleSound = () => {
+    console.log('load horrible sound')
+    Audio.Sound.createAsync(require('../../../assets/horrible-sound.mp3'))
+      .then(({ sound, status }) => {
+        console.log('play horrible sound')
+        sound.playAsync()
+        setHorribleSound(sound)
+      })
+  }
+
+  useEffect(() => {
+    return () => {
+      horribleSound?.unloadAsync()
+    }
+  }, [horribleSound])
 
   useEffect(() => {
     socket.on('new_kitchen_order', order => {
@@ -49,15 +67,17 @@ export default function useKitchenGetOrders (bar = false) {
           bar
             ? order.dishes.filter(dish => dish.category === 1)
             : order.dishes.filter(dish => dish.category !== 1),
-        pretty_list:
+        pending_list:
           bar
-            ? order.pretty_list.filter(dish => dish.type === 1)
-            : order.pretty_list.filter(dish => dish.type !== 1)
+            ? order.pending_list.filter(dish => dish.type === 1)
+            : order.pending_list.filter(dish => dish.type !== 1)
       }
 
       if (newOrder.dishes.length === 0) {
         return
       }
+
+      playHorribleSound()
 
       setOrders(prev => {
         const copyOrder = [...prev]
@@ -65,6 +85,10 @@ export default function useKitchenGetOrders (bar = false) {
         const isExistOrder = copyOrder.find(o => o.id === newOrder.id)
 
         if (isExistOrder) {
+          const index = copyOrder.findIndex(o => o.id === newOrder.id)
+
+          copyOrder[index] = newOrder
+
           return copyOrder
         }
 
@@ -77,11 +101,11 @@ export default function useKitchenGetOrders (bar = false) {
               lastName: newOrder?.user?.lastname
             },
             orderId: newOrder?.id,
-            dish: newOrder?.pretty_list[0],
+            dish: newOrder?.pending_list[0],
             orderIndex: 0,
             table: newOrder?.table_id
           })
-          markAsPreparation(newOrder?.id, newOrder?.pretty_list[0].ids)
+          markAsPreparation(newOrder?.id, newOrder?.pending_list[0].ids)
           return copyOrder
         }
 
@@ -108,31 +132,6 @@ export default function useKitchenGetOrders (bar = false) {
         return copyOrder
       })
     })
-
-    // socket.on('finish_product', ({ order_id: orderId, product_id: productId }) => {
-    //   console.log('finish_product', orderId, productId)
-    //   setOrders(prev => {
-    //     const copyPrev = [...prev]
-
-    //     const orderIndex = copyPrev.findIndex((order) => order.id === orderId)
-
-    //     const order = copyPrev[orderIndex]
-    //     const newOrder = {
-    //       ...order,
-    //       pretty_list: order.pretty_list.filter((dish) => !dish?.ids.find(id => id === productId)),
-    //       dishes: order.dishes.filter((dish) => dish?.id !== productId)
-    //     }
-
-    //     if (newOrder.pretty_list.length === 0) {
-    //       copyPrev.splice(orderIndex, 1)
-    //       return copyPrev
-    //     }
-
-    //     copyPrev[orderIndex] = newOrder
-
-    //     return copyPrev
-    //   })
-    // })
   }, [])
 
   return {

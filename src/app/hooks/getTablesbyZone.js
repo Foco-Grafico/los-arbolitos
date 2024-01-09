@@ -53,86 +53,11 @@ export default function useWaiterGetTablesinZone () {
     socket.on('order_status', data => {
       const orderId = getOrderId()
 
-      // if (data?.status?.id === 3) {
-      //   ToastAndroid.show('La orden ha sido finalizada', ToastAndroid.SHORT)
-
-      //   setTables(prev => {
-      //     const copyPrev = [...prev]
-      //     const tableIndex = copyPrev.findIndex((table) => table?.order?.id === data.order_id)
-
-      //     const table = copyPrev[tableIndex]
-      //     const newTable = {
-      //       ...table,
-      //       finalized: true
-      //     }
-
-      //     copyPrev[tableIndex] = newTable
-
-      //     return copyPrev
-      //   })
-      // }
-
       if (orderId !== Number(data?.order_id)) return
 
       setStatus(data?.status?.id)
     })
   }, [])
-
-  // useEffect(() => {
-  //   setTable(tables[tableSelected])
-  // }, [tableSelected])
-
-  // useEffect(() => {
-  //   socket.on(SOCKETS.new_order_dish, (data) => {
-  //     setTables(prev => {
-  //       const copyPrev = [...prev]
-  //       const tableIndex = copyPrev.findIndex((table) => table.order.id === data.order_id)
-
-  //       const table = copyPrev[tableIndex]
-  //       const newTable = {
-  //         ...table,
-  //         order: {
-  //           ...table.order,
-  //           dishes: data.dishes,
-  //           total: data.total
-  //         }
-  //       }
-
-  //       copyPrev[tableIndex] = newTable
-
-  //       setTable(copyPrev[tableIndex])
-
-  //       return copyPrev
-  //     })
-  //   })
-
-  //   socket.on(SOCKETS.update_priority, ({ id, priority }) => {
-  //     console.log(id, priority)
-
-  //     setTables(prev => {
-  //       const copyPrev = [...prev]
-  //       const tableIndex = copyPrev.findIndex((table) => table.order.id === id)
-
-  //       const table = copyPrev[tableIndex]
-  //       const newTable = {
-  //         ...table,
-  //         order: {
-  //           ...table.order,
-  //           priority
-  //         }
-  //       }
-
-  //       copyPrev[tableIndex] = newTable
-
-  //       return copyPrev
-  //     })
-  //   })
-
-  //   return () => {
-  //     socket.disconnect()
-  //   }
-  // }, [])
-
   return {
     tables,
     setTables
