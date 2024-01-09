@@ -31,7 +31,7 @@ export default function Cashier () {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
       </head>
       <body style="text-align: center; justify-content:space-around;">
-        <p style=" font-family: Helvetica Neue; font-weight: normal;">
+        <p style=" font-family: Montserrat; font-weight: normal;">
          RESTAURANT "LOS ARBOLITOS"<br>
          DIRECCIÓN: AV. ANTONIO TOLEDO CORRO #14 HUERTOS FAMILIARES<br>
          MAZATLÁN, SINALOA CP. 82137<br>
