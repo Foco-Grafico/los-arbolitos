@@ -55,6 +55,7 @@ export const SearchBarSupply = ({ onAddSupplyClick }) => {
               key={supply.id}
               onPress={() => {
                 onAddSupplyClick?.(supply)
+                setQ('')
               }}
               style={{
                 width: '100%',
