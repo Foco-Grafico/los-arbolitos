@@ -2,10 +2,13 @@ import debounce from 'just-debounce-it'
 import { Text, TextInput, TouchableOpacity, View } from 'react-native'
 import useGetSupplies from '../../../../hooks/getSupplies'
 import { useState } from 'react'
+import { v4 } from '../../../../../lib/uuid'
 
 export const SearchBarSupply = ({ onAddSupplyClick }) => {
   const [q, setQ] = useState('')
   const { supplies } = useGetSupplies({ q })
+
+  const [key, setKey] = useState(v4())
 
   const setQuery = debounce(setQ, 500)
 
@@ -23,6 +26,7 @@ export const SearchBarSupply = ({ onAddSupplyClick }) => {
         }}
       >
         <TextInput
+          key={key}
           style={{
             borderWidth: 1,
             borderRadius: 10,
@@ -30,6 +34,7 @@ export const SearchBarSupply = ({ onAddSupplyClick }) => {
             paddingHorizontal: 10,
             width: 200
           }}
+          defaultValue=''
           onChangeText={setQuery}
           placeholder='BUSCAR'
           placeholderTextColor='#005943'
@@ -56,6 +61,7 @@ export const SearchBarSupply = ({ onAddSupplyClick }) => {
               onPress={() => {
                 onAddSupplyClick?.(supply)
                 setQ('')
+                setKey(v4())
               }}
               style={{
                 width: '100%',

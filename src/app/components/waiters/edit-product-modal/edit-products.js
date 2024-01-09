@@ -16,6 +16,7 @@ import { SearchBarSupply } from './components/searchSuppliesBar'
 import { Counter } from './components/counter'
 import { modifyDish } from '../../../../lib/api-call/order/modify-dish'
 import { tableStore } from '../../../../../stores/waiter'
+import { removeDishFromOrder } from '../../../func/remove-dish-from-order'
 // import { tableStore } from '../../../../../stores/waiter'
 // import SignoMas from '../../../../../assets/signodemas'
 // import SignoMenos from '../../../../../assets/signodemenos'
@@ -107,6 +108,18 @@ export default function EditProducts ({ editProductController }) {
               </Text>
               <TouchableOpacity onPress={() => {
                 // console.log('item', item)
+                editProductController?.setData(prev => {
+                  const newItems = [...prev?.items]
+                  newItems.splice(newItems.indexOf(item), 1)
+                  return { ...prev, items: newItems }
+                })
+
+                removeDishFromOrder({
+                  orderDishId: item?.id,
+                  orderId: editProductController?.data?.orderId
+                })
+
+                editProducts(editProductController?.data?.orderId)
               }}
               >
                 <Eliminar style={{ width: 24, height: 24 }} />
@@ -177,10 +190,9 @@ export default function EditProducts ({ editProductController }) {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
             width: '100%',
             flexWrap: 'wrap',
-            gap: 5
+            gap: 25
           }}
         >
           {dishSelected?.supplies?.map((supply, index) => (
@@ -190,7 +202,7 @@ export default function EditProducts ({ editProductController }) {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                gap: 20
+                gap: 10
               }}
             >
               <Text
@@ -238,7 +250,7 @@ export default function EditProducts ({ editProductController }) {
             style={{
               textAlignVertical: 'top'
             }}
-            defaultValue={dishSelected?.comment}
+            defaultValue={(dishSelected?.comment !== 'undefined' && dishSelected?.comment !== 'null') ? dishSelected?.comment : ''}
             onChangeText={text => {
               setSelectDish(prev => {
                 const newDish = { ...prev }

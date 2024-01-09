@@ -163,7 +163,7 @@ export default function ActualDish ({ setOrders, bar = false }) {
                 ))}
               </View>
               <Text style={{ color: '#005943', fontWeight: 'bold', fontSize: 15 }}>OBSERVACIONES</Text>
-              <Text>{dish?.comments[index]}</Text>
+              <Text>{(dish?.comments[index] !== 'null' && dish?.comments[index] !== 'undefined') && dish?.comments[index]}</Text>
             </View>
           )}
         />

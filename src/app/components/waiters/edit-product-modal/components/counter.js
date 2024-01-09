@@ -7,7 +7,7 @@ export const Counter = ({ defaultValue = 0, onChange = () => {} }) => {
   const [counter, setCounter] = useState(defaultValue)
 
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 20 }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10 }}>
       <TouchableOpacity
         onPress={() => {
           setCounter(prev => {

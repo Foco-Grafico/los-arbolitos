@@ -80,7 +80,8 @@ export const tableStore = create((set, get) => ({
         order: undefined
       },
       status: ORDER_STATES[table?.order?.status?.id] ?? ORDER_STATES[1],
-      allFinished: table?.order?.all_finished
+      allFinished: table?.order?.all_finished,
+      alwaysPriority: false
     })
   },
 

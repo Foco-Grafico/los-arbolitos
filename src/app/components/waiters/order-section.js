@@ -100,11 +100,10 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
             <Switch
               value={order?.priority}
               onValueChange={(priority) => {
-                if (alwaysPriority) return
-
                 togglePriority(order?.id, priority)
                 tableStore.setState({ order: { ...order, priority } })
               }}
+              disabled={alwaysPriority}
               trackColor={{ false: '#fff', true: '#005943' }}
               thumbColor={order?.priority ? '#fff' : '#005943'}
             />
