@@ -20,6 +20,8 @@ export function Waiter () {
 
   const [visibleSendCommand, setVisibleSendCommand] = useState(false)
   const [visibleSendToCash, setVisibleSendToCash] = useState(false)
+  const [visibleEditProduct, setVisibleEditProduct] = useState(false)
+  const [dataEditProduct, setDataEditProduct] = useState({})
 
   return (
     <View style={{
@@ -45,9 +47,20 @@ export function Waiter () {
         hasSelected={table?.id != null}
       />
 
-      <OrderSection setTables={setTables} setVisibleSendToCash={setVisibleSendToCash} setShowSendCommand={setVisibleSendCommand} />
+      <OrderSection
+        editProductController={{
+          setVisible: setVisibleEditProduct,
+          setData: setDataEditProduct
+        }} setTables={setTables} setVisibleSendToCash={setVisibleSendToCash} setShowSendCommand={setVisibleSendCommand}
+      />
 
       <Products
+        editProductController={{
+          isVisible: visibleEditProduct,
+          setVisible: setVisibleEditProduct,
+          data: dataEditProduct,
+          setData: setDataEditProduct
+        }}
         isVisibleSendCommand={{
           isVisible: visibleSendCommand,
           setVisible: setVisibleSendCommand

@@ -18,70 +18,114 @@ import { v4 } from '../../../lib/uuid'
 import { useState } from 'react'
 import debounce from 'just-debounce-it'
 import useGetSupplies from '../../hooks/getSupplies'
+import { TextInputDebounced } from './components/text-input'
 
-export default function EditProducts () {
-  const {
-    setShow,
-    data,
-    show
-  } = modalStore(state => state)
+export default function EditProducts ({ editProductController }) {
+  // const {
+  //   setShow,
+  //   data,
+  //   show
+  // } = modalStore(state => state)
   const editProducts = tableStore(state => state.editProducts)
 
   const adjustQuantity = (index, productIndex, type = '+') => {
-    const items = [...data.items]
-    const supplies = [...data.items[productIndex].supplies]
+    editProductController.setData(prev => {
+      const supplies = [...prev.items[productIndex].supplies]
 
-    const newSupply = {
-      ...items[productIndex].supplies[index],
-      quantity: type === '+' ? items[productIndex].supplies[index].quantity + 1 : items[productIndex].supplies[index].quantity - 1
-    }
+      const newSupply = {
+        ...supplies[index],
+        quantity: type === '+' ? supplies[index].quantity + 1 : supplies[index].quantity - 1
+      }
 
-    if (newSupply.quantity <= 0) {
-      items[productIndex].supplies.splice(index, 1)
+      if (newSupply.quantity <= 0) {
+        supplies.splice(index, 1)
 
-      modalStore.setState({
-        data: {
-          ...data,
-          items
+        return {
+          ...prev,
+          items: [...prev.items].map((product, i) => {
+            if (i === productIndex) {
+              return {
+                ...product,
+                supplies
+              }
+            }
+
+            return product
+          })
         }
-      })
-      return
-    }
+      }
 
-    supplies[index] = newSupply
+      supplies[index] = newSupply
 
-    const product = {
-      ...items[productIndex],
-      supplies
-    }
+      return {
+        ...prev,
+        items: [...prev.items].map((product, i) => {
+          if (i === productIndex) {
+            return {
+              ...product,
+              supplies
+            }
+          }
 
-    items[productIndex] = product
-
-    modalStore.setState({
-      data: {
-        ...data,
-        items
+          return product
+        })
       }
     })
+
+    // const items = [...data.items]
+    // const supplies = [...data.items[productIndex].supplies]
+
+    // const newSupply = {
+    //   ...items[productIndex].supplies[index],
+    //   quantity: type === '+' ? items[productIndex].supplies[index].quantity + 1 : items[productIndex].supplies[index].quantity - 1
+    // }
+
+    // if (newSupply.quantity <= 0) {
+    //   items[productIndex].supplies.splice(index, 1)
+
+    //   modalStore.setState({
+    //     data: {
+    //       ...data,
+    //       items
+    //     }
+    //   })
+    //   return
+    // }
+
+    // supplies[index] = newSupply
+
+    // const product = {
+    //   ...items[productIndex],
+    //   supplies
+    // }
+
+    // items[productIndex] = product
+
+    // modalStore.setState({
+    //   data: {
+    //     ...data,
+    //     items
+    //   }
+    // })
   }
 
-  const setComment = debounce((comment, index) => {
-    const items = [...data.items]
-    if (comment === '' || comment === 'null' || comment === 'undefined') {
-      comment = null
-    }
+  // const setComment = debounce((comment, index) => {
+  //   const items = [...data.items]
+  //   if (comment === '' || comment === 'null' || comment === 'undefined') {
+  //     comment = null
+  //   }
 
-    items[index].comment = comment
+  //   items[index].comment = comment
 
-    modalStore.setState({
-      data: {
-        ...data,
-        items
-      }
-    })
-  }, 3000)
+  //   modalStore.setState({
+  //     data: {
+  //       ...data,
+  //       items
+  //     }
+  //   })
+  // }, 3000)
 
-  if (show === 'editDish') {
+  if (editProductController?.isVisible) {
     return (
       <View
         style={{
@@ -115,7 +159,7 @@ export default function EditProducts () {
             contentContainerStyle={{
               gap: 20
             }}
-            data={data.items}
+            data={editProductController?.data?.items}
             renderItem={({ item, index }) => (
               <View
                 style={{
@@ -162,37 +206,55 @@ export default function EditProducts () {
 
                   <SearchBarSupply
                     onAddSupplyClick={(supply) => {
-                      const items = [...data.items]
+                      // const items = [...data.items]
 
-                      const supplyIndex = items[index].supplies.findIndex(s => s.id === supply.id)
+                      const supplyIndex = item.supplies.findIndex(s => s.id === supply.id)
 
                       if (supplyIndex !== -1) {
                         adjustQuantity(supplyIndex, index, '+')
                         return
                       }
 
-                      const supplies = [...data.items[index].supplies]
+                      editProductController.setData(prev => {
+                        const supplies = [...item.supplies, { ...supply, quantity: 1 }]
 
-                      const newSupply = {
-                        ...supply,
-                        quantity: 1
-                      }
+                        return {
+                          ...prev,
+                          items: [...prev.items].map((product, i) => {
+                            if (i === index) {
+                              return {
+                                ...product,
+                                supplies
+                              }
+                            }
 
-                      supplies.push(newSupply)
-
-                      const product = {
-                        ...items[index],
-                        supplies
-                      }
-
-                      items[index] = product
-
-                      modalStore.setState({
-                        data: {
-                          ...data,
-                          items
+                            return product
+                          })
                         }
                       })
+
+                      // const supplies = [...data.items[index].supplies]
+
+                      // const newSupply = {
+                      //   ...supply,
+                      //   quantity: 1
+                      // }
+
+                      // supplies.push(newSupply)
+
+                      // const product = {
+                      //   ...items[index],
+                      //   supplies
+                      // }
+
+                      // items[index] = product
+
+                      // modalStore.setState({
+                      //   data: {
+                      //     ...data,
+                      //     items
+                      //   }
+                      // })
                     }}
                   />
 
@@ -213,14 +275,26 @@ export default function EditProducts () {
                     Observaciones
                   </Text>
 
-                  <TextInput
-                    style={{
-                      flexWrap: 'wrap'
-                    }}
+                  <TextInputDebounced
                     defaultValue={item.comment === 'null' || item.comment === 'undefined' ? '' : item.comment}
                     onChangeText={(text) => {
-                      setComment(text, index)
+                      editProductController.setData(prev => {
+                        return {
+                          ...prev,
+                          items: [...prev.items].map((product, i) => {
+                            if (i === index) {
+                              return {
+                                ...product,
+                                comment: text
+                              }
+                            }
+
+                            return product
+                          })
+                        }
+                      })
                     }}
+                    debounceTime={0}
                   />
                 </View>
 
@@ -381,9 +455,7 @@ const SearchBarSupply = ({ onAddSupplyClick }) => {
   )
 }
 
-const Supply = ({ supply, index, productIndex, adjust, onChangeCounter = () => {} }) => {
-  const [quantity, setQuantity] = useState(supply?.quantity)
-
+const Supply = ({ supply, index, productIndex, adjust }) => {
   return (
     <View style={{ width: 250, marginBottom: 5, flexDirection: 'row', gap: 20 }}>
       <Text style={{ width: 100, color: '#005943', fontSize: 15, fontWeight: 'bold' }}>
@@ -392,21 +464,13 @@ const Supply = ({ supply, index, productIndex, adjust, onChangeCounter = () => {
       <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 20 }}>
         <TouchableOpacity
           onPress={() => {
-            setQuantity(prev => {
-              onChangeCounter({
-                quantity: prev - 1,
-                supplyId: supply.id
-              })
-
-              return prev - 1
-            })
             adjust(index, productIndex, '-')
           }}
         >
           <SignoMenos style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
         <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>
-          {quantity}
+          {supply?.quantity}
         </Text>
         <TouchableOpacity
           onPress={() => {

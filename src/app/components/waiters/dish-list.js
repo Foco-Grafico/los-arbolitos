@@ -9,7 +9,7 @@ import { Image } from 'expo-image'
 import { v4 } from '../../../lib/uuid'
 import { togglePriority } from '../../../lib/api-call/order/toggle'
 
-export function DishList ({ dishes }) {
+export function DishList ({ dishes, editProductController }) {
   const order = tableStore(state => state.order)
   const setStatus = tableStore(state => state.setStatus)
   const setShow = modalStore(state => state.setShow)
@@ -195,6 +195,11 @@ export function DishList ({ dishes }) {
                         items: [product],
                         orderId: order?.id
                       })
+                      editProductController?.setData?.({
+                        items: [product],
+                        orderId: order?.id
+                      })
+                      editProductController?.setVisible?.(true)
                     })
                 }}
               >

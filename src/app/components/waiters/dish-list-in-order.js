@@ -6,7 +6,7 @@ import { removeDishFromOrder } from '../../func/remove-dish-from-order'
 import { Salero } from '../../../../assets/enpreparacion'
 import Accept from '../../../../assets/aceptar'
 
-export function DishListInOrder () {
+export function DishListInOrder ({ editProductController }) {
   const order = tableStore(state => state.order)
   const setShow = modalStore(state => state.setShow)
 
@@ -33,7 +33,8 @@ export function DishListInOrder () {
                 index: order.dishes.findIndex(d => d?.id === dish?.id)
               }))
 
-              setShow('editDish', {
+              editProductController.setVisible(true)
+              editProductController.setData({
                 items,
                 orderId: order?.id
               })
