@@ -6,6 +6,8 @@ import Products from '../components/cashier/products'
 import * as Print from 'expo-print'
 import finishOrderInCashier from '../func/finish-order-in.cashier'
 import useGetOrdersInCashier from '../hooks/getOrdersInCashier'
+import { Cerrar } from '../../../assets/cerrar'
+import { routerStore } from '../../../stores/router'
 
 const priceFormatter = new Intl.NumberFormat('es-MX', {
   style: 'currency',
@@ -18,6 +20,7 @@ export default function Cashier () {
   const { data, setData } = useGetOrdersInCashier()
   const [discount, setDiscount] = useState(0)
   const [totalWithDiscount, setTotalDis] = useState(0)
+  const nav = routerStore(state => state.nav)
 
   const print = async () => {
     const descuento = ((discount !== '0' && discount !== '' && discount != null) ? discount : 0)
@@ -148,7 +151,14 @@ export default function Cashier () {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={{ color: 'white', fontSize: 25, fontWeight: 'bold' }}>CAJA</Text>
+        <Text style={{ color: 'white', fontSize: 25, fontWeight: 'bold', flex: 1, textAlign: 'center' }}>CAJA</Text>
+        <TouchableOpacity
+          onPress={() => {
+            nav('login')
+          }}
+        >
+          <Cerrar fill='#fff' style={{ width: 20, height: 20 }} />
+        </TouchableOpacity>
       </View>
       <View style={styles.main}>
         <Tables
@@ -209,7 +219,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#005942',
     height: '6%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 10
   },
   footer: {
     backgroundColor: '#462f27',

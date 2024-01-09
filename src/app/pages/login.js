@@ -9,6 +9,7 @@ import No from '../../../assets/no'
 import { Image } from 'expo-image'
 import Rest from '../../../assets/rest.jpg'
 import { routes } from '../../lib/data'
+import { SetScreenOrientation } from '../../lib/orientation'
 
 export default function Login () {
   const nav = routerStore(state => state.nav)
@@ -18,6 +19,13 @@ export default function Login () {
     pass: ''
   })
   const [status, setStatus] = useState('nulo')
+
+  useEffect(() => {
+    SetScreenOrientation()
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
 
   useEffect(() => {
     if (authParams.user === '' && authParams.pass === '') {

@@ -3,12 +3,15 @@ import { useEffect, useRef, useState } from 'react'
 import { AlimentoPreparado } from '../../../../assets/alimento-preparado'
 import { socket } from '../../../services/socket'
 import { Audio } from 'expo-av'
+import { Cerrar } from '../../../../assets/cerrar'
+import { routerStore } from '../../../../stores/router'
 
 export function TableList ({ onPressItem = () => {}, data = [], hasSelected = false }) {
   const [tableSelected, setTableSelected] = useState(0)
   const [tables, setTables] = useState([])
   const abortController = useRef(new AbortController())
   const [horribleSound, setHorribleSound] = useState()
+  const nav = routerStore(state => state.nav)
 
   const playHorribleSound = () => {
     console.log('load horrible sound')
@@ -126,6 +129,17 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
           </TouchableOpacity>
         )}
       />
+      <TouchableOpacity
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+        onPress={() => {
+          nav('login')
+        }}
+      >
+        <Cerrar fill='#fff' style={{ width: 20, height: 20 }} />
+      </TouchableOpacity>
       {/* <ScrollView contentContainerStyle={{ gap: 20 }}>
         {tables.map((table, i) => {
           return (

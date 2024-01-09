@@ -1,9 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
 import { kitchenStore } from '../../../../stores/kitchen'
+import { Cerrar } from '../../../../assets/cerrar'
+import { routerStore } from '../../../../stores/router'
 
 export default function NavBarKitchen () {
   const mesero = kitchenStore(state => state.mesero)
   const table = kitchenStore(state => state.table)
+  const nav = routerStore(state => state.nav)
 
   return (
     <View style={styles.bar}>
@@ -14,6 +17,13 @@ export default function NavBarKitchen () {
           <Text style={styles.circleText}>{table}</Text>
         </View>
       </View>
+      <TouchableHighlight
+        onPress={() => {
+          nav('login')
+        }}
+      >
+        <Cerrar fill='#fff' style={{ width: 20, height: 20 }} />
+      </TouchableHighlight>
     </View>
 
   )
@@ -26,7 +36,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     flexDirection: 'row',
     width: '100%',
-    paddingVertical: 5
+    paddingVertical: 5,
+    paddingHorizontal: 10
   },
   circle: {
     width: 40,
@@ -48,7 +59,8 @@ const styles = StyleSheet.create({
   barright: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    gap: 10
+    justifyContent: 'center',
+    gap: 10,
+    flex: 1
   }
 })
