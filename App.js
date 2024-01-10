@@ -5,6 +5,7 @@ import Login from './src/app/pages/login'
 import Cashier from './src/app/pages/cashier'
 import Admin from './src/app/pages/admin'
 import Kitchen from './src/app/pages/kitchen'
+import CreateEmployee from './src/app/pages/admin/crearEmpleado'
 import { SetScreenOrientation } from './src/lib/orientation'
 import { LogBox, View } from 'react-native'
 import { Waiter } from './src/app/pages/waiter'
@@ -52,6 +53,9 @@ export default function App () {
       </Route>
       <Route name='empleados'>
         <Empleados />
+      </Route>
+      <Route name='createEmployee'>
+        <CreateEmployee />
       </Route>
 
     </View>

@@ -1,10 +1,15 @@
 import { useEffect } from 'react'
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import useGetUsers from '../../hooks/getUsers'
+import Editar from '../../../../assets/editar'
+import SignoMas from '../../../../assets/signodemas'
+import Footer from '../../components/admin/footer'
+import { routerStore } from '../../../../stores/router'
 
 export default function Empleados () {
   const { users } = useGetUsers()
+  const nav = routerStore(state => state.nav)
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
@@ -27,13 +32,22 @@ export default function Empleados () {
       <View style={styles.container}>
         <FlatList
           data={users}
+          contentContainerStyle={{ width: '100%', flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}
           renderItem={({ item, index }) =>
-            <View>
-              <Text style={{ ...styles.text, color: index % 2 === 0 ? 'green' : 'blue' }}>{item?.name} {item?.lastname}</Text>
+            <View style={{ backgroundColor: index % 2 === 0 ? '#bfd5d0' : 'white', flexDirection: 'row', width: '100%', justifyContent: 'flex-start', alignItems: 'center' }}>
+              <View style={{ paddingVertical: 10, width: '90%' }}>
+                <Text style={{ ...styles.text, color: index % 2 === 0 ? '#005943' : '#367c6a' }}>{item?.name} {item?.lastname}</Text>
+              </View>
+              <TouchableOpacity style={{ width: '10%' }}>
+                <Editar style={{ width: 25, height: 25 }} />
+              </TouchableOpacity>
             </View>}
         />
+        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5 }} onPress={() => nav('createEmployee')}>
+          <SignoMas style={{ width: 25, height: 25 }} />
+        </TouchableOpacity>
       </View>
-      <View style={styles.footer} />
+      <Footer />
     </View>
   )
 }
@@ -43,24 +57,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     flexDirection: 'column',
-    width: '100%',
-    height: '100%',
     gap: 10
   },
   header: {
     backgroundColor: '#005942',
     height: '6%',
     justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%'
+    alignItems: 'center'
   },
   container: {
     flex: 1,
     paddingVertical: 10,
-    paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%'
+    paddingTop: 50
   },
   product: {
     borderWidth: 1,
@@ -73,7 +83,7 @@ const styles = StyleSheet.create({
 
   },
   text: {
-    color: 'black',
+    color: '#005942',
     fontWeight: 'bold',
     fontSize: 20,
     textAlign: 'center'
@@ -82,7 +92,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#462f27',
     height: '6%',
     justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%'
+    alignItems: 'center'
   }
 })

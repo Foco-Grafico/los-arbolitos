@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { routerStore } from '../../../stores/router'
+import Footer from '../components/admin/footer'
 
 export default function Admin () {
   const nav = routerStore(state => state.nav)
@@ -73,7 +74,7 @@ export default function Admin () {
           </TouchableOpacity>
         )}
       />
-      <View style={styles.footer} />
+      <Footer />
     </View>
   )
 }
