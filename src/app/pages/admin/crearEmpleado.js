@@ -24,7 +24,6 @@ export default function CreateEmployee () {
       <HeaderAdmin>CREAR EMPLEADO</HeaderAdmin>
       <View style={styles.container}>
         <Text>Nombre</Text>
-
       </View>
       <Footer />
     </View>
