@@ -5,7 +5,7 @@ import Cashier from './src/app/pages/cashier'
 import Admin from './src/app/pages/admin'
 import Kitchen from './src/app/pages/kitchen'
 import { SetScreenOrientation } from './src/lib/orientation'
-import { LogBox, Text, View, Modal } from 'react-native'
+import { LogBox, Text, View, Modal, ToastAndroid } from 'react-native'
 import { Waiter } from './src/app/pages/waiter'
 import { routes } from './src/lib/data'
 import { StatusBar } from 'expo-status-bar'
@@ -33,7 +33,13 @@ export default function App () {
       })
 
     const unsuscribe = NetInfo.addEventListener(state => {
-      setIsConnected(state.isConnected)
+      const isAcceptableConnection = state.isConnected && state.details
+
+      if (!state.isInternetReachable) {
+        ToastAndroid.show('La conexion a internet es deficiente', ToastAndroid.SHORT)
+      }
+
+      setIsConnected(isAcceptableConnection)
     })
 
     return () => unsuscribe()
