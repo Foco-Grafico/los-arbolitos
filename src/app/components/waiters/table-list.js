@@ -15,7 +15,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
 
   const playHorribleSound = () => {
     console.log('load horrible sound')
-    Audio.Sound.createAsync(require('../../../../assets/horrible-sound.mp3'))
+    Audio.Sound.createAsync(require('../../../assets/horrible-sound.mp3'))
       .then(({ sound }) => {
         console.log('play horrible sound')
         sound.playAsync()

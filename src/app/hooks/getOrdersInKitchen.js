@@ -45,8 +45,8 @@ export default function useKitchenGetOrders (bar = false) {
 
   const playHorribleSound = () => {
     console.log('load horrible sound')
-    Audio.Sound.createAsync(require('../../../assets/horrible-sound.mp3'))
-      .then(({ sound, status }) => {
+    Audio.Sound.createAsync(require('../../assets/horrible-sound.mp3'))
+      .then(({ sound }) => {
         console.log('play horrible sound')
         sound.playAsync()
         setHorribleSound(sound)
