@@ -3,12 +3,12 @@ import { markAsPreparation } from '../../lib/api-call/kitchen/mark-as-preparatio
 import { socket } from '../../services/socket'
 import getOrdersInKitchen from '../func/get-orders-in-kitchen'
 import { useEffect, useState } from 'react'
-import { Audio } from 'expo-av'
+import { useHorribleSound } from './play-sounds'
 
 export default function useKitchenGetOrders (bar = false) {
   const [orders, setOrders] = useState([])
   const configNewInfo = kitchenStore(state => state.configNewInfo)
-  const [horribleSound, setHorribleSound] = useState()
+  const { play } = useHorribleSound()
 
   useEffect(() => {
     getOrdersInKitchen(bar)
@@ -43,22 +43,6 @@ export default function useKitchenGetOrders (bar = false) {
       })
   }, [bar])
 
-  const playHorribleSound = () => {
-    console.log('load horrible sound')
-    Audio.Sound.createAsync(require('../../../assets/horrible-sound.mp3'))
-      .then(({ sound, status }) => {
-        console.log('play horrible sound')
-        sound.playAsync()
-        setHorribleSound(sound)
-      })
-  }
-
-  useEffect(() => {
-    return () => {
-      horribleSound?.unloadAsync()
-    }
-  }, [horribleSound])
-
   useEffect(() => {
     socket.on('new_kitchen_order', order => {
       const newOrder = {
@@ -77,7 +61,7 @@ export default function useKitchenGetOrders (bar = false) {
         return
       }
 
-      playHorribleSound()
+      play()
 
       setOrders(prev => {
         const copyOrder = [...prev]

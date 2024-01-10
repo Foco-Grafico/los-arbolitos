@@ -2,32 +2,17 @@ import { Text, View, TouchableOpacity, StyleSheet, FlatList, ToastAndroid } from
 import { useEffect, useRef, useState } from 'react'
 import { AlimentoPreparado } from '../../../../assets/alimento-preparado'
 import { socket } from '../../../services/socket'
-import { Audio } from 'expo-av'
 import { Cerrar } from '../../../../assets/cerrar'
 import { routerStore } from '../../../../stores/router'
+import { useHorribleSound } from '../../hooks/play-sounds'
 
 export function TableList ({ onPressItem = () => {}, data = [], hasSelected = false }) {
   const [tableSelected, setTableSelected] = useState(0)
   const [tables, setTables] = useState([])
   const abortController = useRef(new AbortController())
-  const [horribleSound, setHorribleSound] = useState()
   const nav = routerStore(state => state.nav)
 
-  const playHorribleSound = () => {
-    console.log('load horrible sound')
-    Audio.Sound.createAsync(require('../../../../assets/horrible-sound.mp3'))
-      .then(({ sound }) => {
-        console.log('play horrible sound')
-        sound.playAsync()
-        setHorribleSound(sound)
-      })
-  }
-
-  useEffect(() => {
-    return () => {
-      horribleSound?.unloadAsync()
-    }
-  }, [horribleSound])
+  const { play } = useHorribleSound()
 
   useEffect(() => {
     setTables(data)
@@ -36,7 +21,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
   useEffect(() => {
     socket.on('order_status', ({ table, order_id: orderId, status }) => {
       if (status?.id !== 3) return
-      playHorribleSound()
+      play()
 
       ToastAndroid.show('La orden ha sido finalizada', ToastAndroid.SHORT)
 

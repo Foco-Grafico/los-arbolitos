@@ -7,10 +7,12 @@ import { tableStore } from '../../../../stores/waiter'
 import { SendCommandModal } from './send-command-modal'
 import { SendToCashModal } from './send-to-cash-modal'
 import { DishList } from './dish-list'
+import { v4 } from '../../../lib/uuid'
 
 export const Products = ({ isVisibleSendCommand, sendToCash, editProductController }) => {
   const { dishes, setCategory, setSearch } = useWaiterGetProductsInCategory()
   const order = tableStore(state => state.order)
+  const [textKey, setTextKey] = useState(v4())
 
   return (
     <View
@@ -33,6 +35,7 @@ export const Products = ({ isVisibleSendCommand, sendToCash, editProductControll
           }}
         >
           <TextInput
+            key={textKey}
             onChangeText={setSearch}
             placeholder='BUSCAR'
             style={{
@@ -50,6 +53,11 @@ export const Products = ({ isVisibleSendCommand, sendToCash, editProductControll
       <Footer
         onPressInCat={(category) => {
           setCategory(category?.id)
+          setSearch(() => {
+            setTextKey(v4())
+
+            return ''
+          })
         }}
       />
       <EditProducts editProductController={editProductController} />
@@ -78,9 +86,7 @@ const Footer = ({ onPressInCat = () => {} }) => {
     >
       <ScrollView
         horizontal
-        contentContainerStyle={{
-          gap: 20
-        }}
+        fadingEdgeLength={100}
       >
         {categories.map((category, i) => (
           <TouchableOpacity
@@ -93,7 +99,8 @@ const Footer = ({ onPressInCat = () => {} }) => {
               justifyContent: 'center',
               alignItems: 'center',
               paddingVertical: 10,
-              backgroundColor: selected === i ? '#005942' : '#462f27'
+              backgroundColor: selected === i ? '#005942' : '#462f27',
+              paddingHorizontal: 20
             }}
           >
             <Text
