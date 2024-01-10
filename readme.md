@@ -32,4 +32,4 @@ Agradecemos que hayas elegido utilizar la aplicación de gestión de Los Arbolit
 
 5.1 **Actualizaciones:** Nos reservamos el derecho de actualizar esta política. Las actualizaciones se publicarán en la aplicación.
 
-Al utilizar Los Arbolitos, aceptas los términos de esta política de privacidad. Si tienes alguna pregunta o inquietud, contáctanos a focografico@hotmail.com.
+Al utilizar Los Arbolitos, aceptas los términos de esta política de privacidad. Si tienes alguna pregunta o inquietud, contáctanos a contacto@focograficomx.com.
