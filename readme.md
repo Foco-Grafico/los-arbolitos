@@ -1,4 +1,4 @@
-**Política de Privacidad de Los Arbolitos - Aplicación de Gestión Restaurante**
+## **Política de Privacidad de Los Arbolitos - Aplicación de Gestión Restaurante**
 
 **Fecha de Entrada en Vigor: [Fecha]**
 
