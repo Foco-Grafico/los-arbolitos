@@ -6,7 +6,6 @@ import useGetUserRoles from '../../hooks/useGetUserRoles'
 export default function RoleSelector () {
   const [value, setValue] = useState(null)
   const { roles } = useGetUserRoles()
-  console.log(value)
 
   return (
     <View>
