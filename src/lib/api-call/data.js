@@ -12,6 +12,10 @@ export const APIENDPOINTS = {
   getOrdersKitchen: `${API_URL}/kitchen`,
   finishProductInOrder: (dishId) => `${API_URL}/kitchen/${dishId}/finish`,
   getUsers: `${API_URL}/users`,
+  createUser: `${API_URL}/users`,
+  getUserRole: `${API_URL}/users/types`,
   getOrders: `${API_URL}/cashier/orders`,
-  finishOrder: `${API_URL}/cashier/paid-order`
+  finishOrder: `${API_URL}/cashier/paid-order`,
+  getReconciliation: `${API_URL}/reports/reconciliation`,
+  getBoxList: `${API_URL}/boxes`
 }

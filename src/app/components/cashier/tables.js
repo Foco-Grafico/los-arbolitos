@@ -1,9 +1,11 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 // import { v4 } from '../../../lib/uuid'
 import { useEffect, useState } from 'react'
+import { routerStore } from '../../../../stores/router'
 
 export default function CashierTables ({ onPressTable = (order) => {}, data, hasSelected }) {
   const [selected, setSelected] = useState(0)
+  const nav = routerStore(state => state.nav)
 
   useEffect(() => {
     if (hasSelected) {
@@ -37,7 +39,7 @@ export default function CashierTables ({ onPressTable = (order) => {}, data, has
         })}
       </ScrollView>
       <View style={{ height: '5%', justifyContent: 'flex-end' }}>
-        <TouchableOpacity style={styles.buttons}>
+        <TouchableOpacity style={styles.buttons} onPress={() => { nav('corteCaja') }}>
           <Text style={{ color: '#fff', fontWeight: 'bold' }}>CORTE DE CAJA</Text>
         </TouchableOpacity>
       </View>
