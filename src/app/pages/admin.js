@@ -56,6 +56,11 @@ export default function Admin () {
       id: 7,
       name: 'ACTUALIZAR STOCK',
       route: 'actualizarStock'
+    },
+    {
+      id: 8,
+      name: 'ALMACENES',
+      route: 'almacenes'
     }
   ]
 

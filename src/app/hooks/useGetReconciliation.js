@@ -1,22 +1,24 @@
 import { useEffect, useState } from 'react'
-import getUsers from '../func/get-users'
+import getReconciliation from '../func/getReconciliation'
 
-export default function useGetUsers () {
-  const [users, setUsers] = useState([])
+export default function useGetReconciliation () {
+  const [reconciliation, setReconciliation] = useState({})
 
   useEffect(() => {
-    getUsers()
+    getReconciliation()
       .then(res => {
         if (res.ok) {
           return res.json()
         }
+
         if (res.status === 404) {
           return { data: [] }
         }
-        throw new Error('Error al obtener los usuarios')
+
+        throw new Error('Error al obtener las ventas')
       })
       .then(res => {
-        setUsers(res.data)
+        setReconciliation(res?.data)
       })
       .catch(err => {
         console.error(err)
@@ -24,6 +26,6 @@ export default function useGetUsers () {
   }, [])
 
   return {
-    users
+    reconciliation
   }
 }

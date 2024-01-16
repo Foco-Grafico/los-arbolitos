@@ -196,9 +196,6 @@ export default function Cashier () {
               ? <Text style={{ color: '#fff', fontWeight: 'bold' }}>CERRAR CUENTA</Text>
               : <Text style={{ color: '#fff', fontWeight: 'bold' }}>ESPERE...</Text>}
           </TouchableOpacity>
-          {/* <TouchableOpacity>
-            <Printer />
-          </TouchableOpacity> */}
         </View>
       </View>
       <View style={styles.footer} />

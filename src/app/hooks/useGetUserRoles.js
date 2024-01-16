@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import getUsers from '../func/get-users'
+import getUserRoles from '../func/getUsersRoles'
 
-export default function useGetUsers () {
-  const [users, setUsers] = useState([])
+export default function useGetUserRoles () {
+  const [roles, setRoles] = useState([])
 
   useEffect(() => {
-    getUsers()
+    getUserRoles()
       .then(res => {
         if (res.ok) {
           return res.json()
@@ -13,17 +13,15 @@ export default function useGetUsers () {
         if (res.status === 404) {
           return { data: [] }
         }
-        throw new Error('Error al obtener los usuarios')
+        throw new Error('Error al obtener los roles de usuario')
       })
       .then(res => {
-        setUsers(res.data)
+        return setRoles(res.data)
       })
       .catch(err => {
         console.error(err)
       })
   }, [])
 
-  return {
-    users
-  }
+  return { roles }
 }

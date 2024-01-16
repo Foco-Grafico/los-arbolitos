@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import getUsers from '../func/get-users'
+import getBoxList from '../func/getBoxList'
 
-export default function useGetUsers () {
-  const [users, setUsers] = useState([])
+export default function useGetBoxList () {
+  const [boxes, setBoxes] = useState([])
 
   useEffect(() => {
-    getUsers()
+    getBoxList()
       .then(res => {
         if (res.ok) {
           return res.json()
@@ -13,10 +13,10 @@ export default function useGetUsers () {
         if (res.status === 404) {
           return { data: [] }
         }
-        throw new Error('Error al obtener los usuarios')
+        throw new Error('Error al obtener la lista de cajas')
       })
       .then(res => {
-        setUsers(res.data)
+        setBoxes(res.data)
       })
       .catch(err => {
         console.error(err)
@@ -24,6 +24,6 @@ export default function useGetUsers () {
   }, [])
 
   return {
-    users
+    boxes
   }
 }
