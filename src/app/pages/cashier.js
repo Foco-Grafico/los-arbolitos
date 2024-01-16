@@ -77,7 +77,6 @@ export default function Cashier () {
             }).join('')}
 
           </tbody>
-
         </table>
         <p style=" font-family: Helvetica Neue; font-weight: normal;">
         ${(discount !== '0' && discount !== '' && discount != null && discount !== 0)
@@ -96,7 +95,6 @@ export default function Cashier () {
           `
       }
         </p>
-
       </body>
     </html>
     `

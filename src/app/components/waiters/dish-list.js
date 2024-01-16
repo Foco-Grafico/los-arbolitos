@@ -1,4 +1,4 @@
-import { FlatList, Text, View, TouchableOpacity } from 'react-native'
+import { FlatList, Text, View, TouchableOpacity, ToastAndroid } from 'react-native'
 
 import SignoMas from '../../../../assets/signodemas'
 
@@ -189,6 +189,11 @@ export function DishList ({ dishes, editProductController }) {
             >
               <TouchableOpacity
                 onPress={() => {
+                  if (order.status.id >= 5) {
+                    ToastAndroid.show('No se puede editar un pedido que ya está pagado', ToastAndroid.SHORT)
+                    return
+                  }
+
                   addProduct(item)
                     .then(product => {
                       setShow('editDish', {
@@ -207,6 +212,11 @@ export function DishList ({ dishes, editProductController }) {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
+                  if (order.status.id >= 5) {
+                    ToastAndroid.show('No se puede editar un pedido que ya está pagado', ToastAndroid.SHORT)
+                    return
+                  }
+
                   addProduct(item)
                 }}
               >
