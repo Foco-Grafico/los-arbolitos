@@ -10,7 +10,17 @@ const ORDER_STATES = {
     bgColor: '#005943', // Green color
     color: '#fff',
     next: 2,
-    click: ({ setShowSendCommand }) => {
+    click: ({ setShowSendCommand, dishes }) => {
+      if (typeof setShowSendCommand !== 'function') {
+        ToastAndroid.show('No se pudo enviar a cocina', ToastAndroid.SHORT)
+        return
+      }
+
+      if (dishes.length === 0) {
+        ToastAndroid.show('No hay productos en la comanda', ToastAndroid.SHORT)
+        return
+      }
+
       setShowSendCommand?.(true)
     }
   },

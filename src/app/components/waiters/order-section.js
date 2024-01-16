@@ -54,6 +54,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
             status.click?.({
               setShowSendCommand,
               setVisibleSendToCash,
+              dishes: order?.dishes,
               orderId: order?.id,
               cb: order => {
                 setTable({
