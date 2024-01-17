@@ -181,6 +181,10 @@ export default function EditProducts ({ editProductController }) {
             onAddSupplyClick={(supply) => {
               setSelectDish(prev => {
                 const newDish = { ...prev }
+                if (newDish.supplies.find(s => s.id === supply.id)) {
+                  return newDish
+                }
+
                 newDish.supplies.push({ ...supply, quantity: 1 })
                 return newDish
               })

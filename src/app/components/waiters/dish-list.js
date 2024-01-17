@@ -141,7 +141,9 @@ export function DishList ({ dishes, editProductController }) {
           style={{
             flex: 1,
             marginHorizontal: 10,
-            flexDirection: 'row'
+            flexDirection: 'row',
+            backgroundColor: '#ff8b00',
+            borderRadius: 9
           }}
         >
           <Image
@@ -162,18 +164,19 @@ export function DishList ({ dishes, editProductController }) {
           <View
             style={{
               paddingHorizontal: 10,
+              paddingVertical: 7,
               flex: 1
             }}
           >
             <View
               style={{
-                flex: 1
               }}
             >
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
+                  textAlign: 'center'
                 }}
               >
                 {item?.name}
@@ -185,8 +188,9 @@ export function DishList ({ dishes, editProductController }) {
             <View
               style={{
                 flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: 10
+                justifyContent: 'center',
+                gap: 10,
+                marginTop: 10
               }}
             >
               <TouchableOpacity
@@ -210,7 +214,7 @@ export function DishList ({ dishes, editProductController }) {
                     })
                 }}
               >
-                <Editar fill='#005942' style={{ width: 24, height: 24 }} />
+                <Editar fill='#FFF' style={{ width: 24, height: 24 }} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -222,7 +226,7 @@ export function DishList ({ dishes, editProductController }) {
                   addProduct(item)
                 }}
               >
-                <SignoMas fill='#005942' style={{ width: 24, height: 24 }} />
+                <SignoMas fill='#FFF' style={{ width: 24, height: 24 }} />
               </TouchableOpacity>
             </View>
           </View>
