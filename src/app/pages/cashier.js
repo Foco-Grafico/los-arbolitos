@@ -39,8 +39,9 @@ export default function Cashier () {
          DIRECCIÓN: AV. ANTONIO TOLEDO CORRO #14 HUERTOS FAMILIARES<br>
          MAZATLÁN, SINALOA CP. 82137<br>
           MESA ${selectedTable?.table?.name}<br>
+          FOLIO: ${selectedTable?.id}<br>
           ${new Date().toLocaleDateString()}
-          <p>-------------------------------</p>
+          <span>-------------------------------</span>
         </p>
         <table style="width: 100%; border-collapse: collapse;">
           <thead>
@@ -76,7 +77,6 @@ export default function Cashier () {
             }).join('')}
 
           </tbody>
-
         </table>
         <p style=" font-family: Helvetica Neue; font-weight: normal;">
         ${(discount !== '0' && discount !== '' && discount != null && discount !== 0)
@@ -95,7 +95,6 @@ export default function Cashier () {
           `
       }
         </p>
-
       </body>
     </html>
     `
@@ -182,7 +181,6 @@ export default function Cashier () {
             </View>
             <Text style={styles.text}>TOTAL</Text>
             <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
-
               <Text style={{ width: 150, paddingVertical: 5, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }}>
                 {totalWithDiscount ? priceFormatter.format(totalWithDiscount) : '$0.00'}
               </Text>

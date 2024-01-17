@@ -105,7 +105,7 @@ export default function OrderList ({ orders = [] }) {
                 textAlign: 'center',
                 flexWrap: 'wrap'
               }}
-              >{dish.name}
+              >{dish.name} ({dish?.quantity})
               </Text>
               {/* <Text style={{
                 ...styles.text,
