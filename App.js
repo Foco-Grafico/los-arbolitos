@@ -7,6 +7,7 @@ import Kitchen from './src/app/pages/kitchen'
 import CreateEmployee from './src/app/pages/admin/crearEmpleado'
 import CorteDeCaja from './src/app/components/cashier/corteCaja'
 import Almacenes from './src/app/pages/admin/almacenes'
+import ReporteVentas from './src/app/pages/admin/reporteVentaProductos'
 import { SetScreenOrientation } from './src/lib/orientation'
 import { LogBox, Text, View, Modal, ToastAndroid } from 'react-native'
 import { Waiter } from './src/app/pages/waiter'
@@ -111,6 +112,9 @@ export default function App () {
       </Route>
       <Route name='almacenes'>
         <Almacenes />
+      </Route>
+      <Route name='reporteVentas'>
+        <ReporteVentas />
       </Route>
 
     </View>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import getReconciliation from '../func/getReconciliation'
 
 export default function useGetReconciliation () {
-  const [reconciliation, setReconciliation] = useState({})
+  const [reconciliation, setReconciliation] = useState([])
 
   useEffect(() => {
     getReconciliation()
@@ -10,15 +10,13 @@ export default function useGetReconciliation () {
         if (res.ok) {
           return res.json()
         }
-
         if (res.status === 404) {
-          return { data: [] }
+          return []
         }
-
         throw new Error('Error al obtener las ventas')
       })
       .then(res => {
-        setReconciliation(res?.data)
+        setReconciliation(res)
       })
       .catch(err => {
         console.error(err)

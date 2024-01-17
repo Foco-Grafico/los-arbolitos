@@ -2,6 +2,7 @@ import * as React from 'react'
 import Svg, { G, Path } from 'react-native-svg'
 /* SVGR has dropped some elements not supported by react-native-svg: style */
 const SignoMas = (props) => (
+
   <Svg
     baseProfile='basic'
     id='Capa_1'
@@ -12,6 +13,7 @@ const SignoMas = (props) => (
     viewBox='0 0 26.97 26.85'
     xmlSpace='preserve'
     {...props}
+    fill={props.color || '#005942'}
   >
     <G>
       <Path
