@@ -8,11 +8,14 @@ import { SendCommandModal } from './send-command-modal'
 import { SendToCashModal } from './send-to-cash-modal'
 import { DishList } from './dish-list'
 import { v4 } from '../../../lib/uuid'
+import { routerStore } from '../../../../stores/router'
+import { Cerrar } from '../../../../assets/cerrar'
 
 export const Products = ({ isVisibleSendCommand, sendToCash, editProductController }) => {
   const { dishes, setCategory, setSearch } = useWaiterGetProductsInCategory()
   const order = tableStore(state => state.order)
   const [textKey, setTextKey] = useState(v4())
+  const nav = routerStore(state => state.nav)
 
   return (
     <View
@@ -21,6 +24,25 @@ export const Products = ({ isVisibleSendCommand, sendToCash, editProductControll
         position: 'relative'
       }}
     >
+      <View
+        style={{
+          alignItems: 'flex-end',
+          paddingHorizontal: 25,
+          paddingTop: 20
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+          onPress={() => {
+            nav('login')
+          }}
+        >
+          <Cerrar style={{ width: 20, height: 20 }} />
+        </TouchableOpacity>
+      </View>
       <View
         style={{
           flex: 1,

@@ -1,11 +1,11 @@
-import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Switch, Text, TouchableOpacity, View, Modal } from 'react-native'
 import { DishListInOrder } from './dish-list-in-order'
 import { tableStore } from '../../../../stores/waiter'
 // import SwitchSlider from '../switch-slider'
 // import DishListInOrder from './dish-list-in-order'
 // import { orderStore } from '../../../../stores/waiter'
 import { togglePriority } from '../../../lib/api-call/order/toggle'
-// import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash, setTables, editProductController }) {
   const status = tableStore(state => state.status)
@@ -13,6 +13,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
   const setTable = tableStore(state => state.setTable)
   const table = tableStore(state => state.table)
   const alwaysPriority = tableStore(state => state.alwaysPriority)
+  const [viewPriorityModal, setViewPriorityModal] = useState(false)
 
   return (
     <View style={{
@@ -25,6 +26,102 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
       paddingHorizontal: 15
     }}
     >
+      <Modal
+        statusBarTranslucent
+        transparent
+        animationType='fade'
+        visible={viewPriorityModal}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.5)'
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: '#fff',
+              borderRadius: 10,
+              padding: 20,
+              elevation: 10,
+              gap: 20
+            }}
+          >
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 20
+              }}
+            >
+              ¿Desea cambiar la prioridad de la comanda?
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                gap: 20
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  togglePriority(order?.id, !order?.priority)
+                  tableStore.setState({ order: { ...order, priority: !order?.priority } })
+                  setViewPriorityModal(false)
+                }}
+                style={{
+                  backgroundColor: '#005943',
+                  borderRadius: 10,
+                  fontSize: 20,
+                  elevation: 10,
+                  textAlign: 'center',
+                  paddingVertical: 5,
+                  paddingHorizontal: 10,
+                  flex: 1
+                }}
+              >
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontSize: 14,
+                    fontWeight: 'bold',
+                    textAlign: 'center'
+                  }}
+                >
+                  Aceptar
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setViewPriorityModal(false)
+                }}
+                style={{
+                  backgroundColor: 'red',
+                  borderRadius: 10,
+                  fontSize: 20,
+                  elevation: 10,
+                  textAlign: 'center',
+                  paddingVertical: 5,
+                  paddingHorizontal: 10,
+                  flex: 1
+                }}
+              >
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontSize: 14,
+                    fontWeight: 'bold',
+                    textAlign: 'center'
+                  }}
+                >
+                  Cancelar
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <View
         style={{
           flex: 1,
@@ -99,10 +196,11 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
               COMANDA PRIORITARIA
             </Text>
             <Switch
-              value={order?.priority}
+              value={!alwaysPriority ? order?.priority : alwaysPriority}
               onValueChange={(priority) => {
-                togglePriority(order?.id, priority)
-                tableStore.setState({ order: { ...order, priority } })
+                setViewPriorityModal(true)
+                // togglePriority(order?.id, priority)
+                // tableStore.setState({ order: { ...order, priority } })
               }}
               disabled={alwaysPriority}
               trackColor={{ false: '#fff', true: '#005943' }}
@@ -133,6 +231,7 @@ const { bold, buttonText, sendButton } = StyleSheet.create({
     textAlign: 'center',
     width: '100%',
     paddingVertical: 5,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    marginBottom: 35
   }
 })

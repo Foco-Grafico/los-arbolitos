@@ -2,15 +2,15 @@ import { Text, View, TouchableOpacity, StyleSheet, FlatList, ToastAndroid } from
 import { useEffect, useRef, useState } from 'react'
 import { AlimentoPreparado } from '../../../../assets/alimento-preparado'
 import { socket } from '../../../services/socket'
-import { Cerrar } from '../../../../assets/cerrar'
-import { routerStore } from '../../../../stores/router'
+// import { Cerrar } from '../../../../assets/cerrar'
+// import { routerStore } from '../../../../stores/router'
 import { useHorribleSound } from '../../hooks/play-sounds'
 
 export function TableList ({ onPressItem = () => {}, data = [], hasSelected = false }) {
   const [tableSelected, setTableSelected] = useState(0)
   const [tables, setTables] = useState([])
   const abortController = useRef(new AbortController())
-  const nav = routerStore(state => state.nav)
+  // const nav = routerStore(state => state.nav)
 
   const { play } = useHorribleSound()
 
@@ -63,7 +63,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
       <FlatList
         data={tables}
         contentContainerStyle={{
-          gap: 15,
+          gap: 10,
           height: '100%'
         }}
         renderItem={({ item: table, index: i }) => (
@@ -84,17 +84,18 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
 
                 return copyPrev
               })
-            }} style={{
-              borderRadius: 100,
+            }}
+            style={{
+              borderRadius: 6,
               backgroundColor: tableSelected === i ? '#fff' : '#fe8c00',
               padding: 10,
               justifyContent: 'center',
               alignItems: 'center',
-              width: 40,
               height: 40,
               position: 'relative',
               overflow: 'visible'
-            }} key={table.key}
+            }}
+            key={table.key}
           >
             <Text style={styles.text}>
               {table.name}
@@ -114,7 +115,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
           </TouchableOpacity>
         )}
       />
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           justifyContent: 'center',
           alignItems: 'center'
@@ -124,18 +125,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
         }}
       >
         <Cerrar fill='#fff' style={{ width: 20, height: 20 }} />
-      </TouchableOpacity>
-      {/* <ScrollView contentContainerStyle={{ gap: 20 }}>
-        {tables.map((table, i) => {
-          return (
-            <TouchableOpacity onPress={() => { setTableSelected(i) }} style={tableSelected === i ? styles.selectedCircle : styles.circle} key={table.key}>
-              <Text style={styles.text}>
-                {table.name}
-              </Text>
-            </TouchableOpacity>
-          )
-        })}
-      </ScrollView> */}
+      </TouchableOpacity> */}
     </View>
   )
 }
