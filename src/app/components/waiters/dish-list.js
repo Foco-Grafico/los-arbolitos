@@ -14,7 +14,7 @@ export function DishList ({ dishes, editProductController }) {
   const setStatus = tableStore(state => state.setStatus)
   const setShow = modalStore(state => state.setShow)
 
-  const addProduct = (item) => {
+  const addProduct = async (item) => {
     const dish = { ...item }
     const dishesInOrder = [...order.dishes]
     const prettyDishesInOrder = [...order.pretty_list]
@@ -69,15 +69,17 @@ export function DishList ({ dishes, editProductController }) {
     })
 
     if (order.status.id !== 1) {
-      setStatus(1)
-      togglePriority(order.id, true)
-      tableStore.setState(state => ({
-        order: {
-          ...state.order,
-          priority: true
-        },
-        alwaysPriority: true
-      }))
+      await togglePriority(order.id, true)
+        .finally(() => {
+          setStatus(1)
+          tableStore.setState(state => ({
+            order: {
+              ...state.order,
+              priority: true
+            },
+            alwaysPriority: true
+          }))
+        })
     }
 
     return new Promise((resolve) => {
