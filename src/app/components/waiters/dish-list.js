@@ -11,6 +11,7 @@ import { togglePriority } from '../../../lib/api-call/order/toggle'
 
 export function DishList ({ dishes, editProductController }) {
   const order = tableStore(state => state.order)
+  const status = tableStore(state => state.status)
   const setStatus = tableStore(state => state.setStatus)
   const setShow = modalStore(state => state.setShow)
 
@@ -68,18 +69,17 @@ export function DishList ({ dishes, editProductController }) {
       }
     })
 
-    if (order.status.id !== 1) {
+    if (status.id !== 1) {
       await togglePriority(order.id, true)
-        .finally(() => {
-          setStatus(1)
-          tableStore.setState(state => ({
-            order: {
-              ...state.order,
-              priority: true
-            },
-            alwaysPriority: true
-          }))
-        })
+
+      setStatus(1)
+      tableStore.setState(state => ({
+        order: {
+          ...state.order,
+          priority: true
+        },
+        alwaysPriority: true
+      }))
     }
 
     return new Promise((resolve) => {

@@ -66,15 +66,15 @@ export default function useKitchenGetOrders (bar = false) {
       setOrders(prev => {
         const copyOrder = [...prev]
 
-        // const isExistOrder = copyOrder.find(o => o.id === newOrder.id)
+        const isExistOrder = copyOrder.find(o => o.id === newOrder.id)
 
-        // if (isExistOrder) {
-        //   const index = copyOrder.findIndex(o => o.id === newOrder.id)
+        if (isExistOrder) {
+          const index = copyOrder.findIndex(o => o.id === newOrder.id)
 
-        //   copyOrder[index] = newOrder
+          copyOrder[index] = newOrder
 
-        //   return copyOrder
-        // }
+          return copyOrder
+        }
 
         if (copyOrder.length === 0) {
           copyOrder.push(newOrder)
