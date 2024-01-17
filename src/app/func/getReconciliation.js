@@ -8,5 +8,5 @@ export default function getReconciliation () {
     method: 'GET',
     headers
   }
-  return fetch(APIENDPOINTS.getReconciliation, options)
+  return fetch(`${APIENDPOINTS.getReconciliation}`, options)
 }

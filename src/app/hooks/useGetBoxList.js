@@ -11,19 +11,17 @@ export default function useGetBoxList () {
           return res.json()
         }
         if (res.status === 404) {
-          return { data: [] }
+          return []
         }
         throw new Error('Error al obtener la lista de cajas')
       })
       .then(res => {
-        setBoxes(res.data)
+        setBoxes(res)
       })
       .catch(err => {
         console.error(err)
       })
   }, [])
 
-  return {
-    boxes
-  }
+  return { boxes }
 }

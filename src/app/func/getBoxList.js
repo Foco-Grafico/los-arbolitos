@@ -9,5 +9,5 @@ export default function getBoxList () {
     headers
   }
 
-  return fetch(APIENDPOINTS.getBoxList, options)
+  return fetch(`${APIENDPOINTS.getBoxList}/`, options)
 }
