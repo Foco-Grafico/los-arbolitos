@@ -45,7 +45,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
     })
 
     return () => {
-      socket.off(`order_status ${account?.id}`)
+      socket.off(`order_status-${account?.id}`)
     }
   }, [])
 

@@ -57,6 +57,11 @@ export default function useWaiterGetTablesinZone () {
 
       setStatus(data?.status?.id)
     })
+
+    return () => {
+      socket.off('product_status')
+      socket.off('order_status')
+    }
   }, [])
   return {
     tables,
