@@ -49,24 +49,26 @@ export default function useKitchenGetOrders (bar = false) {
         ...order,
         dishes:
           bar
-            ? order.dishes.filter(dish => dish.category === 1)
-            : order.dishes.filter(dish => dish.category !== 1),
+            ? order.dishes.filter(dish => dish.category === 1 || dish.category === 10)
+            : order.dishes.filter(dish => dish.category !== 1 || dish.category !== 10),
         pending_list:
           bar
-            ? order.pending_list.filter(dish => dish.type === 1)
-            : order.pending_list.filter(dish => dish.type !== 1)
+            ? order.pending_list.filter(dish => dish.type === 1 || dish.type === 10)
+            : order.pending_list.filter(dish => dish.type !== 1 || dish.type !== 10)
       }
 
-      if (newOrder.dishes.length === 0) {
+      if (newOrder.pending_list.length === 0) {
         return
       }
 
-      if (bar === true && newOrder.pending_list[0].type === 1) {
-        play()
-      }
+      const playSound = () => {
+        if (bar === true && (newOrder.pending_list[0].type === 1 || newOrder.pending_list[0].type === 10)) {
+          play()
+        }
 
-      if (bar === false && newOrder.pending_list[0].type !== 1) {
-        play()
+        if (bar === false && (newOrder.pending_list[0].type !== 1 || newOrder.pending_list[0].type !== 10)) {
+          play()
+        }
       }
 
       setOrders(prev => {
@@ -77,10 +79,32 @@ export default function useKitchenGetOrders (bar = false) {
         if (isExistOrder) {
           const index = copyOrder.findIndex(o => o.id === newOrder.id)
 
+          const newIds = newOrder.pending_list.flatMap(dish => dish.ids)
+
+          const isExistDish = copyOrder[index].pending_list.reduce((acc, curr) => {
+            if (acc === false) {
+              return false
+            }
+
+            let exist = true
+
+            newIds.forEach(id => {
+              if (!curr.ids.includes(id) && exist === true) {
+                exist = false
+              }
+            })
+
+            return exist
+          }, true)
+
+          if (!isExistDish) playSound()
+
           copyOrder[index] = newOrder
 
           return copyOrder
         }
+
+        playSound()
 
         if (copyOrder.length === 0) {
           copyOrder.push(newOrder)
