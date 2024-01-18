@@ -6,7 +6,6 @@ import SignoMas from '../../../../assets/signodemas'
 
 export default function Almacenes () {
   const { boxes } = useGetBoxList()
-  console.log(boxes)
 
   return (
     <View style={styles.main}>

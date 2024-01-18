@@ -1,39 +1,17 @@
 import GetCategories from '../func/get-categories'
-import { useReducer, useEffect } from 'react'
-
-const reducer = (state, action) => {
-  const { type, payload } = action
-
-  const actions = {
-    GET_CATEGORIES: () => ({
-      ...state,
-      categories: payload,
-      loading: false
-    }),
-    ERROR: () => ({
-      ...state,
-      error: true,
-      loading: false,
-      categories: []
-    })
-  }
-
-  return actions[type] ? actions[type]() : state
-}
+import { useEffect, useState } from 'react'
 
 export default function useGetCategories () {
-  const [{ categories, loading, error }, dispatch] = useReducer(reducer, {
-    categories: [],
-    loading: true,
-    error: false
-  })
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
 
-  const setCategories = payload => {
-    dispatch({ type: 'GET_CATEGORIES', payload })
-  }
-
-  const setError = () => {
-    dispatch({ type: 'ERROR' })
+  const editLocalCatName = (name, index) => {
+    setCategories((prev) => {
+      const newCategories = [...prev]
+      newCategories[index].name = name
+      return newCategories
+    })
   }
 
   useEffect(() => {
@@ -49,11 +27,13 @@ export default function useGetCategories () {
         console.error(err)
         setError('Error al obtener las categorias')
       })
+      .finally(() => setLoading(false))
   }, [])
 
   return {
     categories,
     loading,
-    error
+    error,
+    editLocalCatName
   }
 }

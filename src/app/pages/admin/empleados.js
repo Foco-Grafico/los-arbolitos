@@ -1,6 +1,4 @@
-import { useEffect } from 'react'
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import * as ScreenOrientation from 'expo-screen-orientation'
 import useGetUsers from '../../hooks/getUsers'
 import Editar from '../../../../assets/editar'
 import SignoMas from '../../../../assets/signodemas'
@@ -11,19 +9,6 @@ export default function Empleados () {
   const { users } = useGetUsers()
   const nav = routerStore(state => state.nav)
 
-  useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
-      .catch((err) => {
-        console.log(err)
-      })
-
-    return () => {
-      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE)
-        .catch((err) => {
-          console.log(err)
-        })
-    }
-  }, [])
   return (
     <View style={styles.main}>
       <View style={styles.header}>

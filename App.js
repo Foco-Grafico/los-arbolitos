@@ -8,7 +8,7 @@ import CreateEmployee from './src/app/pages/admin/crearEmpleado'
 import CorteDeCaja from './src/app/components/cashier/corteCaja'
 import Almacenes from './src/app/pages/admin/almacenes'
 import ReporteVentas from './src/app/pages/admin/reporteVentaProductos'
-import { SetScreenOrientation } from './src/lib/orientation'
+import CategoriaProductos from './src/app/pages/admin/categoriaProductos'
 import { LogBox, Text, View, Modal, ToastAndroid } from 'react-native'
 import { Waiter } from './src/app/pages/waiter'
 import { routes } from './src/lib/data'
@@ -16,6 +16,8 @@ import { StatusBar } from 'expo-status-bar'
 import Empleados from './src/app/pages/admin/empleados'
 import NetInfo from '@react-native-community/netinfo'
 import * as Notifications from 'expo-notifications'
+import { routerStore } from './stores/router'
+import * as ScreenOrientation from 'expo-screen-orientation'
 
 LogBox.ignoreLogs(['new NativeEventEmitter', 'Aborted'])
 
@@ -27,15 +29,64 @@ Notifications.setNotificationHandler({
   })
 })
 
+const orientations = {
+  admin: {
+    orientation: ScreenOrientation.OrientationLock.PORTRAIT
+  },
+  categoriaProductos: {
+    orientation: ScreenOrientation.OrientationLock.PORTRAIT
+  },
+  empleados: {
+    orientation: ScreenOrientation.OrientationLock.PORTRAIT
+  },
+  createEmployee: {
+    orientation: ScreenOrientation.OrientationLock.PORTRAIT
+  },
+  corteCaja: {
+    orientation: ScreenOrientation.OrientationLock.PORTRAIT
+  },
+  almacenes: {
+    orientation: ScreenOrientation.OrientationLock.PORTRAIT
+  },
+  reporteVentas: {
+    orientation: ScreenOrientation.OrientationLock.PORTRAIT
+  },
+  cashier: {
+    orientation: ScreenOrientation.OrientationLock.PORTRAIT
+  }
+
+}
+
 export default function App () {
   const [isConnected, setIsConnected] = useState(true)
+  const currentPage = routerStore(state => state.current)
 
   useEffect(() => {
-    SetScreenOrientation()
-      .catch((err) => {
-        console.log(err)
-      })
+    ScreenOrientation.getOrientationLockAsync()
+      .then(o => {
+        const equal = o === orientations[currentPage]?.orientation
 
+        if (orientations[currentPage] != null) {
+          if (equal) return
+
+          console.log('cambiando orientacion')
+
+          ScreenOrientation.lockAsync(orientations[currentPage].orientation)
+            .catch((err) => {
+              console.log(err)
+            })
+          return
+        }
+
+        if (equal) return
+
+        console.log('cambiando orientacion')
+
+        ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE)
+      })
+  }, [currentPage])
+
+  useEffect(() => {
     const unsuscribe = NetInfo.addEventListener(state => {
       const isAcceptableConnection = state.isConnected && state.details
 
@@ -115,6 +166,9 @@ export default function App () {
       </Route>
       <Route name='reporteVentas'>
         <ReporteVentas />
+      </Route>
+      <Route name='categoriaProductos'>
+        <CategoriaProductos />
       </Route>
 
     </View>

@@ -1,28 +1,12 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import HeaderAdmin from '../../components/admin/header'
 import Footer from '../../components/admin/footer'
-import { useEffect } from 'react'
-import * as ScreenOrientation from 'expo-screen-orientation'
 import SwitchSlider from '../../components/switch-slider'
 import { Cancelar } from '../../../../assets/cancelar'
 import Aceptar from '../../../../assets/aceptar'
 import RoleSelector from '../../components/admin/roleSelector'
 
 export default function CreateEmployee () {
-  useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
-      .catch((err) => {
-        console.log(err)
-      })
-
-    return () => {
-      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE)
-        .catch((err) => {
-          console.log(err)
-        })
-    }
-  }, [])
-
   return (
     <View style={styles.main}>
       <HeaderAdmin>CREAR EMPLEADO</HeaderAdmin>

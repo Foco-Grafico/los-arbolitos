@@ -1,6 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native'
-import { useEffect, useState } from 'react'
-import * as ScreenOrientation from 'expo-screen-orientation'
+import { useState } from 'react'
 import Tables from '../components/cashier/tables'
 import Products from '../components/cashier/products'
 import * as Print from 'expo-print'
@@ -119,13 +118,6 @@ export default function Cashier () {
       console.log(e)
     }
   }
-
-  useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
 
   const handleDiscount = (text) => {
     const discount = Number(text)
