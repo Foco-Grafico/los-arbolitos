@@ -9,13 +9,15 @@ import { Image } from 'expo-image'
 import { v4 } from '../../../lib/uuid'
 import { togglePriority } from '../../../lib/api-call/order/toggle'
 
-export function DishList ({ dishes, editProductController }) {
+export function DishList ({ dishes, editProductController, resetSearch }) {
   const order = tableStore(state => state.order)
   const status = tableStore(state => state.status)
   const setStatus = tableStore(state => state.setStatus)
   const setShow = modalStore(state => state.setShow)
 
   const addProduct = async (item) => {
+    resetSearch()
+
     const dish = { ...item }
     const dishesInOrder = [...order.dishes]
     const prettyDishesInOrder = [...order.pretty_list]

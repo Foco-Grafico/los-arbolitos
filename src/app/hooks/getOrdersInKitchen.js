@@ -61,7 +61,13 @@ export default function useKitchenGetOrders (bar = false) {
         return
       }
 
-      play()
+      if (bar === true && newOrder.pending_list[0].type === 1) {
+        play()
+      }
+
+      if (bar === false && newOrder.pending_list[0].type !== 1) {
+        play()
+      }
 
       setOrders(prev => {
         const copyOrder = [...prev]
