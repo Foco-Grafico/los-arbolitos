@@ -49,12 +49,12 @@ export default function useKitchenGetOrders (bar = false) {
         ...order,
         dishes:
           bar
-            ? order.dishes.filter(dish => dish.category === 1 || dish.category === 10)
-            : order.dishes.filter(dish => dish.category !== 1 || dish.category !== 10),
+            ? order.dishes.filter(dish => dish.category === 1)
+            : order.dishes.filter(dish => dish.category !== 1),
         pending_list:
           bar
-            ? order.pending_list.filter(dish => dish.type === 1 || dish.type === 10)
-            : order.pending_list.filter(dish => dish.type !== 1 || dish.type !== 10)
+            ? order.pending_list.filter(dish => dish.type === 1)
+            : order.pending_list.filter(dish => dish.type !== 1)
       }
 
       if (newOrder.pending_list.length === 0) {
@@ -62,11 +62,11 @@ export default function useKitchenGetOrders (bar = false) {
       }
 
       const playSound = () => {
-        if (bar === true && (newOrder.pending_list[0].type === 1 || newOrder.pending_list[0].type === 10)) {
+        if (bar === true && newOrder.pending_list[0].type === 1) {
           play()
         }
 
-        if (bar === false && (newOrder.pending_list[0].type !== 1 || newOrder.pending_list[0].type !== 10)) {
+        if (bar === false && newOrder.pending_list[0].type !== 1) {
           play()
         }
       }
