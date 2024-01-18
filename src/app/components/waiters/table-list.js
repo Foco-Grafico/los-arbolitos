@@ -6,12 +6,14 @@ import { socket } from '../../../services/socket'
 // import { routerStore } from '../../../../stores/router'
 import { useHorribleSound } from '../../hooks/play-sounds'
 import { accountStore } from '../../../../stores/account'
+import { tableStore } from '../../../../stores/waiter'
 
 export function TableList ({ onPressItem = () => {}, data = [], hasSelected = false }) {
   const [tableSelected, setTableSelected] = useState(0)
   const [tables, setTables] = useState([])
   const abortController = useRef(new AbortController())
   const account = accountStore(state => state.account)
+  const setStatus = tableStore(state => state.setStatus)
 
   // const nav = routerStore(state => state.nav)
 
@@ -27,6 +29,8 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
       play()
 
       ToastAndroid.show('La orden ha sido finalizada', ToastAndroid.SHORT)
+
+      setStatus(status?.id)
 
       setTables(prev => {
         const copyPrev = [...prev]

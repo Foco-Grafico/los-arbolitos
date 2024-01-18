@@ -37,10 +37,15 @@ export function Waiter () {
             abortController.current = new AbortController()
           } catch {
           }
+
+          console.log('table', table)
+
           getOrder(table.current_order, {
             signal: abortController.current.signal
           })
             .then(order => {
+              console.log(order.status)
+
               setTable({ ...table, order })
             })
         }}

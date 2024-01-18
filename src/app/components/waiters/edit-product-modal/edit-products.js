@@ -11,7 +11,7 @@ import Eliminar from '../../../../../assets/eliminar'
 // import debounce from 'just-debounce-it'
 // import { modifyDish } from '../../../../lib/api-call/order/modify-dish'
 
-import { FlatList, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Switch, Text, TextInput, TouchableOpacity, View, Modal } from 'react-native'
 import { SearchBarSupply } from './components/searchSuppliesBar'
 import { Counter } from './components/counter'
 import { modifyDish } from '../../../../lib/api-call/order/modify-dish'
@@ -61,10 +61,102 @@ const Layout = ({ children }) => {
 export default function EditProducts ({ editProductController }) {
   const [dishSelected, setSelectDish] = useState(null)
   const editProducts = tableStore(state => state.editProducts)
+  const [productToDelete, setProductToDelete] = useState(null)
+
+  const deleteProduct = (item) => {
+    editProductController?.setData(prev => {
+      const newItems = [...prev?.items]
+      newItems.splice(newItems.indexOf(item), 1)
+      return { ...prev, items: newItems }
+    })
+
+    removeDishFromOrder({
+      orderDishId: item?.id,
+      orderId: editProductController?.data?.orderId
+    })
+
+    editProducts(editProductController?.data?.orderId)
+  }
+
+  console.log('editProductController', editProductController?.data.items[0]?.comment)
 
   if (editProductController?.isVisible && dishSelected == null) {
     return (
       <Layout>
+        <Modal
+          animationType='fade'
+          transparent
+          visible={productToDelete != null}
+          statusBarTranslucent
+        >
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#00000090'
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: '#fff',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 20,
+                padding: 20
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  color: '#005943'
+                }}
+              >
+                ¿DESEA ELIMINAR EL PRODUCTO?
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  gap: 50
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    setProductToDelete(null)
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color: '#005943'
+                    }}
+                  >
+                    CANCELAR
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    deleteProduct(productToDelete)
+                    setProductToDelete(null)
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color: '#005943'
+                    }}
+                  >
+                    ACEPTAR
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
         <Text
           style={{
             fontSize: 20,
@@ -87,8 +179,7 @@ export default function EditProducts ({ editProductController }) {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
+
                 backgroundColor: '#8d89898a',
                 padding: 5,
                 borderRadius: 5
@@ -97,33 +188,79 @@ export default function EditProducts ({ editProductController }) {
                 setSelectDish(item)
               }}
             >
-              <Text
+              <View
                 style={{
-                  color: '#005943',
-                  fontSize: 15,
-                  fontWeight: 'bold'
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  borderBottomWidth: 1,
+                  padding: 5
                 }}
               >
-                {item?.name?.toUpperCase()}
-              </Text>
-              <TouchableOpacity onPress={() => {
+                <Text
+                  style={{
+                    color: '#005943',
+                    fontSize: 15,
+                    fontWeight: 'bold'
+                  }}
+                >
+                  {item?.name?.toUpperCase()}
+                </Text>
+                <TouchableOpacity onPress={() => {
                 // console.log('item', item)
-                editProductController?.setData(prev => {
-                  const newItems = [...prev?.items]
-                  newItems.splice(newItems.indexOf(item), 1)
-                  return { ...prev, items: newItems }
-                })
+                  setProductToDelete(item)
+                }}
+                >
+                  <Eliminar style={{ width: 24, height: 24 }} />
+                </TouchableOpacity>
+              </View>
 
-                removeDishFromOrder({
-                  orderDishId: item?.id,
-                  orderId: editProductController?.data?.orderId
-                })
-
-                editProducts(editProductController?.data?.orderId)
-              }}
+              <View
+                style={{
+                  padding: 5
+                }}
               >
-                <Eliminar style={{ width: 24, height: 24 }} />
-              </TouchableOpacity>
+                <Text
+                  style={{
+                    color: '#000',
+                    fontSize: 15,
+                    fontWeight: 'bold'
+                  }}
+                >
+                  Observaciones:
+                </Text>
+                {(item?.comment !== 'undefined' && item?.comment !== 'null' && item?.comment !== '' && item?.comment != null) && (
+                  <Text
+                    style={{
+                      color: '#005943',
+                      fontSize: 13,
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    {item?.comment}
+                  </Text>
+                )}
+                <Text
+                  style={{
+                    color: '#000',
+                    fontSize: 15,
+                    fontWeight: 'bold'
+                  }}
+                >
+                  Extras:
+                </Text>
+                {item?.supplies?.map((supply) => (
+                  <Text
+                    key={supply?.key}
+                    style={{
+                      color: '#005943',
+                      fontSize: 13,
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    {supply?.name} x {supply?.quantity}
+                  </Text>
+                ))}
+              </View>
             </TouchableOpacity>
           )}
         />
@@ -310,6 +447,7 @@ export default function EditProducts ({ editProductController }) {
 
               editProducts(editProductController?.data?.orderId)
               setSelectDish(null)
+              editProductController?.setVisible?.(false)
             }}
           >
             <Aceptar style={{ width: 24, height: 24 }} />
