@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import getSupplies from '../func/get-supplies'
 
-export default function useGetSupplies ({ q }) {
+export default function useGetSupplies ({ q, all = false }) {
   const [supplies, setSupplies] = useState([])
 
   useEffect(() => {
-    if (q === '') {
+    if (q === '' && !all) {
       setSupplies([])
       return
     }

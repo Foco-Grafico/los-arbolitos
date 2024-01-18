@@ -4,13 +4,13 @@ import { API_URL } from '../../lib/api-call/data'
 import { searchDish } from '../../lib/api-call/order/search-dish'
 import debounce from 'just-debounce-it'
 
-export default function useWaiterGetProductsInCategory () {
+export default function useWaiterGetProductsInCategory (defaultCategory = null) {
   // const selectedCategory = waiterStore(state => state.selectedCategory)
   // const search = waiterStore(state => state.search)
   const [search, setSearchUndebounce] = useState('')
   const [dishes, setDishes] = useState([])
   const [err, setErr] = useState(null)
-  const [category, setCategory] = useState(null)
+  const [category, setCategory] = useState(defaultCategory)
   const abortController = useRef(new AbortController())
   const [dishesF, setDishesF] = useState([])
 

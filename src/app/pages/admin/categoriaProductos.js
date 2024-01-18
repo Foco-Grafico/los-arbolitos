@@ -11,15 +11,9 @@ import { routerStore } from '../../../../stores/router'
 import { productCatStore } from '../../../../stores/waiter'
 
 export default function CategoriaProductos () {
-  const { setSelectedCategory } = productCatStore(state => state.setSelectedCategory)
+  const setSelectedCategory = productCatStore(state => state.setSelectedCategory)
 
   const [selectedInfo, setInfo] = useState({
-    name: '',
-    id: '',
-    index: 0
-  })
-
-  const [prod, setProd] = useState({
     name: '',
     id: '',
     index: 0
@@ -56,12 +50,11 @@ export default function CategoriaProductos () {
               style={styles.container}
               onPress={() => {
                 nav('productos')
-                setProd({
+                setSelectedCategory({
                   name: item?.name,
                   id: item?.id,
                   index
                 })
-                setSelectedCategory(prod)
               }}
             >
               <Text style={{ color: '#000', fontWeight: 'bold' }}>{item?.name}</Text>
