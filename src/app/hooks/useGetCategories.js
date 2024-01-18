@@ -14,6 +14,17 @@ export default function useGetCategories () {
     })
   }
 
+  const newCategory = (name) => {
+    setCategories((prev) => {
+      const newCategories = [...prev]
+      newCategories.push({
+        name,
+        id: prev.length + 1
+      })
+      return newCategories
+    })
+  }
+
   useEffect(() => {
     GetCategories()
       .then((res) => {
@@ -34,6 +45,7 @@ export default function useGetCategories () {
     categories,
     loading,
     error,
-    editLocalCatName
+    editLocalCatName,
+    newCategory
   }
 }

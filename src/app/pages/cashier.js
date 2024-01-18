@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, TextInput, ScrollView } from 'react-native'
 import { useState } from 'react'
 import Tables from '../components/cashier/tables'
 import Products from '../components/cashier/products'
@@ -162,7 +162,7 @@ export default function Cashier () {
             setDiscount(0)
           }}
         />
-        <View style={{ width: '70%', backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', gap: 20 }}>
+        <ScrollView contentContainerStyle={{ width: '100%', backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', gap: 30, paddingVertical: 10 }}>
           <Products table={selectedTable} />
           <View style={{ justifyContent: 'center', alignItems: 'center', gap: 5 }}>
             <Text style={styles.text}>DESCUENTO</Text>
@@ -186,7 +186,7 @@ export default function Cashier () {
               ? <Text style={{ color: '#fff', fontWeight: 'bold' }}>CERRAR CUENTA</Text>
               : <Text style={{ color: '#fff', fontWeight: 'bold' }}>ESPERE...</Text>}
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       </View>
       <View style={styles.footer} />
     </View>

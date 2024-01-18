@@ -9,6 +9,7 @@ import CorteDeCaja from './src/app/components/cashier/corteCaja'
 import Almacenes from './src/app/pages/admin/almacenes'
 import ReporteVentas from './src/app/pages/admin/reporteVentaProductos'
 import CategoriaProductos from './src/app/pages/admin/categoriaProductos'
+import ProductosList from './src/app/pages/admin/productos'
 import { LogBox, Text, View, Modal, ToastAndroid } from 'react-native'
 import { Waiter } from './src/app/pages/waiter'
 import { routes } from './src/lib/data'
@@ -113,6 +114,9 @@ export default function App () {
       </Route>
       <Route name='categoriaProductos' orientation={ORIENTATIONS.PORTRAIT}>
         <CategoriaProductos />
+      </Route>
+      <Route name='productos' orientation={ORIENTATIONS.PORTRAIT}>
+        <ProductosList />
       </Route>
 
     </View>
