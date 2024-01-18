@@ -13,7 +13,7 @@ export default function CashierProducts ({ table }) {
         <Text style={styles.textProduct}>PLATILLO</Text>
         <Text style={styles.textProduct}>COSTO</Text>
       </View>
-      <View style={{ gap: 5 }}>
+      <View style={{ gap: 10 }}>
         {table?.pretty_list?.map((dish) => {
           return (
             <View key={dish?.id} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -55,10 +55,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 10,
     borderWidth: 1,
-    width: '90%',
+    width: '95%',
     borderRadius: 10,
-    paddingHorizontal: 50,
-    height: '60%'
+    paddingHorizontal: 10,
+    flex: 1,
+    paddingVertical: 20
   },
   textProduct: {
     color: 'black',
