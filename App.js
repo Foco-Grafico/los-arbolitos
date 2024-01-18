@@ -10,6 +10,7 @@ import Almacenes from './src/app/pages/admin/almacenes'
 import ReporteVentas from './src/app/pages/admin/reporteVentaProductos'
 import CategoriaProductos from './src/app/pages/admin/categoriaProductos'
 import ProductosList from './src/app/pages/admin/productos'
+import ActualizarStock from './src/app/pages/admin/actualizarStock'
 import { LogBox, Text, View, Modal, ToastAndroid } from 'react-native'
 import { Waiter } from './src/app/pages/waiter'
 import { routes } from './src/lib/data'
@@ -117,6 +118,9 @@ export default function App () {
       </Route>
       <Route name='productos' orientation={ORIENTATIONS.PORTRAIT}>
         <ProductosList />
+      </Route>
+      <Route name='actualizarStock' orientation={ORIENTATIONS.PORTRAIT}>
+        <ActualizarStock />
       </Route>
 
     </View>

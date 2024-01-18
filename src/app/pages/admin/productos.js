@@ -1,23 +1,38 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import HeaderAdmin from '../../components/admin/header'
 import Footer from '../../components/admin/footer'
 import Editar from '../../../../assets/editar'
 import { productCatStore } from '../../../../stores/waiter'
+import useWaiterGetProductsInCategory from '../../hooks/getProductsinCategory'
+import SignoMas from '../../../../assets/signodemas'
+import { useState } from 'react'
+
+const formatName = (name) => {
+  const canFormat = name.toLowerCase().startsWith('de') || name.toLowerCase().startsWith('del') || name.toLowerCase().startsWith('la') || name.toLowerCase().startsWith('el') || name.toLowerCase().startsWith('los') || name.toLowerCase().startsWith('las') || name.toLowerCase().startsWith('para')
+
+  if (canFormat) {
+    return name.split(' ').splice(1).join(' ').toUpperCase()
+  }
+
+  return name.toUpperCase()
+}
 
 export default function ProductosList () {
-  const bebidas = 'BEBIDAS'
-  const { selectedCategory } = productCatStore(state => state.selectedCategory)
-
-  console.log(selectedCategory)
+  const selectedCategory = productCatStore(state => state.selectedCategory)
+  const { dishes } = useWaiterGetProductsInCategory(selectedCategory?.id)
+  const [updateModal, setUpdateModal] = useState(false)
+  const [updateProductName, setUpdateProductName] = useState('')
+  const [createModal, setCreateModal] = useState(false)
+  const [newProductName, setNewProductName] = useState('')
 
   return (
     <View style={styles.main}>
       <HeaderAdmin>
-        <Text>PRODUCTOS DE {bebidas}</Text>
+        <Text>PRODUCTOS DE {formatName(selectedCategory?.name)}</Text>
       </HeaderAdmin>
-      {/* <FlatList
+      <FlatList
         numColumns={2}
-        data={categories}
+        data={dishes}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ alignItems: 'center', gap: 20 }}
         renderItem={({ item, index }) => (
@@ -41,15 +56,218 @@ export default function ProductosList () {
                 //   id: item?.id,
                 //   index
                 // })
-
-                // setModal(true)
+                setUpdateModal(true)
               }}
             >
               <Editar style={{ width: 30, height: 30 }} />
             </TouchableOpacity>
           </View>
         )}
-      /> */}
+      />
+      <View>
+        <TouchableOpacity
+          style={{ alignItems: 'flex-end', paddingHorizontal: 20, padding: 20 }}
+          onPress={() => { setCreateModal(true) }}
+        >
+          <SignoMas style={{ width: 40, height: 40 }} />
+        </TouchableOpacity>
+      </View>
+      <Modal
+        statusBarTranslucent
+        transparent
+        animationType='fade'
+        visible={createModal}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            paddingHorizontal: 20
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: '#fff',
+              borderRadius: 10,
+              padding: 20,
+              elevation: 10,
+              gap: 20,
+              alignItems: 'center'
+            }}
+          >
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 20
+              }}
+            >
+              ¿Deseas crear el producto?
+            </Text>
+            <TextInput style={{ width: 250, borderWidth: 1, paddingHorizontal: 10 }} autoFocus onChangeText={setNewProductName} />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                gap: 20
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  setCreateModal(false)
+                  // Aqui se crea el producto
+                }}
+                style={{
+                  backgroundColor: '#005943',
+                  borderRadius: 10,
+                  fontSize: 20,
+                  elevation: 10,
+                  textAlign: 'center',
+                  paddingVertical: 5,
+                  paddingHorizontal: 10,
+                  flex: 1
+                }}
+              >
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontSize: 14,
+                    fontWeight: 'bold',
+                    textAlign: 'center'
+                  }}
+                >
+                  Aceptar
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setCreateModal(false)
+                }}
+                style={{
+                  backgroundColor: 'red',
+                  borderRadius: 10,
+                  fontSize: 20,
+                  elevation: 10,
+                  textAlign: 'center',
+                  paddingVertical: 5,
+                  paddingHorizontal: 10,
+                  flex: 1
+                }}
+              >
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontSize: 14,
+                    fontWeight: 'bold',
+                    textAlign: 'center'
+                  }}
+                >
+                  Cancelar
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        statusBarTranslucent
+        transparent
+        animationType='fade'
+        visible={updateModal}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            paddingHorizontal: 20
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: '#fff',
+              borderRadius: 10,
+              padding: 20,
+              elevation: 10,
+              gap: 20,
+              alignItems: 'center'
+            }}
+          >
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 20
+              }}
+            >
+              ¿Deseas modificar el producto?
+            </Text>
+            <TextInput style={{ width: 250, borderWidth: 1, paddingHorizontal: 10 }} autoFocus onChangeText={setUpdateProductName} />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                gap: 20
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  setUpdateModal(false)
+                  // Aqui se actualiza el producto
+                }}
+                style={{
+                  backgroundColor: '#005943',
+                  borderRadius: 10,
+                  fontSize: 20,
+                  elevation: 10,
+                  textAlign: 'center',
+                  paddingVertical: 5,
+                  paddingHorizontal: 10,
+                  flex: 1
+                }}
+              >
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontSize: 14,
+                    fontWeight: 'bold',
+                    textAlign: 'center'
+                  }}
+                >
+                  Aceptar
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setUpdateModal(false)
+                }}
+                style={{
+                  backgroundColor: 'red',
+                  borderRadius: 10,
+                  fontSize: 20,
+                  elevation: 10,
+                  textAlign: 'center',
+                  paddingVertical: 5,
+                  paddingHorizontal: 10,
+                  flex: 1
+                }}
+              >
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontSize: 14,
+                    fontWeight: 'bold',
+                    textAlign: 'center'
+                  }}
+                >
+                  Cancelar
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <Footer />
     </View>
   )
