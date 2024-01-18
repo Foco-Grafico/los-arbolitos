@@ -2,9 +2,13 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import HeaderAdmin from '../../components/admin/header'
 import Footer from '../../components/admin/footer'
 import Editar from '../../../../assets/editar'
+import { productCatStore } from '../../../../stores/waiter'
 
 export default function ProductosList () {
   const bebidas = 'BEBIDAS'
+  const { selectedCategory } = productCatStore(state => state.selectedCategory)
+
+  console.log(selectedCategory)
 
   return (
     <View style={styles.main}>

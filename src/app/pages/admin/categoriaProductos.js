@@ -8,13 +8,23 @@ import SignoMas from '../../../../assets/signodemas'
 import updateCategories from '../../func/update-categories'
 import CreateCategory from '../../func/create-category'
 import { routerStore } from '../../../../stores/router'
+import { productCatStore } from '../../../../stores/waiter'
 
 export default function CategoriaProductos () {
+  const { setSelectedCategory } = productCatStore(state => state.setSelectedCategory)
+
   const [selectedInfo, setInfo] = useState({
     name: '',
     id: '',
     index: 0
   })
+
+  const [prod, setProd] = useState({
+    name: '',
+    id: '',
+    index: 0
+  })
+
   const { categories, editLocalCatName, newCategory } = useGetCategories()
   const [modal, setModal] = useState(false)
   const [newCatName, setNewCatName] = useState('')
@@ -42,7 +52,18 @@ export default function CategoriaProductos () {
               margin: 10
             }}
           >
-            <TouchableOpacity style={styles.container} onPress={() => { nav('productos') }}>
+            <TouchableOpacity
+              style={styles.container}
+              onPress={() => {
+                nav('productos')
+                setProd({
+                  name: item?.name,
+                  id: item?.id,
+                  index
+                })
+                setSelectedCategory(prod)
+              }}
+            >
               <Text style={{ color: '#000', fontWeight: 'bold' }}>{item?.name}</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -53,7 +74,6 @@ export default function CategoriaProductos () {
                   id: item?.id,
                   index
                 })
-
                 setModal(true)
               }}
             >

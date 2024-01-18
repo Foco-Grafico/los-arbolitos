@@ -145,6 +145,13 @@ export const modalStore = create((set) => ({
   setShow: (show, data) => set({ show, data })
 }))
 
+export const productCatStore = create((set) => ({
+  selectedCategory: '',
+  search: '',
+  setSelectedCategory: (category) => set({ selectedCategory: category }),
+  setSearch: (search) => set({ search })
+}))
+
 // export const waiterStore = create((set) => ({
 //   selectedCategory: 1,
 //   search: '',
