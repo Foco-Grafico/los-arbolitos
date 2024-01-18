@@ -72,16 +72,16 @@ export default function useKitchenGetOrders (bar = false) {
       }
 
       setOrders(prev => {
-        const copyOrder = [...prev]
+        const copyOrders = [...prev]
 
-        const isExistOrder = copyOrder.find(o => o.id === newOrder.id)
+        const isExistOrder = copyOrders.some(o => o.id === newOrder.id)
 
         if (isExistOrder) {
-          const index = copyOrder.findIndex(o => o.id === newOrder.id)
+          const index = copyOrders.findIndex(o => o.id === newOrder.id)
 
           const newIds = newOrder.pending_list.flatMap(dish => dish.ids)
 
-          const isExistDish = copyOrder[index].pending_list.reduce((acc, curr) => {
+          const isExistDish = copyOrders[index].pending_list.reduce((acc, curr) => {
             if (acc === false) {
               return false
             }
@@ -99,15 +99,15 @@ export default function useKitchenGetOrders (bar = false) {
 
           if (!isExistDish) playSound()
 
-          copyOrder[index] = newOrder
+          copyOrders[index] = newOrder
 
-          return copyOrder
+          return copyOrders
         }
 
         playSound()
 
-        if (copyOrder.length === 0) {
-          copyOrder.push(newOrder)
+        if (copyOrders.length === 0) {
+          copyOrders.push(newOrder)
           configNewInfo({
             mesero: {
               id: newOrder?.user?.id,
@@ -120,11 +120,11 @@ export default function useKitchenGetOrders (bar = false) {
             table: newOrder?.table_id
           })
           markAsPreparation(newOrder?.id, newOrder?.pending_list[0].ids)
-          return copyOrder
+          return copyOrders
         }
 
         if (order.priority) {
-          const lastOrderPriority = copyOrder.reduce((acc, curr, index) => {
+          const lastOrderPriority = copyOrders.reduce((acc, curr, index) => {
             if (curr.priority) {
               return index
             }
@@ -133,17 +133,17 @@ export default function useKitchenGetOrders (bar = false) {
           }, -1)
 
           if (lastOrderPriority === -1) {
-            copyOrder.splice(1, 0, newOrder)
+            copyOrders.splice(1, 0, newOrder)
           } else {
-            copyOrder.splice(lastOrderPriority + 1, 0, newOrder)
+            copyOrders.splice(lastOrderPriority + 1, 0, newOrder)
           }
 
-          return copyOrder
+          return copyOrders
         }
 
-        copyOrder.push(newOrder)
+        copyOrders.push(newOrder)
 
-        return copyOrder
+        return copyOrders
       })
     })
 
