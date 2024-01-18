@@ -78,8 +78,6 @@ export default function EditProducts ({ editProductController }) {
     editProducts(editProductController?.data?.orderId)
   }
 
-  console.log('editProductController', editProductController?.data.items[0]?.comment)
-
   if (editProductController?.isVisible && dishSelected == null) {
     return (
       <Layout>
