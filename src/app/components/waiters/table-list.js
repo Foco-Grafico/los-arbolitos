@@ -5,11 +5,14 @@ import { socket } from '../../../services/socket'
 // import { Cerrar } from '../../../../assets/cerrar'
 // import { routerStore } from '../../../../stores/router'
 import { useHorribleSound } from '../../hooks/play-sounds'
+import { accountStore } from '../../../../stores/account'
 
 export function TableList ({ onPressItem = () => {}, data = [], hasSelected = false }) {
   const [tableSelected, setTableSelected] = useState(0)
   const [tables, setTables] = useState([])
   const abortController = useRef(new AbortController())
+  const account = accountStore(state => state.account)
+
   // const nav = routerStore(state => state.nav)
 
   const { play } = useHorribleSound()
@@ -19,7 +22,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
   }, [data])
 
   useEffect(() => {
-    socket.on('order_status', ({ table, order_id: orderId, status }) => {
+    socket.on(`order_status-${account?.id}`, ({ table, order_id: orderId, status }) => {
       if (status?.id !== 3) return
       play()
 
@@ -40,6 +43,10 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
         return copyPrev
       })
     })
+
+    return () => {
+      socket.off(`order_status-${account?.id}`)
+    }
   }, [])
 
   useEffect(() => {

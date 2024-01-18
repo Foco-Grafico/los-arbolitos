@@ -36,6 +36,10 @@ export default function useGetOrdersInCashier () {
         requested: false
       }])
     })
+
+    return () => {
+      socket.off('new_cash_order')
+    }
   }, [])
 
   return {

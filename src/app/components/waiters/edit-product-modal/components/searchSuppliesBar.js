@@ -52,7 +52,8 @@ export const SearchBarSupply = ({ onAddSupplyClick }) => {
             gap: 5,
             paddingVertical: 5,
             overflow: 'hidden',
-            backgroundColor: '#8d89898a'
+            backgroundColor: '#8d89898a',
+            zIndex: 10
           }}
         >
           {supplies.map((supply) => (
