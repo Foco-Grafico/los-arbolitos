@@ -16,6 +16,13 @@ export const Products = ({ isVisibleSendCommand, sendToCash, editProductControll
   const order = tableStore(state => state.order)
   const [textKey, setTextKey] = useState(v4())
   const nav = routerStore(state => state.nav)
+  const resetSearch = () => {
+    setSearch(() => {
+      setTextKey(v4())
+
+      return ''
+    })
+  }
 
   return (
     <View
@@ -70,16 +77,12 @@ export const Products = ({ isVisibleSendCommand, sendToCash, editProductControll
             }}
           />
         </View>
-        <DishList editProductController={editProductController} dishes={dishes} />
+        <DishList resetSearch={resetSearch} editProductController={editProductController} dishes={dishes} />
       </View>
       <Footer
         onPressInCat={(category) => {
           setCategory(category?.id)
-          setSearch(() => {
-            setTextKey(v4())
-
-            return ''
-          })
+          resetSearch()
         }}
       />
       <EditProducts editProductController={editProductController} />
