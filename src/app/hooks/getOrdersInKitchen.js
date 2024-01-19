@@ -61,14 +61,20 @@ export default function useKitchenGetOrders (bar = false) {
         return
       }
 
-      const playSound = () => {
-        if (bar === true && newOrder.pending_list[0].type === 1) {
-          play()
-        }
+      // const playSound = () => {
+      //   if (bar === true && newOrder.pending_list[0].type === 1) {
+      //     play()
+      //   }
 
-        if (bar === false && newOrder.pending_list[0].type !== 1) {
-          play()
-        }
+      //   if (bar === false && newOrder.pending_list[0].type !== 1) {
+      //     play()
+      //   }
+      // }
+
+      // playSound()
+
+      const isAllValuesInArray = (arr1, arr2) => {
+        return arr1.every((value) => arr2.includes(value))
       }
 
       setOrders(prev => {
@@ -77,34 +83,40 @@ export default function useKitchenGetOrders (bar = false) {
         const isExistOrder = copyOrders.some(o => o.id === newOrder.id)
 
         if (isExistOrder) {
+          console.log('isExistOrder', isExistOrder)
           const index = copyOrders.findIndex(o => o.id === newOrder.id)
 
           const newIds = newOrder.pending_list.flatMap(dish => dish.ids)
+          const oldIds = copyOrders[index].pending_list.flatMap(dish => dish.ids)
 
-          const isExistDish = copyOrders[index].pending_list.reduce((acc, curr) => {
-            if (acc === false) {
-              return false
-            }
+          const isExistDish = isAllValuesInArray(newIds, oldIds)
 
-            let exist = true
+          // const isExistDish = copyOrders[index].pending_list.reduce((acc, curr) => {
+          //   if (acc === false) {
+          //     return false
+          //   }
 
-            newIds.forEach(id => {
-              if (!curr.ids.includes(id) && exist === true) {
-                exist = false
-              }
-            })
+          //   let exist = true
 
-            return exist
-          }, true)
+          //   newIds.forEach(id => {
+          //     if (!curr.ids.includes(id) && exist === true) {
+          //       exist = false
+          //     }
+          //   })
 
-          if (!isExistDish) playSound()
+          //   return exist
+          // }, true)
+
+          // console.log('isExistDish', isExistDish)
+
+          if (!isExistDish) play()
 
           copyOrders[index] = newOrder
 
           return copyOrders
         }
 
-        playSound()
+        play()
 
         if (copyOrders.length === 0) {
           copyOrders.push(newOrder)

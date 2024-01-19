@@ -162,9 +162,11 @@ export default function Cashier () {
             setDiscount(0)
           }}
         />
-        <ScrollView contentContainerStyle={{ width: '100%', backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', gap: 30, paddingVertical: 10 }}>
-          <Products table={selectedTable} />
-          <View style={{ justifyContent: 'center', alignItems: 'center', gap: 5 }}>
+        <View style={{ flex: 1 }}>
+          <ScrollView contentContainerStyle={{ width: '100%', backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', gap: 30, paddingVertical: 10 }}>
+            <Products table={selectedTable} />
+          </ScrollView>
+          <View style={{ justifyContent: 'center', alignItems: 'center', gap: 5, paddingVertical: 10 }}>
             <Text style={styles.text}>DESCUENTO</Text>
             <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
               <TextInput
@@ -180,13 +182,14 @@ export default function Cashier () {
             <TouchableOpacity style={styles.buttons} onPress={print}>
               <Text style={{ color: '#fff', fontWeight: 'bold' }}>IMPRIMIR</Text>
             </TouchableOpacity>
+            <TouchableOpacity style={styles.buttons} onPress={handleFinishOrder} disabled={!selectedTable?.requested}>
+              {selectedTable?.requested
+                ? <Text style={{ color: '#fff', fontWeight: 'bold' }}>CERRAR CUENTA</Text>
+                : <Text style={{ color: '#fff', fontWeight: 'bold' }}>ESPERE...</Text>}
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.buttons} onPress={handleFinishOrder} disabled={!selectedTable?.requested}>
-            {selectedTable?.requested
-              ? <Text style={{ color: '#fff', fontWeight: 'bold' }}>CERRAR CUENTA</Text>
-              : <Text style={{ color: '#fff', fontWeight: 'bold' }}>ESPERE...</Text>}
-          </TouchableOpacity>
-        </ScrollView>
+        </View>
+
       </View>
       <View style={styles.footer} />
     </View>
