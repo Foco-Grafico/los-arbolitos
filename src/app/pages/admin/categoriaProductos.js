@@ -12,7 +12,6 @@ import { productCatStore } from '../../../../stores/waiter'
 
 export default function CategoriaProductos () {
   const setSelectedCategory = productCatStore(state => state.setSelectedCategory)
-
   const [selectedInfo, setInfo] = useState({
     name: '',
     id: '',
@@ -28,8 +27,8 @@ export default function CategoriaProductos () {
 
   return (
     <View style={styles.main}>
-      <HeaderAdmin>
-        <Text>Categoria de productos</Text>
+      <HeaderAdmin style={{ flexDirection: 'column' }}>
+        <Text>CATEGORÍA DE PRODUCTOS</Text>
       </HeaderAdmin>
       <FlatList
         numColumns={2}

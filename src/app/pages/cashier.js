@@ -83,12 +83,22 @@ export default function Cashier () {
           Descuento: ${priceFormatter.format(descuento)}<br>
           IVA: ${priceFormatter.format(iva)}<br>
           <b>Total: </b>${priceFormatter.format(total)} (IVA incluido)<br><br>
+          <br>
+          <br>
+          Propina sugerida (10%): ${priceFormatter.format(total * 0.10)}<br>
+          Propina sugerida (15%): ${priceFormatter.format(total * 0.15)}<br>
+          Propina sugerida (20%): ${priceFormatter.format(total * 0.20)}<br>
           Gracias por su preferencia<br>
           ¡Vuelva pronto!
           `
         : `SubTotal: ${priceFormatter.format(subtotal)}<br>
           IVA: ${priceFormatter.format(iva)}<br>
           <b>Total: </b>${priceFormatter.format(total)} (IVA incluido)<br><br>
+          <br>
+          <br>
+          Propina sugerida (10%): ${priceFormatter.format(total * 0.10)}<br>
+          Propina sugerida (15%): ${priceFormatter.format(total * 0.15)}<br>
+          Propina sugerida (20%): ${priceFormatter.format(total * 0.20)}<br>
           Gracias por su preferencia<br>
           ¡Vuelva pronto!
           `

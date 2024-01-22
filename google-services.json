@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1009109190321",
+    "project_id": "los-arbolitos-8160b",
+    "storage_bucket": "los-arbolitos-8160b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009109190321:android:bb6f7b6159eb86b8ec4490",
+        "android_client_info": {
+          "package_name": "com.focografico.losarbolitos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARaOqOE6JEUFBdc02jxnjCFODp-xV15pI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

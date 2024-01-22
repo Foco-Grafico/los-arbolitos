@@ -1,9 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
+import { boxesStore } from '../../../../stores/admin'
 
 export default function HeaderAdmin ({ children }) {
+  const selectedBox = boxesStore(state => state.selectedBox)
+
   return (
     <View style={styles.header}>
       <Text style={styles.text}>{children}</Text>
+      {selectedBox !== 0 ? <Text style={styles.text}>({selectedBox?.name})</Text> : ''}
     </View>
   )
 }
@@ -14,7 +18,7 @@ const styles = StyleSheet.create({
     height: '6%',
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'row',
+    flexDirection: 'column',
     paddingHorizontal: 10
   },
   text: {

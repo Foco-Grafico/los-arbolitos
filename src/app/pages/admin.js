@@ -36,11 +36,7 @@ export default function Admin () {
       name: 'PRODUCTOS',
       route: 'categoriaProductos'
     },
-    {
-      id: 7,
-      name: 'ACTUALIZAR STOCK',
-      route: 'actualizarStock'
-    },
+
     {
       id: 8,
       name: 'ALMACENES',
