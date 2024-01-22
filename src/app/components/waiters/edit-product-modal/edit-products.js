@@ -282,6 +282,8 @@ export default function EditProducts ({ editProductController }) {
     )
   }
 
+  const [isModified, setIsModified] = useState(false)
+
   if (editProductController?.isVisible) {
     return (
       <Layout>
@@ -321,6 +323,9 @@ export default function EditProducts ({ editProductController }) {
                 }
 
                 newDish.supplies.push({ ...supply, quantity: 1 })
+
+                setIsModified(true)
+
                 return newDish
               })
             }}
@@ -435,6 +440,11 @@ export default function EditProducts ({ editProductController }) {
             onPress={() => {
               // editProductController?.onAccept(dishSelected)
               // setSelectDish(null)
+
+              if ((isModified && dishSelected?.comment === '') || (isModified && dishSelected?.comment === null)) {
+                globalThis.alert('Debe agregar una observación')
+                return
+              }
 
               const supplies = dishSelected?.supplies?.map(supply => ({
                 id: supply?.id,
