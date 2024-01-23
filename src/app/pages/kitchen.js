@@ -3,6 +3,7 @@ import NavBarKitchen from '../components/kitchen/navBar'
 import ActualDish from '../components/kitchen/actual-dish'
 import OrderList from '../components/kitchen/order-list'
 import useKitchenGetOrders from '../hooks/getOrdersInKitchen'
+import ReportButton from '../components/kitchen/report-button'
 
 export default function Kitchen ({ bar = false }) {
   const { orders, setOrders } = useKitchenGetOrders(bar)
@@ -14,7 +15,9 @@ export default function Kitchen ({ bar = false }) {
         <ActualDish bar={bar} setOrders={setOrders} />
         <OrderList bar={bar} orders={orders} />
       </View>
-      <View style={styles.footer} />
+      <View style={styles.float}>
+        <ReportButton />
+      </View>
     </View>
   )
 }
@@ -30,7 +33,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: '5%'
+    height: '10%'
   },
   middle: {
     backgroundColor: '#fff',
@@ -38,5 +41,10 @@ const styles = StyleSheet.create({
     paddingVertical: 50,
     flex: 1,
     gap: 20
+  },
+  float: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20
   }
 })

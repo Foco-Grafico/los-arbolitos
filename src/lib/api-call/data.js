@@ -18,5 +18,6 @@ export const APIENDPOINTS = {
   getOrders: `${API_URL}/cashier/orders`,
   finishOrder: `${API_URL}/cashier/paid-order`,
   getReconciliation: `${API_URL}/reports/reconciliation`,
-  getBoxList: `${API_URL}/boxes`
+  getBoxList: `${API_URL}/boxes`,
+  getOrdersHistory: `${API_URL}/reports/history`
 }

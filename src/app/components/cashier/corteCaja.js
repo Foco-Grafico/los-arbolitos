@@ -1,58 +1,37 @@
-import { FlatList, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import useGetReconciliation from '../../hooks/useGetReconciliation'
 import HeaderAdmin from '../admin/header'
 import Footer from '../admin/footer'
-import { printToFileAsync } from 'expo-print'
-import { shareAsync } from 'expo-sharing'
 import { CSSPDF } from '../pdfcss'
 import ClassHeader from '../../../classes/header'
 import ReportTable from '../../../classes/table'
+import { printToFileAsync } from 'expo-print'
+import { shareAsync } from 'expo-sharing'
+
+const priceFormatter = new Intl.NumberFormat('es-MX', {
+  style: 'currency',
+  currency: 'MXN'
+})
 
 export default function CorteDeCaja () {
-  const { reconciliation } = useGetReconciliation()
-  console.log(JSON.stringify(reconciliation.data))
+  const { reconciliation: orders } = useGetReconciliation()
+  console.log(JSON.stringify(orders.data))
 
-  const generateOrderReport = async () => {
-    const orders = reconciliation.data
-    const totalGeneral = orders?.total
-    const quantityGeneral = orders?.quantity
-    const tableOrders = orders.map(order => {
-      const header = new ClassHeader({
-        order
-      })
-
-      const table = new ReportTable({
-        header: ['PRODUCTOS', 'PRECIO'],
-        items: [
-          ...order?.products?.map(x => ({
-            name: x?.name,
-            total: x?.price.toLocaleString('es-MX', {
-              style: 'currency',
-              currency: 'MXN'
-            })
-          })),
-          ...order?.drinks.map(x => ({
-            name: `${x.name} (${x.quantity})`,
-            total: x.total.toLocaleString('es-MX', {
-              style: 'currency',
-              currency: 'MXN'
-            })
-          }))
-        ],
-        total: `${order?.total.toLocaleString('es-MX', {
-          style: 'currency',
-          currency: 'MXN'
-        })} ${order?.discount != null && order?.discount > 0
-            ? `(Descuento: ${order?.discount.toLocaleString('es-MX', {
-              style: 'currency',
-              currency: 'MXN'
-            })})`
-              : ''}`
-      })
-
-      return { header, table }
+  const inventoryReport = () => {
+    const header = new ClassHeader({
+      report: 'CORTE DE CAJA'
     })
-    //
+
+    const tables = orders?.data?.map((order) => new ReportTable({
+      header: ['PRODUCTO', 'PRECIO'],
+      items: order?.dishes?.map((dish) => ({
+        name: dish?.name,
+        price: dish?.total,
+        supplies: dish?.supplies
+      })),
+      total: order?.total
+    }))
+
     const html = `
     <html lang="en">
     <head>
@@ -64,41 +43,14 @@ export default function CorteDeCaja () {
       <title>{title}</title>
     </head>
     <body>
-      <main class="px-16 py-16 flex-col flex gap-11">
-        ${tableOrders?.map(({ header, table }) => {
-          return `
-          <section class="flex flex-col gap-5">
-            ${header?.render()}
-            ${table?.getHTMLTable()}
-          </section>
-          `
-        })}
-
-        <div class="flex gap-2 flex-grow">
-          <div style="background-color: #fbbd01;" class="flex rounded font-black justify-center flex-grow">
-            <span>TOTAL DE VENTA POR EFECTIVO</span >
-          </div>
-          <div style="color: #fbbd01;" class=" bg-black flex justify-center items-center px-10 rounded flex-grow">
-          </div>
-        </div>
-        <div class="flex gap-2 flex-grow">
-          <div style="background-color: #fbbd01;" class="flex rounded font-black justify-center flex-grow">
-            <span>TOTAL DE VENTA POR TARJETA</span >
-          </div>
-          <div style="color: #fbbd01;" class=" bg-black flex justify-center items-center px-10 rounded flex-grow">
-          </div>
-        </div>
-        <div class="flex gap-2 flex-grow">
-        <div style="background-color: #fbbd01;" class="flex rounded font-black justify-center flex-grow">
-          <span>TOTAL GENERAL / TOTAL DE ORDENES</span>
-        </div>
-        <div style="color: #fbbd01;" class=" bg-black flex justify-center items-center px-10 rounded flex-grow">
-          ${totalGeneral.toLocaleString('es-MX', {
-            style: 'currency',
-            currency: 'MXN'
-          })} / ${quantityGeneral}
-        </div>
-      </div>
+      <main class="px-16 py-16 flex-col flex gap-11 m-10">
+        <section class="flex flex-col gap-5">
+          ${header.render()}
+          ${tables.map(table => table.getHTMLTable()).join('')}
+        </section>
+        <section style='background-color: #005942; margin-top: 10px;' class=" flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
+          <span style='color:white'>Total: ${orders?.total}</span>
+        </section>
       </main>
     </body>
   </html>
@@ -109,39 +61,73 @@ export default function CorteDeCaja () {
     printToFileAsync({
       html,
       base64: false
+    }).then((file) => {
+      shareAsync(file.uri)
     })
-      .then(file => {
-        shareAsync(file.uri)
-      })
   }
   return (
     <View style={{ flex: 1 }}>
       <HeaderAdmin>
-        <Text>Corte de caja</Text>
+        <Text>CORTE DE CAJA</Text>
       </HeaderAdmin>
       <View style={{ flex: 1, paddingVertical: 40 }}>
-        <FlatList
-          data={reconciliation?.data}
-          renderItem={({ item }) =>
-            <View key={item.key}>
-              <Text>{item?.user?.name}  {item?.table?.name}</Text>
-              <Text>'Productos'</Text>
-              {item?.dishes?.map(product => {
-                return (
-                  <Text key={product?.id}>
-                    Nombre: {product?.name} Precio: {product?.total}
-                  </Text>
-                )
-              })}
-            </View>}
-        />
-        <Text>Total: {reconciliation?.total}</Text>
+        <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
+          {orders?.data?.map(item => {
+            return (
+              <View key={item.key} style={{ flexDirection: 'column', paddingHorizontal: 15, borderWidth: 1, width: '100%', gap: 20 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                  <Text style={{ ...styles.text }}>Folio: {item?.folio}</Text>
+                  <Text style={styles.text}>Mesero: {item?.user?.name}</Text>
+                  <Text style={styles.text}>Mesa: {item?.table?.name}</Text>
+                </View>
+                <View style={{ flexDirection: 'column', gap: 5, paddingHorizontal: 40 }}>
+                  {item?.dishes?.map(product => {
+                    return (
+                      <View key={product?.id} style={{ flexDirection: 'row', flex: 1 }}>
+                        <Text style={{ ...styles.text, flex: 3 }}>
+                          {product?.name}
+                        </Text>
+                        <Text style={{ ...styles.text, flex: 1 }}>
+                          Precio: {product?.total}
+                        </Text>
+                      </View>
+                    )
+                  })}
+                </View>
+                <Text style={{ ...styles.text, textAlign: 'right' }}> Total:{item?.total} </Text>
+              </View>
+            )
+          })}
+        </ScrollView>
+        <Text style={styles.text}>Total: {orders?.total}</Text>
+        <TouchableOpacity onPress={() => inventoryReport()} style={styles.button}>
+          <Text style={styles.titles}>GENERAR REPORTE</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={generateOrderReport}>
-        <Text>Generar reporte</Text>
-      </TouchableOpacity>
       <Footer />
     </View>
 
   )
 }
+
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  button: {
+    backgroundColor: '#005942',
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
+    width: '90%',
+    alignSelf: 'center'
+  },
+  titles: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  }
+
+})
