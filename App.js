@@ -11,7 +11,7 @@ import CategoriaProductos from './src/app/pages/admin/categoriaProductos'
 import ProductosList from './src/app/pages/admin/productos'
 import ActualizarStock from './src/app/pages/admin/actualizarStock'
 import AlmacenInv from './src/app/pages/admin/menuAlmacen'
-import { LogBox, View } from 'react-native'
+import { LogBox, Text, View } from 'react-native'
 import { Waiter } from './src/app/pages/waiter'
 import { routes } from './src/lib/data'
 import { StatusBar } from 'expo-status-bar'
@@ -19,6 +19,7 @@ import Empleados from './src/app/pages/admin/empleados'
 import * as Notifications from 'expo-notifications'
 import { LowConnectionModal } from './src/app/components/LowConnectionModal'
 import { useRegisterNotifications } from './src/app/hooks/register-notifications'
+import { Calendar } from './src/app/components/calendar'
 
 LogBox.ignoreLogs(['new NativeEventEmitter', 'Aborted'])
 
@@ -30,7 +31,7 @@ Notifications.setNotificationHandler({
   })
 })
 
-export default function App () {
+function App () {
   useRegisterNotifications()
 
   return (
@@ -90,3 +91,14 @@ export default function App () {
     </View>
   )
 }
+
+// function AppTest () {
+//   return (
+//     <View>
+//       <StatusBar hidden />
+//       <Calendar isOpen />
+//     </View>
+//   )
+// }
+
+export default App
