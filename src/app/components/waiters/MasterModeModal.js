@@ -108,6 +108,10 @@ export const MasterModeModal = ({ isActive, onClose }) => {
               </Text>
               <FlatList
                 data={order?.dishes}
+                style={{
+                  maxHeight: 450,
+                  paddingHorizontal: 10
+                }}
                 contentContainerStyle={{
                   gap: 5
                 }}
