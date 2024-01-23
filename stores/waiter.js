@@ -81,7 +81,19 @@ export const tableStore = create((set, get) => ({
   status: ORDER_STATES[1],
   allFinished: false,
   alwaysPriority: false,
-
+  setDefault: () => {
+    set({
+      table: {},
+      order: {
+        id: 0,
+        dishes: [],
+        pretty_list: []
+      },
+      status: ORDER_STATES[1],
+      allFinished: false,
+      alwaysPriority: false
+    })
+  },
   setTable: (table) => {
     set({
       order: table?.order ?? {},

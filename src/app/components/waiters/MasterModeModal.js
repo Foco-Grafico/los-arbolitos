@@ -5,6 +5,7 @@ import { Cancelar } from '../../../../assets/cancelar'
 import { markAsPreparation } from '../../../lib/api-call/kitchen/mark-as-preparation'
 import finishOrderInKitchen from '../../func/finish-order-in-kitchen'
 import { sendToCashier } from '../../../lib/api-call/order/move-order'
+import finishOrderInCashier from '../../func/finish-order-in.cashier'
 
 export const MasterModeModal = ({ isActive, onClose }) => {
   const [section, setSection] = useState('main')
@@ -251,7 +252,7 @@ export const MasterModeModal = ({ isActive, onClose }) => {
               </Text>
               <View
                 style={{
-                  gap: 5
+                  gap: 30
                 }}
               >
                 <Button
@@ -259,6 +260,7 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                     forceQuit()
 
                     for (const dish of order?.dishes) {
+                      if (dish.status.id === 3) continue
                       finishOrderInKitchen(dish?.id)
                     }
 
@@ -272,14 +274,30 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                     forceQuit()
 
                     for (const dish of order?.dishes) {
+                      if (dish.status.id === 3) continue
+
                       finishOrderInKitchen(dish?.id)
+                        .finally(() => {
+                          setStatus(5)
+                        })
                     }
 
-                    sendToCashier(order?.id)
-                    setStatus(5)
+                    setTimeout(() => {
+                      sendToCashier(order?.id)
+                      setStatus(5)
+                    }, 3000)
                   }}
                 >
-                  Enviar a caja
+                  Solicitar cuenta
+                </Button>
+                <Button
+                  onPress={() => {
+                    forceQuit()
+
+                    finishOrderInCashier(order?.id, 0)
+                  }}
+                >
+                  Liberar mesa
                 </Button>
               </View>
             </>

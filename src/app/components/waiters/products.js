@@ -14,6 +14,7 @@ import { Cerrar } from '../../../../assets/cerrar'
 export const Products = ({ isVisibleSendCommand, sendToCash, editProductController }) => {
   const { dishes, setCategory, setSearch } = useWaiterGetProductsInCategory()
   const order = tableStore(state => state.order)
+  const setDefault = tableStore(state => state.setDefault)
   const [textKey, setTextKey] = useState(v4())
   const nav = routerStore(state => state.nav)
   const resetSearch = () => {
@@ -45,6 +46,7 @@ export const Products = ({ isVisibleSendCommand, sendToCash, editProductControll
           }}
           onPress={() => {
             nav('login')
+            setDefault()
           }}
         >
           <Cerrar style={{ width: 20, height: 20 }} />
