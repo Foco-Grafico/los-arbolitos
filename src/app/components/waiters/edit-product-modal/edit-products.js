@@ -62,6 +62,7 @@ export default function EditProducts ({ editProductController }) {
   const [dishSelected, setSelectDish] = useState(null)
   const editProducts = tableStore(state => state.editProducts)
   const [productToDelete, setProductToDelete] = useState(null)
+  const [isModified, setIsModified] = useState(false)
 
   const deleteProduct = (item) => {
     editProductController?.setData(prev => {
@@ -282,8 +283,6 @@ export default function EditProducts ({ editProductController }) {
     )
   }
 
-  const [isModified, setIsModified] = useState(false)
-
   if (editProductController?.isVisible) {
     return (
       <Layout>
@@ -441,8 +440,20 @@ export default function EditProducts ({ editProductController }) {
               // editProductController?.onAccept(dishSelected)
               // setSelectDish(null)
 
-              if ((isModified && dishSelected?.comment === '') || (isModified && dishSelected?.comment === null)) {
-                globalThis.alert('Debe agregar una observación')
+              const isHaveSupplies = dishSelected?.supplies?.length > 0 && isModified
+
+              if (
+                (isHaveSupplies && dishSelected?.comment === '') ||
+                (dishSelected?.comment == null && isHaveSupplies) ||
+                (
+                  isHaveSupplies &&
+                  dishSelected?.comment !== '' &&
+                  dishSelected?.comment != null &&
+                  dishSelected?.comment.split(' ').join('') === ''
+                )
+              ) {
+                globalThis.alert('No se puede modificar sin asignar una observación')
+
                 return
               }
 

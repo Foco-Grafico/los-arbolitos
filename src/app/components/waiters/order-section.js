@@ -6,14 +6,17 @@ import { tableStore } from '../../../../stores/waiter'
 // import { orderStore } from '../../../../stores/waiter'
 import { togglePriority } from '../../../lib/api-call/order/toggle'
 import { useState } from 'react'
+import { MasterModeModal } from './MasterModeModal'
+import { IconEdit } from '../../../../assets/edit'
 
-export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash, setTables, editProductController }) {
+export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash, setTables, setData, setVisible }) {
   const status = tableStore(state => state.status)
   const order = tableStore(state => state.order)
   const setTable = tableStore(state => state.setTable)
   const table = tableStore(state => state.table)
   const alwaysPriority = tableStore(state => state.alwaysPriority)
   const [viewPriorityModal, setViewPriorityModal] = useState(false)
+  const [masterMode, setMasterMode] = useState(false)
 
   return (
     <View style={{
@@ -26,6 +29,12 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
       paddingHorizontal: 15
     }}
     >
+      <MasterModeModal
+        onClose={() => {
+          setMasterMode(false)
+        }}
+        isActive={masterMode}
+      />
       <Modal
         statusBarTranslucent
         transparent
@@ -142,10 +151,16 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
           </Text>
         </View>
 
-        <DishListInOrder editProductController={editProductController} />
+        <DishListInOrder setData={setData} setVisible={setVisible} />
       </View>
 
-      <View>
+      <View
+        style={{
+          flexDirection: 'row',
+          gap: 2,
+          marginBottom: 35
+        }}
+      >
         <TouchableOpacity
           onPress={() => {
             status.click?.({
@@ -171,11 +186,40 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
               }
             })
           }}
-          style={{ ...sendButton, backgroundColor: status?.bgColor }}
+          style={{
+            borderRadius: 5,
+            elevation: 10,
+            textAlign: 'center',
+            paddingVertical: 5,
+            paddingHorizontal: 10,
+            backgroundColor: status?.bgColor
+          }}
         >
-          <Text style={{ ...buttonText, color: status?.color }}>
+          <Text
+            style={{
+              ...buttonText,
+              color: status?.color,
+              fontSize: 18
+            }}
+          >
             {status?.label}
           </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setMasterMode(true)
+          }}
+          style={{
+            borderRadius: 5,
+            fontSize: 20,
+            elevation: 10,
+            textAlign: 'center',
+            paddingVertical: 5,
+            paddingHorizontal: 10,
+            backgroundColor: status?.bgColor
+          }}
+        >
+          <IconEdit stroke={status?.color} />
         </TouchableOpacity>
       </View>
       {
@@ -213,7 +257,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
   )
 }
 
-const { bold, buttonText, sendButton } = StyleSheet.create({
+const { bold, buttonText } = StyleSheet.create({
   bold: {
     fontWeight: 'bold'
   },
@@ -222,16 +266,5 @@ const { bold, buttonText, sendButton } = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     textAlign: 'center'
-  },
-  sendButton: {
-    backgroundColor: '#005943',
-    borderRadius: 10,
-    fontSize: 20,
-    elevation: 10,
-    textAlign: 'center',
-    width: '100%',
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    marginBottom: 35
   }
 })

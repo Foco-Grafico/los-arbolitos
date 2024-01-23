@@ -53,10 +53,8 @@ export function Waiter () {
       />
 
       <OrderSection
-        editProductController={{
-          setVisible: setVisibleEditProduct,
-          setData: setDataEditProduct
-        }} setTables={setTables} setVisibleSendToCash={setVisibleSendToCash} setShowSendCommand={setVisibleSendCommand}
+        setData={setDataEditProduct}
+        setVisible={setVisibleEditProduct} setTables={setTables} setVisibleSendToCash={setVisibleSendToCash} setShowSendCommand={setVisibleSendCommand}
       />
 
       <Products
