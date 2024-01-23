@@ -3,12 +3,27 @@ import * as Notifications from 'expo-notifications'
 import * as Device from 'expo-device'
 import Constants from 'expo-constants'
 import { Platform } from 'react-native'
+import { accountStore } from '../../../stores/account'
+import { API_URL } from '../../lib/api-call/data'
 
 export const useRegisterNotifications = () => {
+  const account = accountStore()
+
   useEffect(() => {
+    if (account == null) return
+
     registerForPushNotificationsAsync()
+      .then(token => {
+        fetch(`${API_URL}/notifications/register?user_id=${account?.id}`, {
+          method: 'POST',
+          body: JSON.stringify({
+            token
+          })
+        })
+          .catch(err => console.log(err))
+      })
       .catch(err => console.log(err))
-  }, [])
+  }, [account])
 }
 
 async function registerForPushNotificationsAsync () {
