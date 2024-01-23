@@ -172,11 +172,13 @@ export default function ActualDish ({ setOrders, bar = false }) {
             alignItems: 'flex-end'
           }}
         >
-          <TouchableOpacity
-            onPress={handleFinish}
-          >
-            <Aceptar style={{ width: 24, height: 24 }} />
-          </TouchableOpacity>
+          {!(orderIndex > 1) && (
+            <TouchableOpacity
+              onPress={handleFinish}
+            >
+              <Aceptar style={{ width: 24, height: 24 }} />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>

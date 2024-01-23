@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, ScrollView, View, ToastAndroid } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, ScrollView, View } from 'react-native'
 import { Image } from 'expo-image'
 import { API_URL } from '../../../lib/api-call/data'
 import { kitchenStore } from '../../../../stores/kitchen'
@@ -52,12 +52,9 @@ export default function OrderList ({ orders = [] }) {
                 height: '100%'
               }}
               onPress={() => {
-                if (dish.orderIndex > 1) {
-                  ToastAndroid.show('No puedes seleccionar productos de otra orden', ToastAndroid.SHORT)
-                  return
+                if (!(dish.orderIndex > 1)) {
+                  markAsPreparation(orders[dish.orderIndex]?.id, dish.ids)
                 }
-
-                markAsPreparation(orders[dish.orderIndex]?.id, dish.ids)
 
                 configNewInfo({
                   mesero: {
