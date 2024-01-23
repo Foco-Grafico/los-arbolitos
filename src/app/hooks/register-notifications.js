@@ -7,7 +7,7 @@ import { accountStore } from '../../../stores/account'
 import { API_URL } from '../../lib/api-call/data'
 
 export const useRegisterNotifications = () => {
-  const account = accountStore()
+  const account = accountStore(state => state.account)
 
   useEffect(() => {
     if (account == null) return
