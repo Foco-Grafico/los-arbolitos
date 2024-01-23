@@ -220,16 +220,6 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                   onPress={() => {
                     forceQuit()
 
-                    markAsPreparation(order?.id, [selectedDish?.id])
-                    setStatus(2)
-                  }}
-                >
-                  Marcar como en proceso
-                </Button>
-                <Button
-                  onPress={() => {
-                    forceQuit()
-
                     finishOrderInKitchen(selectedDish?.id)
                   }}
                 >
