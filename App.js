@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Route, ORIENTATIONS } from './src/app/components/route'
 import Login from './src/app/pages/login'
 import Cashier from './src/app/pages/cashier'
@@ -12,15 +11,14 @@ import CategoriaProductos from './src/app/pages/admin/categoriaProductos'
 import ProductosList from './src/app/pages/admin/productos'
 import ActualizarStock from './src/app/pages/admin/actualizarStock'
 import AlmacenInv from './src/app/pages/admin/menuAlmacen'
-import { LogBox, View, Platform } from 'react-native'
+import { LogBox, View } from 'react-native'
 import { Waiter } from './src/app/pages/waiter'
 import { routes } from './src/lib/data'
 import { StatusBar } from 'expo-status-bar'
 import Empleados from './src/app/pages/admin/empleados'
 import * as Notifications from 'expo-notifications'
-import * as Device from 'expo-device'
-import Constants from 'expo-constants'
 import { LowConnectionModal } from './src/app/components/LowConnectionModal'
+import { useRegisterNotifications } from './src/app/hooks/register-notifications'
 
 LogBox.ignoreLogs(['new NativeEventEmitter', 'Aborted'])
 
@@ -33,10 +31,7 @@ Notifications.setNotificationHandler({
 })
 
 export default function App () {
-  useEffect(() => {
-    registerForPushNotificationsAsync()
-      .catch(err => console.log(err))
-  }, [])
+  useRegisterNotifications()
 
   return (
     <View
@@ -94,38 +89,4 @@ export default function App () {
 
     </View>
   )
-}
-
-async function registerForPushNotificationsAsync () {
-  let token
-
-  if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C'
-    })
-  }
-
-  if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync()
-    let finalStatus = existingStatus
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync()
-      finalStatus = status
-    }
-    if (finalStatus !== 'granted') {
-      globalThis.alert('Failed to get push token for push notification!')
-      return
-    }
-    token = await Notifications.getExpoPushTokenAsync({
-      projectId: Constants.expoConfig.extra.eas.projectId
-    })
-    console.log(token)
-  } else {
-    globalThis.alert('Must use physical device for Push Notifications')
-  }
-
-  return token.data
 }
