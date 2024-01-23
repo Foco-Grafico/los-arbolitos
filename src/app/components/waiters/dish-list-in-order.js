@@ -1,5 +1,5 @@
 import { Text, TouchableOpacity, StyleSheet, FlatList, View, ToastAndroid } from 'react-native'
-import { modalStore, tableStore } from '../../../../stores/waiter'
+import { tableStore } from '../../../../stores/waiter'
 
 import SignoMenos from '../../../../assets/signodemenos'
 import { removeDishFromOrder } from '../../func/remove-dish-from-order'
@@ -8,7 +8,6 @@ import Accept from '../../../../assets/aceptar'
 
 export function DishListInOrder ({ editProductController }) {
   const order = tableStore(state => state.order)
-  const setShow = modalStore(state => state.setShow)
 
   return (
     <FlatList
