@@ -7,6 +7,7 @@ import { tableStore } from '../../../../stores/waiter'
 import { togglePriority } from '../../../lib/api-call/order/toggle'
 import { useState } from 'react'
 import { MasterModeModal } from './MasterModeModal'
+import { IconEdit } from '../../../../assets/edit'
 
 export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash, setTables, setData, setVisible }) {
   const status = tableStore(state => state.status)
@@ -156,7 +157,8 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
       <View
         style={{
           flexDirection: 'row',
-          gap: 2
+          gap: 2,
+          marginBottom: 35
         }}
       >
         <TouchableOpacity
@@ -186,19 +188,18 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
           }}
           style={{
             borderRadius: 5,
-            fontSize: 20,
             elevation: 10,
             textAlign: 'center',
             paddingVertical: 5,
             paddingHorizontal: 10,
-            marginBottom: 35,
             backgroundColor: status?.bgColor
           }}
         >
           <Text
             style={{
               ...buttonText,
-              color: status?.color
+              color: status?.color,
+              fontSize: 18
             }}
           >
             {status?.label}
@@ -215,13 +216,10 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
             textAlign: 'center',
             paddingVertical: 5,
             paddingHorizontal: 10,
-            marginBottom: 35,
             backgroundColor: status?.bgColor
           }}
         >
-          <Text>
-            +
-          </Text>
+          <IconEdit stroke={status?.color} />
         </TouchableOpacity>
       </View>
       {
