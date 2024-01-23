@@ -8,7 +8,7 @@ import { togglePriority } from '../../../lib/api-call/order/toggle'
 import { useState } from 'react'
 import { MasterModeModal } from './MasterModeModal'
 
-export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash, setTables, editProductController }) {
+export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash, setTables, setData, setVisible }) {
   const status = tableStore(state => state.status)
   const order = tableStore(state => state.order)
   const setTable = tableStore(state => state.setTable)
@@ -150,7 +150,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
           </Text>
         </View>
 
-        <DishListInOrder editProductController={editProductController} />
+        <DishListInOrder setData={setData} setVisible={setVisible} />
       </View>
 
       <View
