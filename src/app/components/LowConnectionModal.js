@@ -4,20 +4,17 @@ import NetInfo from '@react-native-community/netinfo'
 
 export const LowConnectionModal = () => {
   const [isConnected, setIsConnected] = useState(true)
+  const { details, isInternetReachable, isConnected: isConnectedCurr } = NetInfo.useNetInfo()
 
   useEffect(() => {
-    const unsuscribe = NetInfo.addEventListener(state => {
-      const isAcceptableConnection = state.isConnected && state.details
+    const isAcceptableConnection = isConnectedCurr && details
 
-      if (!state.isInternetReachable) {
-        ToastAndroid.show('La conexion a internet es deficiente', ToastAndroid.SHORT)
-      }
+    if (!isInternetReachable) {
+      ToastAndroid.show('La conexion a internet es deficiente', ToastAndroid.SHORT)
+    }
 
-      setIsConnected(isAcceptableConnection)
-    })
-
-    return () => unsuscribe()
-  }, [])
+    setIsConnected(isAcceptableConnection)
+  }, [isConnectedCurr, details])
 
   return (
     <Modal
