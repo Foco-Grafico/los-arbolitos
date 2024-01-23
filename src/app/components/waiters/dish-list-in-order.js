@@ -1,14 +1,13 @@
 import { Text, TouchableOpacity, StyleSheet, FlatList, View, ToastAndroid } from 'react-native'
-import { modalStore, tableStore } from '../../../../stores/waiter'
+import { tableStore } from '../../../../stores/waiter'
 
 import SignoMenos from '../../../../assets/signodemenos'
 import { removeDishFromOrder } from '../../func/remove-dish-from-order'
 import { Salero } from '../../../../assets/enpreparacion'
 import Accept from '../../../../assets/aceptar'
 
-export function DishListInOrder ({ editProductController }) {
+export function DishListInOrder ({ setVisible, setData }) {
   const order = tableStore(state => state.order)
-  const setShow = modalStore(state => state.setShow)
 
   return (
     <FlatList
@@ -33,8 +32,10 @@ export function DishListInOrder ({ editProductController }) {
                 index: order.dishes.findIndex(d => d?.id === dish?.id)
               }))
 
-              editProductController.setVisible(true)
-              editProductController.setData({
+              console.log(items)
+
+              setVisible(true)
+              setData({
                 items,
                 orderId: order?.id
               })
