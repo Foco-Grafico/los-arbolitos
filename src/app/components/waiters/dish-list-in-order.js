@@ -1,17 +1,18 @@
-import { Text, TouchableOpacity, StyleSheet, FlatList, View, ToastAndroid } from 'react-native'
-import { tableStore } from '../../../../stores/waiter'
+import { Text, TouchableOpacity, StyleSheet, FlatList, View } from 'react-native'
+// import { tableStore } from '../../../../stores/waiter'
 
 import SignoMenos from '../../../../assets/signodemenos'
-import { removeDishFromOrder } from '../../func/remove-dish-from-order'
+// import { removeDishFromOrder } from '../../func/remove-dish-from-order'
 import { Salero } from '../../../../assets/enpreparacion'
 import Accept from '../../../../assets/aceptar'
+import { dishList } from '../../../../stores/waiter/order-sec.store'
 
 export function DishListInOrder ({ setVisible, setData }) {
-  const order = tableStore(state => state.order)
+  const prettyList = dishList(state => state.pretty)
 
   return (
     <FlatList
-      data={order.pretty_list}
+      data={prettyList}
       contentContainerStyle={{
         gap: 5
       }}
@@ -27,18 +28,18 @@ export function DishListInOrder ({ setVisible, setData }) {
           <TouchableOpacity
             disabled={item?.status?.id !== 1}
             onPress={() => {
-              const items = order.dishes.filter(dish => item?.ids.includes(dish?.id)).map(dish => ({
-                ...dish,
-                index: order.dishes.findIndex(d => d?.id === dish?.id)
-              }))
+              // const items = order.dishes.filter(dish => item?.ids.includes(dish?.id)).map(dish => ({
+              //   ...dish,
+              //   index: order.dishes.findIndex(d => d?.id === dish?.id)
+              // }))
 
-              console.log(items)
+              // console.log(items)
 
-              setVisible(true)
-              setData({
-                items,
-                orderId: order?.id
-              })
+              // setVisible(true)
+              // setData({
+              //   items,
+              //   orderId: order?.id
+              // })
             }}
             style={{
               flexDirection: 'row',
@@ -67,74 +68,74 @@ export function DishListInOrder ({ setVisible, setData }) {
           {((!item.modified || (item.modified && item.quantity === 1)) && item.status?.id === 1) && (
             <TouchableOpacity
               onPress={() => {
-                const idToDelete = item?.ids[0]
-                const dishesToDelete = order.dishes.find(dish => idToDelete === dish?.id)
+                // const idToDelete = item?.ids[0]
+                // const dishesToDelete = order.dishes.find(dish => idToDelete === dish?.id)
 
-                const newDishes = order.dishes.filter(dish => dish?.id !== idToDelete)
+                // const newDishes = order.dishes.filter(dish => dish?.id !== idToDelete)
 
-                const allExceptFirst = [...item?.ids].slice(1)
+                // const allExceptFirst = [...item?.ids].slice(1)
 
-                const newPrettyDishes = [...order.pretty_list]
+                // const newPrettyDishes = [...order.pretty_list]
 
-                newPrettyDishes[index].quantity -= 1
-                newPrettyDishes[index].ids = allExceptFirst
+                // newPrettyDishes[index].quantity -= 1
+                // newPrettyDishes[index].ids = allExceptFirst
 
-                const isEmpty = allExceptFirst.length === 0
+                // const isEmpty = allExceptFirst.length === 0
 
-                if (isEmpty) {
-                  newPrettyDishes.splice(index, 1)
-                }
+                // if (isEmpty) {
+                //   newPrettyDishes.splice(index, 1)
+                // }
 
-                tableStore.setState({
-                  order: {
-                    ...order,
-                    dishes: newDishes,
-                    pretty_list: newPrettyDishes
-                  }
-                })
+                // tableStore.setState({
+                //   order: {
+                //     ...order,
+                //     dishes: newDishes,
+                //     pretty_list: newPrettyDishes
+                //   }
+                // })
 
-                const ifError = () => {
-                  ToastAndroid.show('Error al eliminar platillo', ToastAndroid.SHORT)
+                // const ifError = () => {
+                //   ToastAndroid.show('Error al eliminar platillo', ToastAndroid.SHORT)
 
-                  if (isEmpty) {
-                    newPrettyDishes.push(item)
+                //   if (isEmpty) {
+                //     newPrettyDishes.push(item)
 
-                    tableStore.setState({
-                      order: {
-                        ...order,
-                        dishes: [...newDishes, dishesToDelete],
-                        pretty_list: newPrettyDishes
-                      }
-                    })
-                    return
-                  }
+                //     tableStore.setState({
+                //       order: {
+                //         ...order,
+                //         dishes: [...newDishes, dishesToDelete],
+                //         pretty_list: newPrettyDishes
+                //       }
+                //     })
+                //     return
+                //   }
 
-                  newPrettyDishes[index].quantity += 1
-                  newPrettyDishes[index].ids.push(idToDelete)
+                //   newPrettyDishes[index].quantity += 1
+                //   newPrettyDishes[index].ids.push(idToDelete)
 
-                  tableStore.setState({
-                    order: {
-                      ...order,
-                      dishes: [...newDishes, dishesToDelete],
-                      pretty_list: newPrettyDishes
-                    }
-                  })
-                }
+                //   tableStore.setState({
+                //     order: {
+                //       ...order,
+                //       dishes: [...newDishes, dishesToDelete],
+                //       pretty_list: newPrettyDishes
+                //     }
+                //   })
+                // }
 
-                removeDishFromOrder({
-                  orderId: order?.id,
-                  orderDishId: idToDelete
-                })
-                  .then(res => {
-                    if (res.ok) {
-                      ToastAndroid.show('Se ha eliminado el producto de la orden', ToastAndroid.SHORT)
-                      return
-                    }
-                    ifError()
-                  })
-                  .catch(() => {
-                    ifError()
-                  })
+                // removeDishFromOrder({
+                //   orderId: order?.id,
+                //   orderDishId: idToDelete
+                // })
+                //   .then(res => {
+                //     if (res.ok) {
+                //       ToastAndroid.show('Se ha eliminado el producto de la orden', ToastAndroid.SHORT)
+                //       return
+                //     }
+                //     ifError()
+                //   })
+                //   .catch(() => {
+                //     ifError()
+                //   })
               }}
             >
               <SignoMenos fill='#005942' style={{ width: 24, height: 24 }} />

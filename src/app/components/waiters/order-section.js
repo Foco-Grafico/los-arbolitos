@@ -1,21 +1,22 @@
-import { StyleSheet, Switch, Text, TouchableOpacity, View, Modal } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { DishListInOrder } from './dish-list-in-order'
-import { tableStore } from '../../../../stores/waiter'
+// import { tableStore } from '../../../../stores/waiter'
 // import SwitchSlider from '../switch-slider'
 // import DishListInOrder from './dish-list-in-order'
 // import { orderStore } from '../../../../stores/waiter'
-import { togglePriority } from '../../../lib/api-call/order/toggle'
+// import { togglePriority } from '../../../lib/api-call/order/toggle'
 import { useState } from 'react'
 import { MasterModeModal } from './MasterModeModal'
-import { IconEdit } from '../../../../assets/edit'
+import { StatusButton } from './order-section/StatusButton'
+// import { IconEdit } from '../../../../assets/edit'
 
 export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash, setTables, setData, setVisible }) {
-  const status = tableStore(state => state.status)
-  const order = tableStore(state => state.order)
-  const setTable = tableStore(state => state.setTable)
-  const table = tableStore(state => state.table)
-  const alwaysPriority = tableStore(state => state.alwaysPriority)
-  const [viewPriorityModal, setViewPriorityModal] = useState(false)
+  // const status = tableStore(state => state.status)
+  // const order = tableStore(state => state.order)
+  // const setTable = tableStore(state => state.setTable)
+  // const table = tableStore(state => state.table)
+  // const alwaysPriority = tableStore(state => state.alwaysPriority)
+  // const [viewPriorityModal, setViewPriorityModal] = useState(false)
   const [masterMode, setMasterMode] = useState(false)
 
   return (
@@ -35,7 +36,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
         }}
         isActive={masterMode}
       />
-      <Modal
+      {/* <Modal
         statusBarTranslucent
         transparent
         animationType='fade'
@@ -130,7 +131,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
       <View
         style={{
           flex: 1,
@@ -154,7 +155,9 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
         <DishListInOrder setData={setData} setVisible={setVisible} />
       </View>
 
-      <View
+      <StatusButton />
+
+      {/* <View
         style={{
           flexDirection: 'row',
           gap: 2,
@@ -163,42 +166,21 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
       >
         <TouchableOpacity
           onPress={() => {
-            status.click?.({
-              setShowSendCommand,
-              setVisibleSendToCash,
-              dishes: order?.dishes,
-              orderId: order?.id,
-              cb: order => {
-                setTable({
-                  ...table,
-                  order
-                })
-                setTables(prev => {
-                  const copyPrev = [...prev]
 
-                  copyPrev[table.tableIndex] = {
-                    ...copyPrev[table.tableIndex],
-                    current_order: order.id
-                  }
-
-                  return copyPrev
-                })
-              }
-            })
           }}
           style={{
             borderRadius: 5,
             elevation: 10,
             textAlign: 'center',
             paddingVertical: 5,
-            paddingHorizontal: 10,
-            backgroundColor: status?.bgColor
+            paddingHorizontal: 10
+            // backgroundColor: status?.bgColor
           }}
         >
           <Text
             style={{
               ...buttonText,
-              color: status?.color,
+              // color: status?.color,
               fontSize: 18
             }}
           >
@@ -215,14 +197,14 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
             elevation: 10,
             textAlign: 'center',
             paddingVertical: 5,
-            paddingHorizontal: 10,
-            backgroundColor: status?.bgColor
+            paddingHorizontal: 10
+            // backgroundColor: status?.bgColor
           }}
         >
           <IconEdit stroke={status?.color} />
         </TouchableOpacity>
-      </View>
-      {
+      </View> */}
+      {/* {
         status.id === 1 && (
           <View
             style={{
@@ -252,7 +234,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
             />
           </View>
         )
-      }
+      } */}
     </View>
   )
 }
