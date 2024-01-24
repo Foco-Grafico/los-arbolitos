@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import * as Notifications from 'expo-notifications'
 import * as Device from 'expo-device'
 import Constants from 'expo-constants'
@@ -8,14 +8,21 @@ import { API_URL } from '../../lib/api-call/data'
 
 export const useRegisterNotifications = () => {
   const account = accountStore(state => state.account)
+  const notificationListener = useRef()
+  const responseListener = useRef()
 
   useEffect(() => {
     if (account == null) return
+
+    const headers = new Headers()
+    headers.append('Content-Type', 'application/json')
+    headers.append('Accept', 'application/json')
 
     registerForPushNotificationsAsync()
       .then(token => {
         fetch(`${API_URL}/notifications/register?user_id=${account?.id}`, {
           method: 'POST',
+          headers,
           body: JSON.stringify({
             token
           })
@@ -24,6 +31,21 @@ export const useRegisterNotifications = () => {
       })
       .catch(err => console.log(err))
   }, [account])
+
+  useEffect(() => {
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      // setNotification(notification)
+    })
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response)
+    })
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current)
+      Notifications.removeNotificationSubscription(responseListener.current)
+    }
+  })
 }
 
 async function registerForPushNotificationsAsync () {
@@ -57,5 +79,5 @@ async function registerForPushNotificationsAsync () {
     globalThis.alert('Must use physical device for Push Notifications')
   }
 
-  return token.data
+  return token
 }

@@ -11,7 +11,7 @@ import CategoriaProductos from './src/app/pages/admin/categoriaProductos'
 import ProductosList from './src/app/pages/admin/productos'
 import ActualizarStock from './src/app/pages/admin/actualizarStock'
 import AlmacenInv from './src/app/pages/admin/menuAlmacen'
-import { LogBox, Text, View } from 'react-native'
+import { LogBox, View } from 'react-native'
 import { Waiter } from './src/app/pages/waiter'
 import { routes } from './src/lib/data'
 import { StatusBar } from 'expo-status-bar'
@@ -19,7 +19,6 @@ import Empleados from './src/app/pages/admin/empleados'
 import * as Notifications from 'expo-notifications'
 import { LowConnectionModal } from './src/app/components/LowConnectionModal'
 import { useRegisterNotifications } from './src/app/hooks/register-notifications'
-import { Calendar } from './src/app/components/calendar'
 
 LogBox.ignoreLogs(['new NativeEventEmitter', 'Aborted'])
 
@@ -29,6 +28,14 @@ Notifications.setNotificationHandler({
     shouldPlaySound: false,
     shouldSetBadge: false
   })
+})
+
+Notifications.scheduleNotificationAsync({
+  content: {
+    title: 'Look at that notification',
+    body: "I'm so proud of myself!"
+  },
+  trigger: null
 })
 
 function App () {
