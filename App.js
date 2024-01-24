@@ -67,7 +67,7 @@ function App () {
       <Route name={routes[1]} orientation={ORIENTATIONS.PORTRAIT}>
         <Admin />
       </Route>
-      <Route name={routes['5']}>
+      <Route name={routes[5]}>
         <Kitchen bar />
       </Route>
       <Route name='empleados' orientation={ORIENTATIONS.PORTRAIT}>
