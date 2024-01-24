@@ -11,7 +11,14 @@ import CategoriaProductos from './src/app/pages/admin/categoriaProductos'
 import ProductosList from './src/app/pages/admin/productos'
 import ActualizarStock from './src/app/pages/admin/actualizarStock'
 import AlmacenInv from './src/app/pages/admin/menuAlmacen'
+<<<<<<< HEAD
+import CategoriaInsumos from './src/app/pages/admin/categoriaInsumos'
+import InsumosList from './src/app/pages/admin/insumos'
+import NuevoInsumo from './src/app/pages/admin/nuevoInsumo'
+import { LogBox, View, Platform } from 'react-native'
+=======
 import { LogBox, View } from 'react-native'
+>>>>>>> 2814f357686e7351c2ce83b59ec5f2f507c9f21f
 import { Waiter } from './src/app/pages/waiter'
 import { routes } from './src/lib/data'
 import { StatusBar } from 'expo-status-bar'
@@ -30,7 +37,15 @@ Notifications.setNotificationHandler({
   })
 })
 
-export default function App () {
+Notifications.scheduleNotificationAsync({
+  content: {
+    title: 'Look at that notification',
+    body: "I'm so proud of myself!"
+  },
+  trigger: null
+})
+
+function App () {
   useRegisterNotifications()
 
   return (
@@ -86,7 +101,27 @@ export default function App () {
       <Route name='menuAlmacen' orientation={ORIENTATIONS.PORTRAIT}>
         <AlmacenInv />
       </Route>
+      <Route name='insumos' orientation={ORIENTATIONS.PORTRAIT}>
+        <CategoriaInsumos />
+      </Route>
+      <Route name='insumosList' orientation={ORIENTATIONS.PORTRAIT}>
+        <InsumosList />
+      </Route>
+      <Route name='nuevoInsumo' orientation={ORIENTATIONS.PORTRAIT}>
+        <NuevoInsumo />
+      </Route>
 
     </View>
   )
 }
+
+// function AppTest () {
+//   return (
+//     <View>
+//       <StatusBar hidden />
+//       <Calendar isOpen />
+//     </View>
+//   )
+// }
+
+export default App

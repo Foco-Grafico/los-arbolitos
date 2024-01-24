@@ -1,49 +1,97 @@
-import { FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import HeaderAdmin from '../../components/admin/header'
 import Footer from '../../components/admin/footer'
-import Editar from '../../../../assets/editar'
-import { productCatStore } from '../../../../stores/waiter'
-import useWaiterGetProductsInCategory from '../../hooks/getProductsinCategory'
-import SignoMas from '../../../../assets/signodemas'
+import useGetSuppliesTypes from '../../hooks/useGetSuppliesTypes'
+import { FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View, ToastAndroid } from 'react-native'
 import { useState } from 'react'
+import { routerStore } from '../../../../stores/router'
 import { supplyCatStore } from '../../../../stores/admin'
-import useGetSupplies from '../../hooks/getSupplies'
+import Editar from '../../../../assets/editar'
+import SignoMas from '../../../../assets/signodemas'
 
-const formatName = (name) => {
-  const canFormat = name.toLowerCase().startsWith('de') || name.toLowerCase().startsWith('del') || name.toLowerCase().startsWith('la') || name.toLowerCase().startsWith('el') || name.toLowerCase().startsWith('los') || name.toLowerCase().startsWith('las') || name.toLowerCase().startsWith('para')
-
-  if (canFormat) {
-    return name.split(' ').splice(1).join(' ').toUpperCase()
-  }
-
-  return name.toUpperCase()
-}
-
-export default function InsumosList () {
+export default function CategoriaInsumos () {
+  const { types } = useGetSuppliesTypes()
+  const setSelectedCategory = supplyCatStore(state => state.setSelectedSupplyCategory)
   const selectedCategory = supplyCatStore(state => state.selectedSupplyCategory)
-  const [updateModal, setUpdateModal] = useState(false)
-  const [updateProductName, setUpdateProductName] = useState('')
-  const [createModal, setCreateModal] = useState(false)
-  const [newProductName, setNewProductName] = useState('')
+  const nav = routerStore(state => state.nav)
 
-  const { supplies } = useGetSupplies({
-    all: true,
-    q: selectedCategory.name
+  const [modal, setModal] = useState(false)
+  const [modalCreate, setModalCreate] = useState(false)
+  const [newCatName, setNewCatName] = useState('')
+  const [newCat, setNewCat] = useState('')
+
+  //   const editLocalCatName = (name, index) => {
+  //     const newTypes = [...types]
+  //     newTypes[index].name = name
+  //     setSelectedCategory({
+  //       name,
+  //       id: selectedInfo.id,
+  //       index
+  //     })
+  //   }
+  //   const updateCategories = async (name, id) => {
+  //     const response = await fetch(`http://localhost:3000/api/supplies/types/?name=${name}&id=${id}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify({
+  //         name
+  //       })
+  //     })
+  //     const data = await response.json()
+  //     if (data.error) {
+  //       throw new Error(data.error)
+  //     }
+  //   }
+
+  //   const CreateCategory = async (name) => {
+  //     const response = await fetch('http://localhost:3000/api/supplies/types', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify({
+  //         name
+  //       })
+  //     })
+  //     const data = await response.json()
+  //     if (data.error) {
+  //       throw new Error(data.error)
+  //     }
+  //   }
+
+  //   const newCategory = (name) => {
+  //     const newTypes = [...types]
+  //     newTypes.push({
+  //       name,
+  //       id: types.length + 1
+  //     })
+  //     setSelectedCategory({
+  //       name,
+  //       id: types.length + 1,
+  //       index: types.length
+  //     })
+  //   }
+
+  console.log(selectedCategory)
+  const [selectedInfo, setInfo] = useState({
+    name: '',
+    id: '',
+    index: 0
   })
-
   return (
     <View style={styles.main}>
-      <HeaderAdmin>
-        <Text>PRODUCTOS DE {formatName(selectedCategory?.name)}</Text>
+      <HeaderAdmin style={{ flexDirection: 'column' }}>
+        <Text>CATEGORÍA DE INSUMOS</Text>
       </HeaderAdmin>
       <FlatList
         numColumns={2}
-        data={supplies}
-        keyExtractor={(supply) => supply.id.toString()}
+        data={types.data}
+        keyExtractor={(item) => item?.id.toString()}
         contentContainerStyle={{ alignItems: 'center', gap: 20 }}
-        renderItem={({ supply, index }) => (
+        renderItem={({ item, index }) => (
           <View
-            key={supply.key} style={{
+            key={item?.key} style={{
               borderWidth: 1,
               borderRadius: 10,
               justifyContent: 'center',
@@ -51,18 +99,28 @@ export default function InsumosList () {
               margin: 10
             }}
           >
-            <TouchableOpacity style={styles.container}>
-              <Text style={{ color: '#000', fontWeight: 'bold' }}>{supply?.name}</Text>
+            <TouchableOpacity
+              style={styles.container}
+              onPress={() => {
+                nav('insumosList')
+                setSelectedCategory({
+                  name: item?.name,
+                  id: item?.id,
+                  index
+                })
+              }}
+            >
+              <Text style={{ color: '#000', fontWeight: 'bold' }}>{item?.name}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ position: 'absolute', right: 7, top: 50 }}
               onPress={() => {
-                // setInfo({
-                //   name: item?.name,
-                //   id: item?.id,
-                //   index
-                // })
-                setUpdateModal(true)
+                setInfo({
+                  name: item?.name,
+                  id: item?.id,
+                  index
+                })
+                setModal(true)
               }}
             >
               <Editar style={{ width: 30, height: 30 }} />
@@ -70,19 +128,17 @@ export default function InsumosList () {
           </View>
         )}
       />
-      <View>
-        <TouchableOpacity
-          style={{ alignItems: 'flex-end', paddingHorizontal: 20, padding: 20 }}
-          onPress={() => { setCreateModal(true) }}
-        >
-          <SignoMas style={{ width: 40, height: 40 }} />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={{ alignItems: 'flex-end', paddingHorizontal: 20 }}
+        onPress={() => { nav('nuevoInsumo') }}
+      >
+        <SignoMas style={{ width: 40, height: 40 }} />
+      </TouchableOpacity>
       <Modal
         statusBarTranslucent
         transparent
         animationType='fade'
-        visible={createModal}
+        visible={modal}
       >
         <View
           style={{
@@ -109,9 +165,9 @@ export default function InsumosList () {
                 fontSize: 20
               }}
             >
-              ¿Deseas crear el producto?
+              ¿Deseas actualizar la categoría?
             </Text>
-            <TextInput style={{ width: 250, borderWidth: 1, paddingHorizontal: 10 }} autoFocus onChangeText={setNewProductName} />
+            <TextInput style={{ width: 250, borderWidth: 1, paddingHorizontal: 10 }} autoFocus onChangeText={setNewCatName} placeholder={selectedInfo.name} />
             <View
               style={{
                 flexDirection: 'row',
@@ -121,8 +177,18 @@ export default function InsumosList () {
             >
               <TouchableOpacity
                 onPress={() => {
-                  setCreateModal(false)
-                  // Aqui se crea el producto
+                  if (newCatName === '') {
+                    ToastAndroid.show('No se puede actualizar con un campo vacio', ToastAndroid.SHORT)
+                    return
+                  }
+                  setModal(false)
+                  //   editLocalCatName(newCatName, selectedInfo.index)
+
+                //   updateCategories(newCatName, selectedInfo.id)
+                //     .catch(() => {
+                //       ToastAndroid.show(`No se pudo actualizar la categoría ${selectedInfo.name}`, ToastAndroid.SHORT)
+                //       editLocalCatName(selectedInfo.name, selectedInfo.index)
+                //     })
                 }}
                 style={{
                   backgroundColor: '#005943',
@@ -148,7 +214,7 @@ export default function InsumosList () {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  setCreateModal(false)
+                  setModal(false)
                 }}
                 style={{
                   backgroundColor: 'red',
@@ -180,7 +246,7 @@ export default function InsumosList () {
         statusBarTranslucent
         transparent
         animationType='fade'
-        visible={updateModal}
+        visible={modalCreate}
       >
         <View
           style={{
@@ -207,9 +273,9 @@ export default function InsumosList () {
                 fontSize: 20
               }}
             >
-              ¿Deseas modificar el producto?
+              ¿Deseas crear la categoría?
             </Text>
-            <TextInput style={{ width: 250, borderWidth: 1, paddingHorizontal: 10 }} autoFocus onChangeText={setUpdateProductName} />
+            <TextInput style={{ width: 250, borderWidth: 1, paddingHorizontal: 10 }} autoFocus onChangeText={setNewCat} />
             <View
               style={{
                 flexDirection: 'row',
@@ -219,8 +285,13 @@ export default function InsumosList () {
             >
               <TouchableOpacity
                 onPress={() => {
-                  setUpdateModal(false)
-                  // Aqui se actualiza el producto
+                  if (newCat === '') {
+                    ToastAndroid.show('No se puede actualizar con un campo vacio', ToastAndroid.SHORT)
+                    return
+                  }
+                  //   newCategory(newCat)
+                  //   CreateCategory(newCat)
+                  setModalCreate(false)
                 }}
                 style={{
                   backgroundColor: '#005943',
@@ -246,7 +317,7 @@ export default function InsumosList () {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  setUpdateModal(false)
+                  setModalCreate(false)
                 }}
                 style={{
                   backgroundColor: 'red',
@@ -280,16 +351,17 @@ export default function InsumosList () {
 }
 
 const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    backgroundColor: '#fff'
-
-  },
   container: {
     height: 90,
     width: 250,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row'
+  },
+  main: {
+    backgroundColor: '#fff',
+    width: '100%',
+    height: '100%',
+    gap: 10
   }
 })
