@@ -12,6 +12,9 @@ import CategoriaProductos from './src/app/pages/admin/categoriaProductos'
 import ProductosList from './src/app/pages/admin/productos'
 import ActualizarStock from './src/app/pages/admin/actualizarStock'
 import AlmacenInv from './src/app/pages/admin/menuAlmacen'
+import CategoriaInsumos from './src/app/pages/admin/categoriaInsumos'
+import InsumosList from './src/app/pages/admin/insumos'
+import NuevoInsumo from './src/app/pages/admin/nuevoInsumo'
 import { LogBox, View, Platform } from 'react-native'
 import { Waiter } from './src/app/pages/waiter'
 import { routes } from './src/lib/data'
@@ -90,6 +93,15 @@ export default function App () {
       </Route>
       <Route name='menuAlmacen' orientation={ORIENTATIONS.PORTRAIT}>
         <AlmacenInv />
+      </Route>
+      <Route name='insumos' orientation={ORIENTATIONS.PORTRAIT}>
+        <CategoriaInsumos />
+      </Route>
+      <Route name='insumosList' orientation={ORIENTATIONS.PORTRAIT}>
+        <InsumosList />
+      </Route>
+      <Route name='nuevoInsumo' orientation={ORIENTATIONS.PORTRAIT}>
+        <NuevoInsumo />
       </Route>
 
     </View>
