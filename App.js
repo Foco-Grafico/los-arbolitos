@@ -11,14 +11,10 @@ import CategoriaProductos from './src/app/pages/admin/categoriaProductos'
 import ProductosList from './src/app/pages/admin/productos'
 import ActualizarStock from './src/app/pages/admin/actualizarStock'
 import AlmacenInv from './src/app/pages/admin/menuAlmacen'
-<<<<<<< HEAD
 import CategoriaInsumos from './src/app/pages/admin/categoriaInsumos'
 import InsumosList from './src/app/pages/admin/insumos'
 import NuevoInsumo from './src/app/pages/admin/nuevoInsumo'
-import { LogBox, View, Platform } from 'react-native'
-=======
 import { LogBox, View } from 'react-native'
->>>>>>> 2814f357686e7351c2ce83b59ec5f2f507c9f21f
 import { Waiter } from './src/app/pages/waiter'
 import { routes } from './src/lib/data'
 import { StatusBar } from 'expo-status-bar'
