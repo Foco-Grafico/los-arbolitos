@@ -33,14 +33,6 @@ Notifications.setNotificationHandler({
   })
 })
 
-Notifications.scheduleNotificationAsync({
-  content: {
-    title: 'Look at that notification',
-    body: "I'm so proud of myself!"
-  },
-  trigger: null
-})
-
 function App () {
   useRegisterNotifications()
 
