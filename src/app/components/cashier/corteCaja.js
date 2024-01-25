@@ -9,6 +9,7 @@ import { printToFileAsync } from 'expo-print'
 import { shareAsync } from 'expo-sharing'
 import * as FileSystem from 'expo-file-system'
 import * as Sharing from 'expo-sharing'
+import { IntentLauncherAndroid } from 'expo'
 
 const ExcelJS = require('exceljs')
 
@@ -127,6 +128,12 @@ export default function CorteDeCaja () {
           })
           .finally(() => {
             Sharing.shareAsync(`file://${filePath}`, { mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', dialogTitle: 'Compartir archivo Excel' })
+
+            IntentLauncherAndroid.startActivityAsync(IntentLauncherAndroid.ACTION_VIEW, {
+              data: `content://com.android.externalstorage.documents/document/primary:${filePath}`,
+              flags: 1, // FLAG_GRANT_READ_URI_PERMISSION
+              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            })
           })
       })
       .catch(err => {
