@@ -1,4 +1,4 @@
-import { StyleSheet, Switch, Text, TouchableOpacity, View, Modal } from 'react-native'
+import { StyleSheet, Switch, Text, TouchableOpacity, View, Modal, ScrollView } from 'react-native'
 import { DishListInOrder } from './dish-list-in-order'
 import { tableStore } from '../../../../stores/waiter'
 // import SwitchSlider from '../switch-slider'
@@ -17,6 +17,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
   const alwaysPriority = tableStore(state => state.alwaysPriority)
   const [viewPriorityModal, setViewPriorityModal] = useState(false)
   const [masterMode, setMasterMode] = useState(false)
+  const [cantadito, setCantadito] = useState(false)
 
   return (
     <View style={{
@@ -29,6 +30,132 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
       paddingHorizontal: 15
     }}
     >
+      <Modal
+        statusBarTranslucent
+        visible={cantadito}
+        transparent
+        animationType='fade'
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            padding: 20
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: '#fff',
+              borderRadius: 10,
+              padding: 20,
+              elevation: 10,
+              gap: 20,
+              width: '40%'
+            }}
+          >
+            <ScrollView
+              style={{
+                maxHeight: '80%'
+              }}
+            >
+              {order?.pretty_list?.map(dish => {
+                if (dish == null) return null
+                console.log('dish', JSON.stringify(dish))
+
+                return (
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      gap: 5
+                    }}
+                    key={dish?.key}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: 'bold'
+                      }}
+                    >
+                      {dish?.quantity} {dish?.name}
+                    </Text>
+
+                    {dish?.ids?.map((id, index) => {
+                      const isComment = dish.comments && dish?.comments[index] != null
+                      const isModified = dish?.name.endsWith('(M)')
+
+                      if (!isComment) return null
+
+                      return (
+                        <View
+                          style={{
+                            flexDirection: 'column',
+                            gap: 5,
+                            marginLeft: 10
+                          }}
+                          key={id}
+                        >
+                          <Text
+                            style={{
+                              fontWeight: 'bold'
+                            }}
+                          >
+                            {index + 1}-
+                            <Text
+                              style={{
+                                color: '#005943'
+                              }}
+                            >Observaciones
+                            </Text>: {dish?.comments && dish?.comments[index]}
+                          </Text>
+                          {isModified && dish?.supplies_modified[id]?.map(supply => {
+                            return (
+                              <Text
+                                style={{
+                                  marginLeft: 15,
+                                  fontSize: 14
+                                }}
+                                key={supply.key}
+                              >
+                                - {supply.quantity} {supply.name}
+                              </Text>
+                            )
+                          })}
+                        </View>
+                      )
+                    })}
+                  </View>
+                )
+              })}
+            </ScrollView>
+
+            <TouchableOpacity
+              style={{
+                backgroundColor: '#005943',
+                borderRadius: 10,
+                fontSize: 20,
+                elevation: 10,
+                textAlign: 'center',
+                paddingVertical: 5,
+                paddingHorizontal: 10
+              }}
+              onPress={() => {
+                setCantadito(false)
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontSize: 20,
+                  color: '#fff'
+                }}
+              >
+                Cerrar
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <MasterModeModal
         onClose={() => {
           setMasterMode(false)
@@ -131,6 +258,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
           </View>
         </View>
       </Modal>
+
       <View
         style={{
           flex: 1,
@@ -153,6 +281,30 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
 
         <DishListInOrder setData={setData} setVisible={setVisible} />
       </View>
+
+      <TouchableOpacity
+        onPress={() => {
+          setCantadito(true)
+        }}
+        style={{
+          backgroundColor: '#005943',
+          borderRadius: 5,
+          fontSize: 20,
+          textAlign: 'center',
+          paddingVertical: 5,
+          paddingHorizontal: 10
+        }}
+      >
+        <Text style={{
+          color: '#fff',
+          fontSize: 14,
+          fontWeight: 'bold',
+          textAlign: 'center'
+        }}
+        >
+          Cantadito
+        </Text>
+      </TouchableOpacity>
 
       <View
         style={{
