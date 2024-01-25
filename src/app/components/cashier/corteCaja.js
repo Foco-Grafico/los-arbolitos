@@ -7,6 +7,7 @@ import ClassHeader from '../../../classes/header'
 import ReportTable from '../../../classes/table'
 import { printToFileAsync } from 'expo-print'
 import { shareAsync } from 'expo-sharing'
+const ExcelJS = require('exceljs')
 
 const priceFormatter = new Intl.NumberFormat('es-MX', {
   style: 'currency',
@@ -64,6 +65,52 @@ export default function CorteDeCaja () {
       shareAsync(file.uri)
     })
   }
+
+  const inventoryReportExcel = () => {
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet('Sheet 1')
+
+    const headerStyle = {
+      font: { bold: true, color: { argb: 'FFFFFF' } },
+      fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '2F75B5' } },
+      alignment: { horizontal: 'center' },
+      border: { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } }
+    }
+
+    const headersIndex = []
+
+    const matriz = orders?.data?.reduce((acc, curr, index) => {
+      headersIndex.push(acc.length)
+
+      const header = [`FOLIO ${curr?.folio}`, `MESERO ${curr?.user?.name}`, `MESA ${curr?.table?.name}`]
+
+      const itemsHeader = ['PRODUCTO', 'PRECIO']
+      const items = curr?.dishes?.map((dish) => {
+        return [dish?.name, dish?.total]
+      })
+
+      const total = ['TOTAL', curr?.total]
+
+      return [...acc, header, itemsHeader, ...items, total]
+    }, [])
+
+    const total = ['TOTAL', orders?.total]
+
+    matriz.push(total)
+
+    matriz.forEach((row, index) => {
+      const isHeader = headersIndex.includes(index)
+
+      if (isHeader) {
+        worksheet.addRow(row).eachCell({ includeEmpty: true }, (cell) => {
+          cell.style = headerStyle
+        })
+      } else {
+        worksheet.addRow(row)
+      }
+    })
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <Modal
