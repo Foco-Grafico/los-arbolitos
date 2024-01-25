@@ -7,6 +7,9 @@ import ClassHeader from '../../../classes/header'
 import ReportTable from '../../../classes/table'
 import { printToFileAsync } from 'expo-print'
 import { shareAsync } from 'expo-sharing'
+import * as FileSystem from 'expo-file-system'
+import * as Sharing from 'expo-sharing'
+
 const ExcelJS = require('exceljs')
 
 const priceFormatter = new Intl.NumberFormat('es-MX', {
@@ -109,6 +112,16 @@ export default function CorteDeCaja () {
         worksheet.addRow(row)
       }
     })
+
+    const filePath = `${FileSystem.documentDirectory}/output.xlsx`
+
+    workbook.xlsx.writeFile(filePath)
+      .catch(err => {
+        console.error(err)
+      })
+      .finally(() => {
+        Sharing.shareAsync(filePath, { mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', dialogTitle: 'Compartir archivo Excel' })
+      })
   }
 
   return (
@@ -173,7 +186,7 @@ export default function CorteDeCaja () {
             }}
             style={styles.button}
           >
-            <Text style={styles.titles}>GENERAR REPORTE EXCEL</Text>
+            <Text style={styles.titles} onPress={inventoryReportExcel}>GENERAR REPORTE EXCEL</Text>
           </TouchableOpacity>
         </View>
       </View>
