@@ -5,6 +5,7 @@ export default function useGetReconciliation () {
   const [reconciliation, setReconciliation] = useState({
     data: []
   })
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     getReconciliation()
@@ -21,6 +22,7 @@ export default function useGetReconciliation () {
       })
       .then(res => {
         setReconciliation(res)
+        setLoading(false)
       })
       .catch(err => {
         console.error(err)
@@ -28,6 +30,7 @@ export default function useGetReconciliation () {
   }, [])
 
   return {
-    reconciliation
+    reconciliation,
+    loading
   }
 }

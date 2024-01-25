@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import useGetReconciliation from '../../hooks/useGetReconciliation'
 import HeaderAdmin from '../admin/header'
 import Footer from '../admin/footer'
@@ -14,8 +14,7 @@ const priceFormatter = new Intl.NumberFormat('es-MX', {
 })
 
 export default function CorteDeCaja () {
-  const { reconciliation: orders } = useGetReconciliation()
-  console.log(JSON.stringify(orders.data))
+  const { reconciliation: orders, loading } = useGetReconciliation()
 
   const inventoryReport = () => {
     const header = new ClassHeader({
@@ -49,7 +48,7 @@ export default function CorteDeCaja () {
           ${tables.map(table => table.getHTMLTable()).join('')}
         </section>
         <section style='background-color: #005942; margin-top: 10px;' class=" flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-          <span style='color:white'>Total: ${orders?.total}</span>
+          <span style='color:white'>Total: ${priceFormatter.format(orders?.total)}</span>
         </section>
       </main>
     </body>
@@ -67,6 +66,18 @@ export default function CorteDeCaja () {
   }
   return (
     <View style={{ flex: 1 }}>
+      <Modal
+        visible={loading}
+        transparent
+        statusBarTranslucent
+        animationType='fade'
+      >
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 7 }}>
+            <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>Cargando...</Text>
+          </View>
+        </View>
+      </Modal>
       <HeaderAdmin>
         <Text>CORTE DE CAJA</Text>
       </HeaderAdmin>
@@ -100,9 +111,24 @@ export default function CorteDeCaja () {
           })}
         </ScrollView>
         <Text style={styles.text}>Total: {orders?.total}</Text>
-        <TouchableOpacity onPress={() => inventoryReport()} style={styles.button}>
-          <Text style={styles.titles}>GENERAR REPORTE</Text>
-        </TouchableOpacity>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around'
+          }}
+        >
+          <TouchableOpacity onPress={inventoryReport} style={styles.button}>
+            <Text style={styles.titles}>GENERAR REPORTE PDF</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              console.log('Excel')
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.titles}>GENERAR REPORTE EXCEL</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <Footer />
     </View>
@@ -120,8 +146,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     margin: 10,
-    width: '90%',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    flex: 1
   },
   titles: {
     color: 'white',
