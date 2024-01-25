@@ -1,6 +1,7 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useState } from 'react'
 import { ModalHistory } from './ModalHistory'
+import Historial from '../../../../assets/historial'
 
 export default function ReportButton () {
   const [modal, setModal] = useState(false)
@@ -8,7 +9,7 @@ export default function ReportButton () {
   return (
     <View>
       <TouchableOpacity style={styles.button} onPress={() => { setModal(true) }}>
-        <Text style={{ ...styles.text, fontSize: 14, color: '#fff' }}>Historial</Text>
+        <Historial />
       </TouchableOpacity>
       {modal && (
         <ModalHistory setModal={setModal} />
@@ -20,7 +21,7 @@ export default function ReportButton () {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#462f27',
+    backgroundColor: '#005943',
     alignItems: 'center',
     justifyContent: 'center',
     height: 60,
