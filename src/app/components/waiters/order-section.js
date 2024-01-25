@@ -302,7 +302,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
           textAlign: 'center'
         }}
         >
-          Cantadito
+          DESCRIPCION DE ORDEN
         </Text>
       </TouchableOpacity>
 
