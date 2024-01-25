@@ -51,13 +51,12 @@ export default class ReportTable {
                 <tr>
                     <td class="px-1">
                         <div style='background-color:  #005942;' class=" flex flex-col px-3 rounded font-black h-12 justify-center">
-                            <span style='color:white'>TOTAL</span>
-                            <span style='color:white'>${this.header[0]}</span>
+                            <span style='color:white'>TOTAL ORDEN</span>
                         </div>
                     </td>
                     <td class="px-1">
-                        <div style='color: #005942;' class=" bg-black flex justify-center items-center px-10 rounded h-12">
-                       <span style='color:white'>${this.total}</span>
+                        <div style='background-color: #005942;' class=" bg-black flex justify-center items-center px-10 rounded h-12">
+                        <span style='color:white'>${priceFormatter.format(this.total)}</span>
                         </div>
                     </td>
                 </tr>

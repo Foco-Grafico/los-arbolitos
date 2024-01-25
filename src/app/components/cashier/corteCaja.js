@@ -50,11 +50,14 @@ export default function CorteDeCaja () {
         <section class="flex flex-col gap-5">
           ${header.render()}
           ${tables.map(table => table.getHTMLTable()).join('')}
-        </section>
-        <section style='background-color: #005942; margin-top: 10px;' class=" flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
+          <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
           <span style='color:white'>Total: ${priceFormatter.format(orders?.total)}</span>
         </section>
-      </main>
+        </section>
+        <section style='background-color: #005942; align-self: flex-end; margin-top: 800px;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
+          <span style='color:white'>Total: ${priceFormatter.format(orders?.total)}</span>
+        </section>
+        </main>
     </body>
   </html>
 
