@@ -8,8 +8,7 @@ import ReportTable from '../../../classes/table'
 import { printToFileAsync } from 'expo-print'
 import { shareAsync } from 'expo-sharing'
 import * as FileSystem from 'expo-file-system'
-import * as Sharing from 'expo-sharing'
-import { IntentLauncherAndroid } from 'expo'
+import * as IntentLauncher from 'expo-intent-launcher'
 
 const ExcelJS = require('exceljs')
 
@@ -76,7 +75,7 @@ export default function CorteDeCaja () {
 
     const headerStyle = {
       font: { bold: true, color: { argb: 'FFFFFF' } },
-      fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '2F75B5' } },
+      fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '005942' } },
       alignment: { horizontal: 'center' },
       border: { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } }
     }
@@ -90,30 +89,47 @@ export default function CorteDeCaja () {
 
       const itemsHeader = ['PRODUCTO', 'PRECIO']
       const items = curr?.dishes?.map((dish) => {
-        return [dish?.name, dish?.total]
+        return [dish?.name, priceFormatter.format(dish?.total)]
       })
 
-      const total = ['TOTAL', curr?.total]
+      const total = ['', 'TOTAL', priceFormatter.format(curr?.total)]
 
       return [...acc, header, itemsHeader, ...items, total]
     }, [])
 
-    const total = ['TOTAL', orders?.total]
+    const total = ['TOTAL', priceFormatter.format(orders?.total)]
 
     matriz.push(total)
 
-    console.log(matriz)
-
     matriz.forEach((row, index) => {
       const isHeader = headersIndex.includes(index)
+      const isLast = index === matriz.length - 1
 
       if (isHeader) {
         worksheet.addRow(row).eachCell({ includeEmpty: true }, (cell) => {
           cell.style = headerStyle
         })
-      } else {
-        worksheet.addRow(row)
+        return
       }
+
+      if (isLast) {
+        worksheet.addRow(row).eachCell({ includeEmpty: true }, (cell) => {
+          cell.style = {
+            ...headerStyle,
+            fill: {
+              ...headerStyle.fill,
+              fgColor: { argb: '8B4513' } // Brown color
+            }
+          }
+        })
+        return
+      }
+
+      worksheet.addRow(row)
+    })
+
+    worksheet.columns.forEach(column => {
+      column.width = 20
     })
 
     const filePath = `${FileSystem.documentDirectory}/output.xlsx`
@@ -124,14 +140,16 @@ export default function CorteDeCaja () {
       .then(buffer => {
         FileSystem.writeAsStringAsync(filePath, buffer.toString('base64'), { encoding: FileSystem.EncodingType.Base64 })
           .catch(err => {
-            console.error(err)
+            console.error('Errror al guardar', err)
           })
-          .finally(() => {
-            Sharing.shareAsync(`file://${filePath}`, { mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', dialogTitle: 'Compartir archivo Excel' })
+          .finally(async () => {
+            // shareAsync(filePath, { mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', dialogTitle: 'Compartir archivo Excel' })
 
-            IntentLauncherAndroid.startActivityAsync(IntentLauncherAndroid.ACTION_VIEW, {
-              data: `content://com.android.externalstorage.documents/document/primary:${filePath}`,
-              flags: 1, // FLAG_GRANT_READ_URI_PERMISSION
+            const curi = await FileSystem.getContentUriAsync(filePath)
+
+            IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+              data: curi,
+              flags: 1,
               type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             })
           })
@@ -139,9 +157,6 @@ export default function CorteDeCaja () {
       .catch(err => {
         console.error(err)
       })
-      // .finally(() => {
-      //   Sharing.shareAsync(filePath, { mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', dialogTitle: 'Compartir archivo Excel' })
-      // })
   }
 
   return (
