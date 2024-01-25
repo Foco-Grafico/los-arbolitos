@@ -101,6 +101,8 @@ export default function CorteDeCaja () {
 
     matriz.push(total)
 
+    console.log(matriz)
+
     matriz.forEach((row, index) => {
       const isHeader = headersIndex.includes(index)
 
@@ -115,13 +117,24 @@ export default function CorteDeCaja () {
 
     const filePath = `${FileSystem.documentDirectory}/output.xlsx`
 
-    workbook.xlsx.writeFile(filePath)
+    workbook.xlsx.writeBuffer({
+      useStyles: true
+    })
+      .then(buffer => {
+        FileSystem.writeAsStringAsync(filePath, buffer.toString('base64'), { encoding: FileSystem.EncodingType.Base64 })
+          .catch(err => {
+            console.error(err)
+          })
+          .finally(() => {
+            Sharing.shareAsync(`file://${filePath}`, { mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', dialogTitle: 'Compartir archivo Excel' })
+          })
+      })
       .catch(err => {
         console.error(err)
       })
-      .finally(() => {
-        Sharing.shareAsync(filePath, { mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', dialogTitle: 'Compartir archivo Excel' })
-      })
+      // .finally(() => {
+      //   Sharing.shareAsync(filePath, { mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', dialogTitle: 'Compartir archivo Excel' })
+      // })
   }
 
   return (
@@ -181,12 +194,10 @@ export default function CorteDeCaja () {
             <Text style={styles.titles}>GENERAR REPORTE PDF</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {
-              console.log('Excel')
-            }}
+            onPress={inventoryReportExcel}
             style={styles.button}
           >
-            <Text style={styles.titles} onPress={inventoryReportExcel}>GENERAR REPORTE EXCEL</Text>
+            <Text style={styles.titles}>GENERAR REPORTE EXCEL</Text>
           </TouchableOpacity>
         </View>
       </View>
