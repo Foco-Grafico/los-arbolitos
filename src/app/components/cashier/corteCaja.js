@@ -323,13 +323,13 @@ export default function CorteDeCaja () {
                           {product?.name}
                         </Text>
                         <Text style={{ ...styles.text, flex: 1 }}>
-                          Precio: {product?.total}
+                          Precio: {priceFormatter(product?.total)}
                         </Text>
                       </View>
                     )
                   })}
                 </View>
-                <Text style={{ ...styles.text, textAlign: 'right' }}> Total:{item?.total} </Text>
+                <Text style={{ ...styles.text, textAlign: 'right' }}> Total:{priceFormatter(item?.total)} </Text>
               </TouchableOpacity>
             )
           })}
