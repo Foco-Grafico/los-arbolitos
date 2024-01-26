@@ -31,6 +31,7 @@ export function DishList ({ dishes, editProductController, resetSearch }) {
 
     if (isExistInPrettyList && prettyDishesInOrder[prettyIndex].status.id === 1) {
       prettyDishesInOrder[prettyIndex].quantity++
+      prettyDishesInOrder[prettyIndex].created_at.push(new Date().toISOString())
     } else {
       prettyDishesInOrder.push({
         ids: [],
@@ -40,7 +41,8 @@ export function DishList ({ dishes, editProductController, resetSearch }) {
         status: {
           id: 1,
           name: 'pending'
-        }
+        },
+        created_at: [new Date().toISOString()]
       })
     }
 
