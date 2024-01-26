@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native'
 import SignoMenos from '../../../../../../assets/signodemenos'
 import SignoMas from '../../../../../../assets/signodemas'
 
-export const Counter = ({ defaultValue = 0, onChange = () => {} }) => {
+export const Counter = ({ defaultValue = 1, onChange = () => {} }) => {
   const [counter, setCounter] = useState(defaultValue)
 
   return (
