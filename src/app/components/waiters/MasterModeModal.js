@@ -283,7 +283,7 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                   onPress={() => {
                     forceQuit()
 
-                    finishOrderInCashier(order?.id, 0)
+                    finishOrderInCashier(order?.id, 0, true)
                   }}
                 >
                   Liberar mesa

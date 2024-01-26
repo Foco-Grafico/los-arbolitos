@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, TextInput, ScrollView } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, TextInput, ScrollView, Modal } from 'react-native'
 import { useState } from 'react'
 import Tables from '../components/cashier/tables'
 import Products from '../components/cashier/products'
@@ -19,6 +19,7 @@ export default function Cashier () {
   const { data, setData } = useGetOrdersInCashier()
   const [discount, setDiscount] = useState(0)
   const nav = routerStore(state => state.nav)
+  const [paymentTypeModal, setPaymentType] = useState(false)
 
   const print = async () => {
     const totalWithDiscount = Number(selectedTable?.total - discount)
@@ -144,16 +145,46 @@ export default function Cashier () {
     setDiscount(discount)
   }
 
-  const handleFinishOrder = () => {
-    finishOrderInCashier(selectedTable?.id, discount)
+  const handleFinishOrder = (type = true) => {
+    finishOrderInCashier(selectedTable?.id, discount, type)
     setData(prev => prev.filter(order => order.id !== selectedTable?.id))
     setSelectedTable({})
     setRequested(false)
     setDiscount(0)
+    setPaymentType(false)
   }
 
   return (
     <View style={styles.container}>
+      <Modal
+        animationType='slide'
+        transparent
+        visible={paymentTypeModal}
+        onRequestClose={() => {
+          setPaymentType(false)
+        }}
+        statusBarTranslucent
+      >
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,.5)' }}>
+          <View style={{ backgroundColor: '#fff', width: '80%', height: '50%', borderRadius: 10, justifyContent: 'center', alignItems: 'center', gap: 40 }}>
+            <Text style={{ color: '#005942', fontWeight: 'bold', fontSize: 20 }}>¿Cómo desea pagar?</Text>
+            <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'center', alignItems: 'center' }}>
+              <TouchableOpacity
+                style={{ height: 50, width: 150, borderWidth: 1, backgroundColor: '#005942', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}
+                onPress={() => { handleFinishOrder(true) }}
+              >
+                <Text style={{ color: '#fff', fontWeight: 'bold' }}>EFECTIVO</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ height: 50, width: 150, borderWidth: 1, backgroundColor: '#005942', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}
+                onPress={() => { handleFinishOrder(false) }}
+              >
+                <Text style={{ color: '#fff', fontWeight: 'bold' }}>TARJETA</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.header}>
         <Text style={{ color: 'white', fontSize: 25, fontWeight: 'bold', flex: 1, textAlign: 'center' }}>CAJA</Text>
         <TouchableOpacity
@@ -205,7 +236,11 @@ export default function Cashier () {
             <TouchableOpacity style={styles.buttons} onPress={print}>
               <Text style={{ color: '#fff', fontWeight: 'bold' }}>IMPRIMIR</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttons} onPress={handleFinishOrder} disabled={!requested}>
+            <TouchableOpacity
+              style={styles.buttons} onPress={
+              () => { setPaymentType(true) }
+            } disabled={!requested}
+            >
               {requested
                 ? <Text style={{ color: '#fff', fontWeight: 'bold' }}>CERRAR CUENTA</Text>
                 : <Text style={{ color: '#fff', fontWeight: 'bold' }}>ESPERE...</Text>}
