@@ -43,7 +43,14 @@ export default function CorteDeCaja () {
           FOLIO: ${order?.id}<br>
           FECHA: ${new Date().toLocaleDateString()}<br>
           HORA: ${order?.timestamp.split('T')[1]}<br>
-          TIPO DE PAGO: ${order?.is_effective}<br>
+          ${(order.is_effective === true)
+            ? `
+            TIPO DE PAGO: EFECTIVO<br>
+            `
+            : `
+            TIPO DE PAGO: TARJETA<br>
+            `
+          }
           <span>-------------------------------</span>
         </p>
         <table style="width: 100%; border-collapse: collapse;">

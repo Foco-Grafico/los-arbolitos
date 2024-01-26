@@ -7,6 +7,7 @@ import finishOrderInCashier from '../func/finish-order-in.cashier'
 import useGetOrdersInCashier from '../hooks/getOrdersInCashier'
 import { Cerrar } from '../../../assets/cerrar'
 import { routerStore } from '../../../stores/router'
+import Footer from '../components/admin/footer'
 
 const priceFormatter = new Intl.NumberFormat('es-MX', {
   style: 'currency',
@@ -249,7 +250,7 @@ export default function Cashier () {
         </View>
 
       </View>
-      <View style={styles.footer} />
+      <Footer />
     </View>
   )
 }
