@@ -323,18 +323,18 @@ export default function CorteDeCaja () {
                           {product?.name}
                         </Text>
                         <Text style={{ ...styles.text, flex: 1 }}>
-                          Precio: {priceFormatter(product?.total)}
+                          Precio: {priceFormatter.format(product?.total)}
                         </Text>
                       </View>
                     )
                   })}
                 </View>
-                <Text style={{ ...styles.text, textAlign: 'right' }}> Total:{priceFormatter(item?.total)} </Text>
+                <Text style={{ ...styles.text, textAlign: 'right' }}> Total:{priceFormatter.format(item?.total)} </Text>
               </TouchableOpacity>
             )
           })}
         </ScrollView>
-        <Text style={styles.text}>Total: {orders?.total}</Text>
+        <Text style={styles.text}>Total:{priceFormatter.format(orders?.total)}</Text>
         <View
           style={{
             flexDirection: 'row',
