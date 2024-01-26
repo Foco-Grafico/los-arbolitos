@@ -17,6 +17,7 @@ import { Counter } from './components/counter'
 import { modifyDish } from '../../../../lib/api-call/order/modify-dish'
 import { tableStore } from '../../../../../stores/waiter'
 import { removeDishFromOrder } from '../../../func/remove-dish-from-order'
+import addDishToOrder from '../../../../lib/api-call/order/add-dish-to-order'
 // import { tableStore } from '../../../../../stores/waiter'
 // import SignoMas from '../../../../../assets/signodemas'
 // import SignoMenos from '../../../../../assets/signodemenos'
@@ -63,6 +64,9 @@ export default function EditProducts ({ editProductController }) {
   const editProducts = tableStore(state => state.editProducts)
   const [productToDelete, setProductToDelete] = useState(null)
   const [isModified, setIsModified] = useState(false)
+  const [quantityProducts, setQuantityProducts] = useState(1)
+
+  console.log(dishSelected, editProductController.data)
 
   const deleteProduct = (item) => {
     editProductController?.setData(prev => {
@@ -313,6 +317,28 @@ export default function EditProducts ({ editProductController }) {
               {dishSelected?.name}
             </Text>
           </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 10
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 17,
+                fontWeight: 'bold',
+                color: '#005943'
+              }}
+            >Cantidad:
+            </Text>
+            <Counter
+              onChange={(value) => {
+                setQuantityProducts(value)
+              }}
+            />
+          </View>
           <SearchBarSupply
             onAddSupplyClick={(supply) => {
               setSelectDish(prev => {
@@ -464,7 +490,32 @@ export default function EditProducts ({ editProductController }) {
 
               modifyDish(editProductController?.data?.orderId, dishSelected?.id, supplies, dishSelected?.priority, dishSelected?.comment)
 
+              if (quantityProducts > 1) {
+                const promises = new Array(quantityProducts - 1).fill(0).map(() => {
+                  return addDishToOrder({
+                    dishId: dishSelected?.dish_id,
+                    supplies,
+                    orderId: editProductController?.data?.orderId
+                  })
+                    .then(res => {
+                      if (res.ok) {
+                        return res.json()
+                      }
+                    })
+                    .then(json => {
+                      const { id } = json.data
+
+                      modifyDish(editProductController?.data?.orderId, id, supplies, dishSelected?.priority, dishSelected?.comment)
+                    })
+                })
+
+                Promise.all(promises).then(() => {
+                  editProducts(editProductController?.data?.orderId)
+                })
+              }
+
               editProducts(editProductController?.data?.orderId)
+
               setSelectDish(null)
               editProductController?.setVisible?.(false)
             }}
