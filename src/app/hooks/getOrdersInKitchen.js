@@ -145,7 +145,7 @@ export default function useKitchenGetOrders (bar = false) {
           }, -1)
 
           if (lastOrderPriority === -1) {
-            const position = copyOrders.length > 2 ? 2 : 1
+            const position = copyOrders.length >= 2 ? 2 : 1
 
             copyOrders.splice(position, 0, newOrder)
           } else {
