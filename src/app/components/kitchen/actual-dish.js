@@ -1,5 +1,5 @@
 import { Image } from 'expo-image'
-import { FlatList, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native'
 import Aceptar from '../../../../assets/aceptar'
 import { kitchenStore } from '../../../../stores/kitchen'
 import finishOrderInKitchen from '../../func/finish-order-in-kitchen'
@@ -7,12 +7,14 @@ import { v4 } from '../../../lib/uuid'
 import { useDeviceType, types } from '../../hooks/device'
 import { markAsPreparation } from '../../../lib/api-call/kitchen/mark-as-preparation'
 import { API_URL } from '../../../lib/api-call/data'
+import { useState } from 'react'
 
 export default function ActualDish ({ setOrders, bar = false }) {
   const dish = kitchenStore(state => state.selectedDish)
   const orderIndex = kitchenStore(state => state.orderIndex)
   const setDish = kitchenStore(state => state.setSelectedDish)
   const type = useDeviceType()
+  const [modalConfirmation, setModalConfirmation] = useState(false)
 
   const handleFinish = () => {
     for (const id of dish.ids) {
@@ -84,6 +86,74 @@ export default function ActualDish ({ setOrders, bar = false }) {
         gap: 30
       }}
     >
+      <Modal
+        visible={modalConfirmation}
+        transparent
+        animationType='slide'
+        statusBarTranslucent
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.5)'
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: '#fff',
+              borderRadius: 10,
+              padding: 20,
+              width: 300
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                textAlign: 'center'
+              }}
+            >
+              ¿Desea terminar el platillo?
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                marginTop: 20
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => setModalConfirmation(false)}
+              >
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    color: '#005943'
+                  }}
+                >
+                  NO
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleFinish}
+              >
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    color: '#005943'
+                  }}
+                >
+                  SI
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       {dish?.picture != null && (
         <Image
           source={dish?.picture?.startsWith('http') ? dish?.picture : `${API_URL}/${dish?.picture}`}
@@ -175,7 +245,9 @@ export default function ActualDish ({ setOrders, bar = false }) {
         >
           {!(orderIndex > 1) && (
             <TouchableOpacity
-              onPress={handleFinish}
+              onPress={
+                () => setModalConfirmation(true)
+              }
             >
               <Aceptar style={{ width: 24, height: 24 }} />
             </TouchableOpacity>
