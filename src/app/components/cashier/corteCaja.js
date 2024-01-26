@@ -9,6 +9,7 @@ import { printToFileAsync } from 'expo-print'
 import { shareAsync } from 'expo-sharing'
 import * as FileSystem from 'expo-file-system'
 import * as IntentLauncher from 'expo-intent-launcher'
+import * as Print from 'expo-print'
 
 const ExcelJS = require('exceljs')
 
@@ -19,6 +20,104 @@ const priceFormatter = new Intl.NumberFormat('es-MX', {
 
 export default function CorteDeCaja () {
   const { reconciliation: orders, loading } = useGetReconciliation()
+
+  const print = async (order) => {
+    console.log(JSON.stringify(order))
+
+    const descuento = ((order.discount !== '0' && order.discount !== '' && order.discount != null) ? order.discount : 0)
+    const iva = (Number(order.total) * 0.16)
+    const subtotal = Number(order.total - iva)
+    const total = order.total_payment
+
+    const html = `
+    <html>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+      </head>
+      <body style="text-align: center; justify-content:space-around;">
+        <p style=" font-family: Montserrat; font-weight: normal;">
+         RESTAURANT "LOS ARBOLITOS"<br>
+         DIRECCIÓN: AV. ANTONIO TOLEDO CORRO #14 HUERTOS FAMILIARES<br>
+         MAZATLÁN, SINALOA CP. 82137<br>
+          MESA ${order?.table?.name}<br>
+          FOLIO: ${order?.id}<br>
+          FECHA: ${new Date().toLocaleDateString()}<br>
+          HORA: ${order?.timestamp.split('T')[1]}<br>
+          <span>-------------------------------</span>
+        </p>
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="solid black; padding: 5px; text-align: start;">CANT</th>
+              <th style="solid black; padding: 5px; text-align: start;">DESCRIPCION</th>
+              <th style="solid black; padding: 5px; text-align: end;">IMPORTE</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${order?.pretty_list?.map((product) => {
+              return (`
+                <tr>
+                  <td style="solid black; padding: 5px;">${product?.quantity}</td>
+                  <td style="solid black; padding: 5px;">${product?.name}</td>
+                  <td style="solid black; padding: 5px; text-align: end;">${priceFormatter.format(product?.price * product.quantity)}</td>
+                </tr>
+                ${
+                  Object.keys(product?.supplies_modified).map(key => {
+                    return product?.supplies_modified[key].map(supply => {
+                      return (`
+                        <tr>
+                          <td style="solid black; padding: 5px;"></td>
+                          <td style="solid black; padding: 5px;">(${supply.quantity}) ${supply.name}</td>
+                          <td style="solid black; padding: 5px; text-align: end;">${priceFormatter.format(supply.extra_cost)}</td>
+                        </tr>
+                      `)
+                    })
+                  }).join('')
+                }
+              `)
+            }).join('')}
+
+          </tbody>
+        </table>
+        <p style=" font-family: Helvetica Neue; font-weight: normal;">
+        ${(order.discount !== '0' && order.discount !== '' && order.discount != null && order.discount !== 0)
+       ? `SubTotal: ${priceFormatter.format(subtotal)}<br>
+          Descuento: ${priceFormatter.format(descuento)}<br>
+          IVA: ${priceFormatter.format(iva)}<br>
+          <b>Total: </b>${priceFormatter.format(total)} (IVA incluido)<br><br>
+          <br>
+          <br>
+          Propina sugerida (10%): ${priceFormatter.format(total * 0.10)}<br>
+          Propina sugerida (15%): ${priceFormatter.format(total * 0.15)}<br>
+          Propina sugerida (20%): ${priceFormatter.format(total * 0.20)}<br>
+          Gracias por su preferencia<br>
+          ¡Vuelva pronto!
+          `
+        : `SubTotal: ${priceFormatter.format(subtotal)}<br>
+          IVA: ${priceFormatter.format(iva)}<br>
+          <b>Total: </b>${priceFormatter.format(total)} (IVA incluido)<br><br>
+          <br>
+          <br>
+          Propina sugerida (10%): ${priceFormatter.format(total * 0.10)}<br>
+          Propina sugerida (15%): ${priceFormatter.format(total * 0.15)}<br>
+          Propina sugerida (20%): ${priceFormatter.format(total * 0.20)}<br>
+          Gracias por su preferencia<br>
+          ¡Vuelva pronto!
+          `
+      }
+        </p>
+      </body>
+    </html>
+    `
+    try {
+      await Print.printAsync({
+        html
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   const inventoryReport = () => {
     const header = new ClassHeader({
@@ -181,7 +280,11 @@ export default function CorteDeCaja () {
         <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
           {orders?.data?.map(item => {
             return (
-              <View key={item.key} style={{ flexDirection: 'column', paddingHorizontal: 15, borderWidth: 1, width: '100%', gap: 20 }}>
+              <TouchableOpacity
+                key={item.key} style={{ flexDirection: 'column', paddingHorizontal: 15, borderWidth: 1, width: '100%', gap: 20 }} onPress={() => {
+                  print(item)
+                }}
+              >
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                   <Text style={{ ...styles.text }}>Folio: {item?.folio}</Text>
                   <Text style={styles.text}>Mesero: {item?.user?.name}</Text>
@@ -202,7 +305,7 @@ export default function CorteDeCaja () {
                   })}
                 </View>
                 <Text style={{ ...styles.text, textAlign: 'right' }}> Total:{item?.total} </Text>
-              </View>
+              </TouchableOpacity>
             )
           })}
         </ScrollView>

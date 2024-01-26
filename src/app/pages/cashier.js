@@ -23,8 +23,8 @@ export default function Cashier () {
 
   const print = async () => {
     const descuento = ((discount !== '0' && discount !== '' && discount != null) ? discount : 0)
-    const subtotal = Number(originalTotal)
     const iva = (Number(totalWithDiscount) * 0.16)
+    const subtotal = Number(originalTotal - iva)
     const total = totalWithDiscount
 
     const html = `
