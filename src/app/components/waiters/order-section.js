@@ -25,6 +25,8 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
   const [masterMode, setMasterMode] = useState(false)
   const [cantadito, setCantadito] = useState(false)
 
+  console.log(JSON.stringify(order?.pretty_list))
+
   return (
     <View style={{
       width: 'auto',
@@ -77,7 +79,6 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
               </Text>
               {order?.pretty_list?.map(dish => {
                 if (dish == null) return null
-                console.log('dish', JSON.stringify(dish))
 
                 return (
                   <View
@@ -93,14 +94,13 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
                         fontWeight: 'bold'
                       }}
                     >
-                      {dish?.quantity} {dish?.name} - {dateFormatter.format(new Date(dish?.created_at ?? null))}
+                      {dish?.quantity} {dish?.name}
                     </Text>
 
                     {dish?.ids?.map((id, index) => {
                       const isComment = dish.comments && dish?.comments[index] != null
                       const isModified = dish?.name.endsWith('(M)')
-
-                      if (!isComment) return null
+                      const isLast = dish?.ids?.length - 1 === index
 
                       return (
                         <View
@@ -111,32 +111,47 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
                           }}
                           key={id}
                         >
-                          <Text
-                            style={{
-                              fontWeight: 'bold'
-                            }}
-                          >
-                            {index + 1}-
-                            <Text
-                              style={{
-                                color: '#005943'
-                              }}
-                            >Observaciones
-                            </Text>: {dish?.comments && dish?.comments[index]}
+                          <Text>
+                            Hora de adición: <Text style={{ color: '#005943' }}>{dateFormatter.format(new Date(dish?.created_at[index]))}</Text>
                           </Text>
-                          {isModified && dish?.supplies_modified[id]?.map(supply => {
-                            return (
+                          {isComment && (
+                            <>
                               <Text
                                 style={{
-                                  marginLeft: 15,
-                                  fontSize: 14
+                                  fontWeight: 'bold'
                                 }}
-                                key={supply.key}
                               >
-                                - {supply.quantity} {supply.name}
+                                <Text
+                                  style={{
+                                    color: '#005943'
+                                  }}
+                                >Observaciones
+                                </Text>: {dish?.comments && dish?.comments[index]}
                               </Text>
-                            )
-                          })}
+                              {isModified && dish?.supplies_modified[id]?.map(supply => {
+                                return (
+                                  <Text
+                                    style={{
+                                      marginLeft: 15,
+                                      fontSize: 14
+                                    }}
+                                    key={supply.key}
+                                  >
+                                    - {supply.quantity} {supply.name}
+                                  </Text>
+                                )
+                              })}
+                            </>
+                          )}
+                          {!isLast && (
+                            <View
+                              style={{
+                                borderBottomWidth: 1,
+                                borderBottomColor: '#000',
+                                width: '100%'
+                              }}
+                            />
+                          )}
                         </View>
                       )
                     })}
