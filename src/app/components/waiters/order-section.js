@@ -9,6 +9,12 @@ import { useState } from 'react'
 import { MasterModeModal } from './MasterModeModal'
 import { IconEdit } from '../../../../assets/edit'
 
+const dateFormatter = new Intl.DateTimeFormat('es-MX', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true
+})
+
 export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash, setTables, setData, setVisible }) {
   const status = tableStore(state => state.status)
   const order = tableStore(state => state.order)
@@ -60,6 +66,15 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
                 maxHeight: '80%'
               }}
             >
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: 16,
+                  marginBottom: 10
+                }}
+              >
+                Hora de orden: <Text style={{ color: '#005943' }}>{dateFormatter.format(new Date(order?.timestamp))}</Text>
+              </Text>
               {order?.pretty_list?.map(dish => {
                 if (dish == null) return null
                 console.log('dish', JSON.stringify(dish))
@@ -72,12 +87,13 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
                     }}
                     key={dish?.key}
                   >
+
                     <Text
                       style={{
                         fontWeight: 'bold'
                       }}
                     >
-                      {dish?.quantity} {dish?.name}
+                      {dish?.quantity} {dish?.name} - {dateFormatter.format(new Date(dish?.created_at ?? null))}
                     </Text>
 
                     {dish?.ids?.map((id, index) => {
