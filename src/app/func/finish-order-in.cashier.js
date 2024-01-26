@@ -1,6 +1,6 @@
 import { APIENDPOINTS } from '../../lib/api-call/data'
 
-export default function finishOrderInCashier (orderId, discount) {
+export default function finishOrderInCashier (orderId, discount, type) {
   const headers = new Headers()
   headers.append('accept', 'application/json')
 
@@ -9,5 +9,5 @@ export default function finishOrderInCashier (orderId, discount) {
     headers
   }
 
-  return fetch(`${APIENDPOINTS.finishOrder}?order_id=${orderId}&discount=${discount}`, options)
+  return fetch(`${APIENDPOINTS.finishOrder}?order_id=${orderId}&discount=${discount}&type=${type}`, options)
 }
