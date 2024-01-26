@@ -125,7 +125,7 @@ export default function CorteDeCaja () {
     })
 
     const tables = orders?.data?.map((order) => new ReportTable({
-      header: ['PRODUCTO', 'PRECIO', `MESA ${order?.table?.name}`],
+      header: ['PRODUCTO', 'PRECIO', `MESA ${order?.table?.name}`, order?.is_effective ? 'EFECTIVO' : 'TARJETA'],
 
       items: order?.dishes?.map((dish) => ({
         name: dish?.name,
@@ -185,7 +185,7 @@ export default function CorteDeCaja () {
     const matriz = orders?.data?.reduce((acc, curr, index) => {
       headersIndex.push(acc.length)
 
-      const header = [`FOLIO ${curr?.folio}`, `MESERO ${curr?.user?.name}`, `MESA ${curr?.table?.name}`]
+      const header = [`FOLIO ${curr?.folio}`, `MESERO ${curr?.user?.name}`, `MESA ${curr?.table?.name}`, curr?.is_effective ? 'EFECTIVO' : 'TARJETA']
 
       const itemsHeader = ['PRODUCTO', 'PRECIO']
       const items = curr?.dishes?.map((dish) => {
