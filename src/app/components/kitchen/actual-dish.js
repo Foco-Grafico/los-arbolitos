@@ -138,7 +138,10 @@ export default function ActualDish ({ setOrders, bar = false }) {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={handleFinish}
+                onPress={() => {
+                  handleFinish()
+                  setModalConfirmation(false)
+                }}
               >
                 <Text
                   style={{
