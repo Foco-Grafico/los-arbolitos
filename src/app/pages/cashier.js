@@ -21,8 +21,11 @@ export default function Cashier () {
   const [discount, setDiscount] = useState(0)
   const nav = routerStore(state => state.nav)
   const [paymentTypeModal, setPaymentType] = useState(false)
+  const [isEffective, setIsEffective] = useState(true)
 
-  const print = async () => {
+  const print = async (isEffective) => {
+    setPaymentType(false)
+
     const totalWithDiscount = Number(selectedTable?.total - discount)
     const originalTotal = Number(selectedTable?.total)
 
@@ -45,7 +48,7 @@ export default function Cashier () {
           FOLIO: ${selectedTable?.id}<br>
           FECHA: ${new Date().toLocaleDateString()}<br>
           HORA: ${selectedTable?.timestamp.split('T')[1]}<br>
-          ${(selectedTable?.is_effective === true)
+          ${(isEffective === true)
             ? `
             TIPO DE PAGO: EFECTIVO<br>
             `
@@ -154,13 +157,12 @@ export default function Cashier () {
     setDiscount(discount)
   }
 
-  const handleFinishOrder = (type = true) => {
-    finishOrderInCashier(selectedTable?.id, discount, type)
+  const handleFinishOrder = () => {
+    finishOrderInCashier(selectedTable?.id, discount, isEffective)
     setData(prev => prev.filter(order => order.id !== selectedTable?.id))
     setSelectedTable({})
     setRequested(false)
     setDiscount(0)
-    setPaymentType(false)
   }
 
   return (
@@ -180,13 +182,19 @@ export default function Cashier () {
             <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'center', alignItems: 'center' }}>
               <TouchableOpacity
                 style={{ height: 50, width: 150, borderWidth: 1, backgroundColor: '#005942', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}
-                onPress={() => { handleFinishOrder(true) }}
+                onPress={() => {
+                  setIsEffective(true)
+                  print(true)
+                }}
               >
                 <Text style={{ color: '#fff', fontWeight: 'bold' }}>EFECTIVO</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ height: 50, width: 150, borderWidth: 1, backgroundColor: '#005942', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}
-                onPress={() => { handleFinishOrder(false) }}
+                onPress={() => {
+                  setIsEffective(false)
+                  print(false)
+                }}
               >
                 <Text style={{ color: '#fff', fontWeight: 'bold' }}>TARJETA</Text>
               </TouchableOpacity>
@@ -242,13 +250,15 @@ export default function Cashier () {
                 {selectedTable?.total ? priceFormatter.format(selectedTable?.total - discount) : '$0.00'}
               </Text>
             </View>
-            <TouchableOpacity style={styles.buttons} onPress={print}>
-              <Text style={{ color: '#fff', fontWeight: 'bold' }}>IMPRIMIR</Text>
-            </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttons} onPress={
               () => { setPaymentType(true) }
-            } disabled={!requested}
+            }
+            >
+              <Text style={{ color: '#fff', fontWeight: 'bold' }}>IMPRIMIR</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttons} onPress={handleFinishOrder} disabled={!requested}
             >
               {requested
                 ? <Text style={{ color: '#fff', fontWeight: 'bold' }}>CERRAR CUENTA</Text>
