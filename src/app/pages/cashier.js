@@ -45,6 +45,14 @@ export default function Cashier () {
           FOLIO: ${selectedTable?.id}<br>
           FECHA: ${new Date().toLocaleDateString()}<br>
           HORA: ${selectedTable?.timestamp.split('T')[1]}<br>
+          ${(selectedTable?.is_effective === true)
+            ? `
+            TIPO DE PAGO: EFECTIVO<br>
+            `
+            : `
+            TIPO DE PAGO: TARJETA<br>
+            `
+          }
           <span>-------------------------------</span>
         </p>
         <table style="width: 100%; border-collapse: collapse;">
