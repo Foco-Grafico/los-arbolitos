@@ -1,6 +1,7 @@
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import useGetOrderHistory from '../../hooks/useGetOrderHistory'
 import { useState } from 'react'
+import { Counter } from '../waiters/edit-product-modal/components/counter'
 
 const priceFormatter = new Intl.NumberFormat('es-MX', {
   style: 'currency',
@@ -8,7 +9,12 @@ const priceFormatter = new Intl.NumberFormat('es-MX', {
 })
 
 export const ModalHistory = ({ setModal }) => {
-  const { orders } = useGetOrderHistory()
+  const [page, setPage] = useState(1)
+
+  const { orders } = useGetOrderHistory(
+    page,
+    10
+  )
 
   const [modalModified, setModalModified] = useState({
     visible: false,
@@ -96,6 +102,10 @@ export const ModalHistory = ({ setModal }) => {
               )
             })}
           </ScrollView>
+          <Counter
+            block
+            defaultValue={page} onChange={setPage}
+          />
           <TouchableOpacity
             style={{ alignItems: 'flex-end', paddingHorizontal: 20 }}
             onPress={() => { setModal(false) }}

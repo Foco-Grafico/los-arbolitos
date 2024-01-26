@@ -1,10 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import SignoMenos from '../../../../../../assets/signodemenos'
 import SignoMas from '../../../../../../assets/signodemas'
 
-export const Counter = ({ defaultValue = 1, onChange = () => {} }) => {
+export const Counter = ({ defaultValue = 1, onChange = () => {}, block = false }) => {
   const [counter, setCounter] = useState(defaultValue)
+
+  useEffect(() => {
+    if (block && counter < 1) {
+      setCounter(() => {
+        onChange(1)
+        return 1
+      })
+    }
+  }, [counter])
 
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10 }}>

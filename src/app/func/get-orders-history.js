@@ -1,6 +1,6 @@
 import { APIENDPOINTS } from '../../lib/api-call/data'
 
-export default function getOrdersHistory () {
+export default function getOrdersHistory (page, limit) {
   const headers = new Headers()
   headers.append('accept', 'application/json')
 
@@ -9,5 +9,5 @@ export default function getOrdersHistory () {
     headers
   }
 
-  return fetch(APIENDPOINTS.getOrdersHistory, options)
+  return fetch(`${APIENDPOINTS.getOrdersHistory}?page=${page}&limit=${limit}`, options)
 }
