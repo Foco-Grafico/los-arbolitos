@@ -126,7 +126,7 @@ export default function CorteDeCaja () {
     })
 
     const tables = orders?.data?.map((order) => new ReportTable({
-      header: ['PRODUCTO', 'PRECIO', `MESA ${order?.table?.name}`, order?.is_effective ? 'EFECTIVO' : 'TARJETA'],
+      header: ['PRODUCTO', `PRECIO (${order?.is_effective ? 'E' : 'T'})`, `MESA ${order?.table?.name}`],
 
       items: order?.dishes?.map((dish) => ({
         name: dish?.name,
@@ -151,6 +151,12 @@ export default function CorteDeCaja () {
         <section class="flex flex-col gap-5">
           ${header.render()}
           ${tables.map(table => table.getHTMLTable()).join('')}
+          <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
+            <span style='color:white'>Total en efectivo: ${priceFormatter.format(orders?.total_cash)}</span>
+          </section>
+          <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
+            <span style='color:white'>Total en tarjeta: ${priceFormatter.format(orders?.total_debit)}</span>
+          </section>
           <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
             <span style='color:white'>Total: ${priceFormatter.format(orders?.total)}</span>
           </section>
@@ -198,13 +204,12 @@ export default function CorteDeCaja () {
       return [...acc, header, itemsHeader, ...items, total]
     }, [])
 
+    const totalDebit = ['TOTAL EN TARJETA', priceFormatter.format(orders?.total_debit)]
+    const totalCash = ['TOTAL EN EFECTIVO', priceFormatter.format(orders?.total_cash)]
     const total = ['TOTAL', priceFormatter.format(orders?.total)]
-
-    matriz.push(total)
 
     matriz.forEach((row, index) => {
       const isHeader = headersIndex.includes(index)
-      const isLast = index === matriz.length - 1
 
       if (isHeader) {
         worksheet.addRow(row).eachCell({ includeEmpty: true }, (cell) => {
@@ -213,20 +218,32 @@ export default function CorteDeCaja () {
         return
       }
 
-      if (isLast) {
-        worksheet.addRow(row).eachCell({ includeEmpty: true }, (cell) => {
-          cell.style = {
-            ...headerStyle,
-            fill: {
-              ...headerStyle.fill,
-              fgColor: { argb: '8B4513' } // Brown color
-            }
-          }
-        })
-        return
-      }
+      // if (isLast) {
+      //   worksheet.addRow(row).eachCell({ includeEmpty: true }, (cell) => {
+      //     cell.style = {
+      //       ...headerStyle,
+      //       fill: {
+      //         ...headerStyle.fill,
+      //         fgColor: { argb: '8B4513' } // Brown color
+      //       }
+      //     }
+      //   })
+      //   return
+      // }
 
       worksheet.addRow(row)
+    })
+
+    worksheet.addRows([totalCash, totalDebit, total]).forEach((row) => {
+      row.eachCell({ includeEmpty: true }, (cell) => {
+        cell.style = {
+          ...headerStyle,
+          fill: {
+            ...headerStyle.fill,
+            fgColor: { argb: '8B4513' } // Brown color
+          }
+        }
+      })
     })
 
     worksheet.columns.forEach(column => {
