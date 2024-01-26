@@ -15,13 +15,15 @@ const priceFormatter = new Intl.NumberFormat('es-MX', {
 
 export default function Cashier () {
   const [selectedTable, setSelectedTable] = useState({})
-  const [originalTotal, setOriginalTotal] = useState(0)
+  const [requested, setRequested] = useState(false)
   const { data, setData } = useGetOrdersInCashier()
   const [discount, setDiscount] = useState(0)
-  const [totalWithDiscount, setTotalDis] = useState(0)
   const nav = routerStore(state => state.nav)
 
   const print = async () => {
+    const totalWithDiscount = Number(selectedTable?.total - discount)
+    const originalTotal = Number(selectedTable?.total)
+
     const descuento = ((discount !== '0' && discount !== '' && discount != null) ? discount : 0)
     const iva = (Number(totalWithDiscount) * 0.16)
     const subtotal = Number(originalTotal - iva)
@@ -112,6 +114,7 @@ export default function Cashier () {
       await Print.printAsync({
         html
       })
+      setRequested(true)
       setData(prev => {
         const copyPrev = [...prev]
         const index = copyPrev.findIndex(order => order.id === selectedTable?.id)
@@ -132,22 +135,21 @@ export default function Cashier () {
 
   const handleDiscount = (text) => {
     const discount = Number(text)
-    const total = text ? Number(originalTotal) - discount : Number(originalTotal)
 
     if (isNaN(discount)) {
       setDiscount(0)
-      setTotalDis(originalTotal)
       return
     }
 
-    setTotalDis(total)
     setDiscount(discount)
   }
 
   const handleFinishOrder = () => {
-    finishOrderInCashier(selectedTable?.id, selectedTable?.discount ? selectedTable?.discount : 0)
+    finishOrderInCashier(selectedTable?.id, discount)
     setData(prev => prev.filter(order => order.id !== selectedTable?.id))
     setSelectedTable({})
+    setRequested(false)
+    setDiscount(0)
   }
 
   return (
@@ -168,9 +170,7 @@ export default function Cashier () {
           data={data}
           onPressTable={(order) => {
             setSelectedTable(order)
-            setOriginalTotal(order.total)
-            setTotalDis(order.total)
-            setDiscount(0)
+            setDiscount(order?.discount ? order?.discount : 0)
           }}
         />
         <View style={{ flex: 1 }}>
@@ -181,20 +181,32 @@ export default function Cashier () {
             <Text style={styles.text}>DESCUENTO</Text>
             <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
               <TextInput
-                style={{ width: 150, paddingVertical: 5, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }} keyboardType='numeric' value={discount.toString()} onChangeText={handleDiscount}
+                key={selectedTable?.key}
+                style={{
+                  width: 150,
+                  paddingVertical: 5,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  color: '#005943',
+                  textAlign: 'center',
+                  fontSize: 15
+                }}
+                keyboardType='numeric'
+                defaultValue={discount.toString()}
+                onChangeText={handleDiscount}
               />
             </View>
             <Text style={styles.text}>TOTAL</Text>
             <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={{ width: 150, paddingVertical: 5, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }}>
-                {totalWithDiscount ? priceFormatter.format(totalWithDiscount) : '$0.00'}
+                {selectedTable?.total ? priceFormatter.format(selectedTable?.total - discount) : '$0.00'}
               </Text>
             </View>
             <TouchableOpacity style={styles.buttons} onPress={print}>
               <Text style={{ color: '#fff', fontWeight: 'bold' }}>IMPRIMIR</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttons} onPress={handleFinishOrder} disabled={!selectedTable?.requested}>
-              {selectedTable?.requested
+            <TouchableOpacity style={styles.buttons} onPress={handleFinishOrder} disabled={!requested}>
+              {requested
                 ? <Text style={{ color: '#fff', fontWeight: 'bold' }}>CERRAR CUENTA</Text>
                 : <Text style={{ color: '#fff', fontWeight: 'bold' }}>ESPERE...</Text>}
             </TouchableOpacity>
