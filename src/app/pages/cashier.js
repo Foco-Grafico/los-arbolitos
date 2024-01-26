@@ -39,7 +39,8 @@ export default function Cashier () {
          MAZATLÁN, SINALOA CP. 82137<br>
           MESA ${selectedTable?.table?.name}<br>
           FOLIO: ${selectedTable?.id}<br>
-          ${new Date().toLocaleDateString()}
+          FECHA: ${new Date().toLocaleDateString()}<br>
+          HORA: ${selectedTable?.timestamp.split('T')[1]}<br>
           <span>-------------------------------</span>
         </p>
         <table style="width: 100%; border-collapse: collapse;">

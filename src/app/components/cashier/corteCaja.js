@@ -27,6 +27,7 @@ export default function CorteDeCaja () {
 
     const tables = orders?.data?.map((order) => new ReportTable({
       header: ['PRODUCTO', 'PRECIO'],
+
       items: order?.dishes?.map((dish) => ({
         name: dish?.name,
         price: dish?.total,

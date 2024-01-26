@@ -199,6 +199,7 @@ export default function ActualDish ({ setOrders, bar = false }) {
                 <Text
                   style={{
                     fontWeight: 'bold'
+
                   }}
                 >
                   CANTIDAD
@@ -226,14 +227,14 @@ export default function ActualDish ({ setOrders, bar = false }) {
                 </Text>
                 {dish.supplies_modified[item].map((supply) => (
                   <View key={v4()}>
-                    <Text>
+                    <Text style={{ fontSize: 24, fontWeight: 'bold' }}>
                       {supply.name} {supply.quantity}
                     </Text>
                   </View>
                 ))}
               </View>
               <Text style={{ color: '#005943', fontWeight: 'bold', fontSize: 15 }}>OBSERVACIONES</Text>
-              <Text>{(dish?.comments[index] !== 'null' && dish?.comments[index] !== 'undefined') && dish?.comments[index]}</Text>
+              <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{(dish?.comments[index] !== 'null' && dish?.comments[index] !== 'undefined') && dish?.comments[index]}</Text>
             </View>
           )}
         />

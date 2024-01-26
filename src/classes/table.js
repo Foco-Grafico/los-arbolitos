@@ -5,6 +5,7 @@ const priceFormatter = new Intl.NumberFormat('es-MX', {
 
 export default class ReportTable {
   header = ['X', 'CANTIDAD', 'TOTAL']
+  main = ['FOLIO', 'FECHA', 'MESERO']
 
   constructor ({ items, header, total }) {
     this.items = items
@@ -16,18 +17,19 @@ export default class ReportTable {
     return `
         <table class="w-full">
             <thead>
-                <tr>
-                    ${this.header[0] && this.header.map(x => `
-                        <th class="font-black text-xl px-1">
-                            <div style='background-color: #462f27;' >
-                                <span style='color:white'>${x}</span>
-                            </div>
-                        </th>
+                <tr style='justify-between flex flex-col'>
+                ${this.header[0] && this.header.map(x => `
+                    <th class="font-black text-xl px-1">
+                        <div style='background-color: #462f27;' >
+                            <span style='color:white'>${x}</span>
+                        </div>
+                    </th>
                     `).join('')}
                 </tr>
             </thead>
             <tbody>
                 ${this.items[0] && this.items.map(x => `
+                <tr>
                     <tr>
                         <td class="px-1">
                             <div class="px-6 bg-slate-200">
@@ -40,13 +42,14 @@ export default class ReportTable {
                                         </div>
                                         `
                                 }).join('')}
-                                    </td>
+                        </td>
                         <td class="px-1">
                                 <div class="px-6 bg-slate-200">
                                         ${priceFormatter.format(x?.price)}
                                 </div>
                         </td>
                     </tr>
+                </tr>
                 `).join('')}
                 <tr>
                     <td class="px-1">
