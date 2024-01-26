@@ -75,7 +75,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
                   marginBottom: 10
                 }}
               >
-                Hora de orden: <Text style={{ color: '#005943' }}>{dateFormatter.format(new Date(order?.timestamp))}</Text>
+                Hora de orden: <Text style={{ color: '#005943' }}>{dateFormatter.format(new Date(order?.timestamp ?? null))}</Text>
               </Text>
               {order?.pretty_list?.map(dish => {
                 if (dish == null) return null
