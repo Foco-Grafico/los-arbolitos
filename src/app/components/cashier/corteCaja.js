@@ -165,7 +165,7 @@ export default function CorteDeCaja () {
             <span style='color:white'>Total en tarjeta: ${priceFormatter.format(orders?.total_debit)}</span>
           </section>
           <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-            <span style='color:white'>Total: ${priceFormatter.format(orders?.total)}</span>
+            <span style='color:white'>Total general: ${priceFormatter.format(orders?.total)}</span>
           </section>
         </section>
         </main>
@@ -213,7 +213,7 @@ export default function CorteDeCaja () {
 
     const totalDebit = ['TOTAL EN TARJETA', priceFormatter.format(orders?.total_debit)]
     const totalCash = ['TOTAL EN EFECTIVO', priceFormatter.format(orders?.total_cash)]
-    const total = ['TOTAL', priceFormatter.format(orders?.total)]
+    const total = ['TOTAL GENERAL', priceFormatter.format(orders?.total)]
 
     matriz.forEach((row, index) => {
       const isHeader = headersIndex.includes(index)
