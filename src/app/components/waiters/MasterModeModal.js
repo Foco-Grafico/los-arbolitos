@@ -262,6 +262,15 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                   onPress={() => {
                     forceQuit()
 
+                    setStatus(1)
+                  }}
+                >
+                  Enviar a cocina
+                </Button>
+                <Button
+                  onPress={() => {
+                    forceQuit()
+
                     for (const dish of order?.dishes) {
                       if (dish.status.id === 3) continue
 
