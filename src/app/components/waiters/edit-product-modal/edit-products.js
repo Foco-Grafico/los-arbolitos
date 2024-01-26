@@ -66,7 +66,7 @@ export default function EditProducts ({ editProductController }) {
   const [isModified, setIsModified] = useState(false)
   const [quantityProducts, setQuantityProducts] = useState(1)
 
-  console.log(dishSelected, editProductController.data)
+  console.log(quantityProducts)
 
   const deleteProduct = (item) => {
     editProductController?.setData(prev => {
@@ -299,46 +299,61 @@ export default function EditProducts ({ editProductController }) {
         >
           <View
             style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#005943',
-              borderRadius: 10,
-              paddingHorizontal: 15,
-              paddingVertical: 4
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: 'bold',
-                color: '#fff'
-              }}
-            >
-              {dishSelected?.name}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
+              flexDirection: 'column',
               gap: 10
             }}
           >
-            <Text
+            <View
               style={{
-                fontSize: 17,
-                fontWeight: 'bold',
-                color: '#005943'
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#005943',
+                borderRadius: 10,
+                paddingHorizontal: 15,
+                paddingVertical: 4
               }}
-            >Cantidad:
-            </Text>
-            <Counter
-              onChange={(value) => {
-                setQuantityProducts(value)
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  color: '#fff'
+                }}
+              >
+                {dishSelected?.name}
+              </Text>
+
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 10,
+                borderWidth: 1,
+                borderRadius: 5,
+                padding: 5,
+                backgroundColor: '#462f27'
               }}
-            />
+            >
+              <Text
+                style={{
+                  fontSize: 17,
+                  fontWeight: 'bold',
+                  color: '#FFF'
+                }}
+              >Cantidad:
+              </Text>
+              <Counter
+                color='#fff'
+                block
+                onChange={(value) => {
+                  setQuantityProducts(value)
+                }}
+              />
+            </View>
           </View>
+
           <SearchBarSupply
             onAddSupplyClick={(supply) => {
               setSelectDish(prev => {
@@ -516,6 +531,7 @@ export default function EditProducts ({ editProductController }) {
 
               editProducts(editProductController?.data?.orderId)
 
+              setQuantityProducts(1)
               setSelectDish(null)
               editProductController?.setVisible?.(false)
             }}

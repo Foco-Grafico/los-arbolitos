@@ -3,11 +3,13 @@ import { Text, TouchableOpacity, View } from 'react-native'
 import SignoMenos from '../../../../../../assets/signodemenos'
 import SignoMas from '../../../../../../assets/signodemas'
 
-export const Counter = ({ defaultValue = 1, onChange = () => {}, block = false }) => {
+export const Counter = ({ defaultValue = 1, onChange = () => {}, block = false, color = '#005942' }) => {
   const [counter, setCounter] = useState(defaultValue)
 
   useEffect(() => {
     if (block && counter < 1) {
+      console.log('block')
+
       setCounter(() => {
         onChange(1)
         return 1
@@ -25,9 +27,9 @@ export const Counter = ({ defaultValue = 1, onChange = () => {}, block = false }
           })
         }}
       >
-        <SignoMenos style={{ width: 24, height: 24 }} />
+        <SignoMenos fill={color} style={{ width: 24, height: 24 }} />
       </TouchableOpacity>
-      <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>
+      <Text style={{ color: color === '#005942' ? '#000' : color, fontSize: 15, fontWeight: 'bold' }}>
         {counter}
       </Text>
       <TouchableOpacity
@@ -38,7 +40,7 @@ export const Counter = ({ defaultValue = 1, onChange = () => {}, block = false }
           })
         }}
       >
-        <SignoMas style={{ width: 24, height: 24 }} />
+        <SignoMas fill={color} style={{ width: 24, height: 24 }} />
       </TouchableOpacity>
     </View>
   )

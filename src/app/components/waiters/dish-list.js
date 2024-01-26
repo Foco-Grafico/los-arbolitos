@@ -105,6 +105,7 @@ export function DishList ({ dishes, editProductController, resetSearch }) {
 
           const product = {
             ...dishesInOrder[newIndex],
+            dish_id: item?.id,
             id
           }
 
