@@ -7,7 +7,7 @@ export default function HeaderAdmin ({ children }) {
   return (
     <View style={styles.header}>
       <Text style={styles.text}>{children}</Text>
-      {selectedBox.name !== '' ? <Text style={styles.text}>({selectedBox?.name})</Text> : ''}
+      {selectedBox.name !== '' && selectedBox.name === undefined ? '' : <Text style={styles.text}>({selectedBox?.name})</Text>}
     </View>
   )
 }

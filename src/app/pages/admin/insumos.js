@@ -2,8 +2,6 @@ import { FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } 
 import HeaderAdmin from '../../components/admin/header'
 import Footer from '../../components/admin/footer'
 import Editar from '../../../../assets/editar'
-import { productCatStore } from '../../../../stores/waiter'
-import useWaiterGetProductsInCategory from '../../hooks/getProductsinCategory'
 import SignoMas from '../../../../assets/signodemas'
 import { useState } from 'react'
 import { supplyCatStore } from '../../../../stores/admin'
@@ -31,6 +29,7 @@ export default function InsumosList () {
     q: selectedCategory.name
   })
 
+  console.log(supplies)
   return (
     <View style={styles.main}>
       <HeaderAdmin>

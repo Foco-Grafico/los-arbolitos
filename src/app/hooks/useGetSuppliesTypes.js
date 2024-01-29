@@ -11,17 +11,20 @@ export default function useGetSuppliesTypes () {
           return res.json()
         }
         if (res.status === 404) {
-          return []
+          return {
+            data: []
+          }
         }
         throw new Error('Error al obtener los tipos de insumos')
       })
-      .then(res => {
-        setTypes(res)
-      })
+      .then(res =>
+        setTypes(res.data)
+      )
       .catch(err => {
         console.error(err)
       })
   }, [])
+
   return {
     types, setTypes
   }
