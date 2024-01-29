@@ -22,6 +22,7 @@ import Empleados from './src/app/pages/admin/empleados'
 import * as Notifications from 'expo-notifications'
 import { LowConnectionModal } from './src/app/components/LowConnectionModal'
 import { useRegisterNotifications } from './src/app/hooks/register-notifications'
+import { Calendar } from './src/app/components/calendar'
 
 LogBox.ignoreLogs(['new NativeEventEmitter', 'Aborted'])
 
@@ -103,13 +104,20 @@ function App () {
   )
 }
 
-// function AppTest () {
-//   return (
-//     <View>
-//       <StatusBar hidden />
-//       <Calendar isOpen />
-//     </View>
-//   )
-// }
+function AppTest () {
+  return (
+    <View>
+      <StatusBar hidden />
+      <Calendar
+        isOpen
+        onChangeDate={
+          (date) => {
+            console.log(date)
+          }
+        }
+      />
+    </View>
+  )
+}
 
 export default App
