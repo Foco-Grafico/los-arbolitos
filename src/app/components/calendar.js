@@ -82,8 +82,9 @@ const getLastChunk = (array = [], chunkSize) => {
   return [...elements].reverse()
 }
 
-export const Calendar = ({ isOpen }) => {
-  const [date, setDate] = useState(new Date())
+export const Calendar = ({ isOpen, defaultDate = new Date(), onChangeDate = (date) => {} }) => {
+  const [date, setDate] = useState(defaultDate)
+  const [selectedDate, setSelectedDate] = useState(defaultDate)
 
   const nextMonth = () => {
     const newDate = new Date(date)
@@ -117,8 +118,7 @@ export const Calendar = ({ isOpen }) => {
             backgroundColor: 'white',
             borderRadius: 10,
             padding: 10,
-            width: '80%',
-            height: '35%'
+            height: 300
           }}
         >
           <View
@@ -145,28 +145,101 @@ export const Calendar = ({ isOpen }) => {
             </TouchableOpacity>
           </View>
 
-          <FlatList
+          <View
             style={{
-              maxHeight: 300,
-              minWidth: 300
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingBottom: 8,
+              marginBottom: 5,
+              borderBottomWidth: 1
             }}
+          >
+            <Text
+              style={{
+                flex: 1,
+                textAlign: 'center',
+                color: '#367c6a'
+              }}
+            >
+              DOM
+            </Text>
+            <Text
+              style={{
+                flex: 1,
+                textAlign: 'center',
+                color: '#367c6a'
+              }}
+            >LUN
+            </Text>
+            <Text
+              style={{
+                flex: 1,
+                textAlign: 'center',
+                color: '#367c6a'
+              }}
+            >MAR
+            </Text>
+            <Text
+              style={{
+                flex: 1,
+                textAlign: 'center',
+                color: '#367c6a'
+              }}
+            >MIE
+            </Text>
+            <Text
+              style={{
+                flex: 1,
+                textAlign: 'center',
+                color: '#367c6a'
+              }}
+            >JUE
+            </Text>
+            <Text
+              style={{
+                flex: 1,
+                textAlign: 'center',
+                color: '#367c6a'
+              }}
+            >VIE
+            </Text>
+            <Text
+              style={{
+                flex: 1,
+                textAlign: 'center',
+                color: '#367c6a'
+              }}
+            >SAB
+            </Text>
+          </View>
+
+          <FlatList
             numColumns={7}
-            contentContainerStyle={{
-              gap: 20
-            }}
             data={getArrayDays(date)}
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
                 style={{
-                  flex: item.last ? 0 : 1,
+                  // flex: item.last ? 0 : 1,
+                  width: 30,
+                  height: 30,
+                  margin: 5,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginHorizontal: item.last ? 25 : 0
+                  backgroundColor: (selectedDate.getDate() === item.day && !item.transparent && selectedDate.getMonth() === date.getMonth() && selectedDate.getFullYear() === date.getFullYear()) ? '#367c6a' : 'transparent',
+                  borderRadius: 100
+                  // marginHorizontal: item.last ? 25 : 0
+                }}
+                onPress={() => {
+                  if (item.transparent) return
+
+                  setSelectedDate(new Date(date.getFullYear(), date.getMonth(), item.day))
+                  onChangeDate(new Date(date.getFullYear(), date.getMonth(), item.day))
                 }}
               >
                 <Text
                   style={{
-                    opacity: item.transparent ? 0.2 : 1
+                    opacity: item.transparent ? 0.2 : 1,
+                    color: (selectedDate.getDate() === item.day && !item.transparent && selectedDate.getMonth() === date.getMonth() && selectedDate.getFullYear() === date.getFullYear()) ? 'white' : '#367c6a'
                   }}
                 >
                   {item.day}
