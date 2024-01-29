@@ -7,7 +7,7 @@ import addDishToOrder from '../../../lib/api-call/order/add-dish-to-order'
 import { modalStore, tableStore } from '../../../../stores/waiter'
 import { Image } from 'expo-image'
 import { v4 } from '../../../lib/uuid'
-import { togglePriority } from '../../../lib/api-call/order/toggle'
+// import { togglePriority } from '../../../lib/api-call/order/toggle'
 
 export function DishList ({ dishes, editProductController, resetSearch }) {
   const order = tableStore(state => state.order)
@@ -74,16 +74,16 @@ export function DishList ({ dishes, editProductController, resetSearch }) {
     })
 
     if (status.id !== 1) {
-      await togglePriority(order.id, true)
+      // await togglePriority(order.id, true)
 
       setStatus(1)
-      tableStore.setState(state => ({
-        order: {
-          ...state.order,
-          priority: true
-        },
-        alwaysPriority: true
-      }))
+      // tableStore.setState(state => ({
+      //   order: {
+      //     ...state.order,
+      //     priority: true
+      //   },
+      //   alwaysPriority: true
+      // }))
     }
 
     return new Promise((resolve) => {
