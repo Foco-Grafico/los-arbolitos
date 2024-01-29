@@ -1,13 +1,16 @@
 import { Text, TouchableOpacity, StyleSheet, FlatList, View, ToastAndroid } from 'react-native'
 import { tableStore } from '../../../../stores/waiter'
-
 import SignoMenos from '../../../../assets/signodemenos'
 import { removeDishFromOrder } from '../../func/remove-dish-from-order'
 import { Salero } from '../../../../assets/enpreparacion'
 import Accept from '../../../../assets/aceptar'
+import { sendTokitchen } from '../../../lib/api-call/order/move-order'
+import { accountStore } from '../../../../stores/account'
 
 export function DishListInOrder ({ setVisible, setData }) {
   const order = tableStore(state => state.order)
+  const setStatus = tableStore(state => state.setStatus)
+  const account = accountStore(state => state.account)
 
   return (
     <FlatList
@@ -128,6 +131,11 @@ export function DishListInOrder ({ setVisible, setData }) {
                   .then(res => {
                     if (res.ok) {
                       ToastAndroid.show('Se ha eliminado el producto de la orden', ToastAndroid.SHORT)
+                      setStatus(1)
+                      sendTokitchen(order?.id, account?.id)
+                        .then(() => {
+                          setStatus(2)
+                        })
                       return
                     }
                     ifError()
