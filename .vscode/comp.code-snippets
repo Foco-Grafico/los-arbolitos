@@ -1,0 +1,17 @@
+{
+  "comp": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "comp",
+    "body": [
+      "import { View } from 'react-native'",
+      "",
+      "export const ${1:Component} = () => {",
+      "    return (",
+      "        <View>",
+      "",
+      "        </View>",
+      "    )",
+      "}"
+    ]
+  }
+}
