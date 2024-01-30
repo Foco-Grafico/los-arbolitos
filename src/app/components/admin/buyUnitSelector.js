@@ -1,11 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
 import useGetMeasurementUnit from '../../hooks/useGetMeasurementUnit'
 
-export default function BuyUnitSelector () {
+export default function BuyUnitSelector ({ onChange }) {
   const [value, setValue] = useState(null)
   const { units } = useGetMeasurementUnit()
+
+  useEffect(() => {
+    if (units.length > 0) {
+      setValue(units[0].id)
+      onChange(units[0])
+    }
+  }, [units])
 
   return (
     <View>
@@ -24,6 +31,7 @@ export default function BuyUnitSelector () {
         value={value}
         onChange={item => {
           setValue(item.id)
+          onChange(item)
         }}
       />
     </View>

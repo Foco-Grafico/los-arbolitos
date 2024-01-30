@@ -11,6 +11,7 @@ import SellUnitSelector from '../../components/admin/sellUnitSelector'
 import { routerStore } from '../../../../stores/router'
 import { supplyCatStore } from '../../../../stores/admin'
 import createSupply from '../../func/create-supply'
+import { Calendar } from '../../components/calendar'
 
 export default function NuevoInsumo () {
   const nav = routerStore(state => state.nav)
@@ -59,7 +60,7 @@ export default function NuevoInsumo () {
           UNIDAD DE COMPRA
         </Text>
         <View style={{ flexDirection: 'row', height: 50 }}>
-          <BuyUnitSelector />
+          <BuyUnitSelector onChange={setBuyValue} />
           <TextInput style={{ borderWidth: 1, width: '30%', borderBottomRightRadius: 10, borderTopRightRadius: 10, height: 50, paddingHorizontal: 10 }} placeholder='$' placeholderTextColor='#000' onChangeText={setBuyUnit} keyboardType='numeric' />
         </View>
 
@@ -67,7 +68,7 @@ export default function NuevoInsumo () {
           UNIDAD DE VENTA
         </Text>
         <View style={{ flexDirection: 'row', height: 50 }}>
-          <SellUnitSelector />
+          <SellUnitSelector onChange={setSellValue} />
           <TextInput style={{ borderWidth: 1, width: '30%', borderBottomRightRadius: 10, borderTopRightRadius: 10, height: 50, paddingHorizontal: 10 }} placeholder='$' placeholderTextColor='#000' onChangeText={setSellUnit} keyboardType='numeric' />
         </View>
 
