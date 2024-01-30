@@ -1,11 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
-import useGetUserRoles from '../../hooks/useGetUserRoles'
+import useGetMeasurementUnit from '../../hooks/useGetMeasurementUnit'
 
-export default function BuyUnitSelector () {
+export default function BuyUnitSelector ({ onChange }) {
   const [value, setValue] = useState(null)
-  const { roles } = useGetUserRoles()
+  const { units } = useGetMeasurementUnit()
+
+  useEffect(() => {
+    if (units.length > 0) {
+      setValue(units[0].id)
+      onChange(units[0])
+    }
+  }, [units])
 
   return (
     <View>
@@ -15,7 +22,7 @@ export default function BuyUnitSelector () {
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
-        data={roles}
+        data={units}
         mode='modal'
         maxHeight={300}
         labelField='name'
@@ -24,6 +31,7 @@ export default function BuyUnitSelector () {
         value={value}
         onChange={item => {
           setValue(item.id)
+          onChange(item)
         }}
       />
     </View>

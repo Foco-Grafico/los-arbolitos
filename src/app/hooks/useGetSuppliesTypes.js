@@ -6,21 +6,17 @@ export default function useGetSuppliesTypes () {
 
   useEffect(() => {
     getSuppliesTypes()
-      .then(res => {
+      .then((res) => {
         if (res.ok) {
           return res.json()
         }
         if (res.status === 404) {
-          return {
-            data: []
-          }
+          return []
         }
         throw new Error('Error al obtener los tipos de insumos')
       })
-      .then(res =>
-        setTypes(res.data)
-      )
-      .catch(err => {
+      .then(res => setTypes(res.data))
+      .catch((err) => {
         console.error(err)
       })
   }, [])

@@ -95,7 +95,7 @@ function App () {
       <Route name='menuAlmacen' orientation={ORIENTATIONS.PORTRAIT}>
         <AlmacenInv />
       </Route>
-      <Route name='insumos' orientation={ORIENTATIONS.PORTRAIT}>
+      <Route name='categoriaInsumos' orientation={ORIENTATIONS.PORTRAIT}>
         <CategoriaInsumos />
       </Route>
       <Route name='insumosList' orientation={ORIENTATIONS.PORTRAIT}>
