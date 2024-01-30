@@ -49,6 +49,9 @@ function App () {
       <Route name='login'>
         <Login />
       </Route>
+      <Route name={routes[6]}>
+        <Waiter leader />
+      </Route>
       <Route name={routes[2]}>
         <Waiter />
       </Route>
