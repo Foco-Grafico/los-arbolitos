@@ -82,7 +82,7 @@ export default function useKitchenGetOrders (bar = false) {
 
         const isExistOrder = copyOrders.some(o => o.id === newOrder.id)
 
-        if (newOrder.pending_list.length === 0 && isExistOrder) {
+        if (newOrder.dishes.length === 0 && isExistOrder) {
           return copyOrders.filter(o => o.id !== newOrder.id)
         }
 

@@ -11,6 +11,7 @@ export function DishListInOrder ({ setVisible, setData }) {
   const order = tableStore(state => state.order)
   const setStatus = tableStore(state => state.setStatus)
   const account = accountStore(state => state.account)
+  const status = tableStore(state => state.status)
 
   return (
     <FlatList
@@ -131,11 +132,14 @@ export function DishListInOrder ({ setVisible, setData }) {
                   .then(res => {
                     if (res.ok) {
                       ToastAndroid.show('Se ha eliminado el producto de la orden', ToastAndroid.SHORT)
-                      setStatus(1)
-                      sendTokitchen(order?.id, account?.id)
-                        .then(() => {
-                          setStatus(2)
-                        })
+
+                      if (newPrettyDishes.length === 0) {
+                        setStatus(1)
+                      }
+
+                      if (status.id === 2) {
+                        sendTokitchen(order?.id, account?.id)
+                      }
                       return
                     }
                     ifError()
