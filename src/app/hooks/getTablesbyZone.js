@@ -4,18 +4,19 @@ import GetTablesbyZone from '../func/get-tablesby-zone'
 // import { orderStore } from '../../../stores/waiter'
 import { socket } from '../../services/socket'
 import { tableStore } from '../../../stores/waiter'
+import { getAllTables } from '../../lib/api-call/waiter'
 
-export default function useWaiterGetTablesinZone () {
+export default function useWaiterGetTablesinZone (leader = false) {
   const account = accountStore(state => state.account)
   const [tables, setTables] = useState([])
   const setProductsStatus = tableStore(state => state.setProductsStatus)
   const getOrderId = tableStore(state => state.getOrderId)
   const setStatus = tableStore(state => state.setStatus)
-  // const tableSelected = orderStore((state) => state.selectedPostionTable)
-  // const setTable = orderStore((state) => state.setTable)
 
   useEffect(() => {
-    GetTablesbyZone(account.id)
+    const func = leader ? getAllTables : GetTablesbyZone
+
+    func(account.id)
       .then((res) => {
         if (res.ok) {
           return res.json()
