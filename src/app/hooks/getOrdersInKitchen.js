@@ -57,9 +57,9 @@ export default function useKitchenGetOrders (bar = false) {
             : order.pending_list.filter(dish => dish.type !== 1)
       }
 
-      if (newOrder.pending_list.length === 0) {
-        return
-      }
+      // if (newOrder.pending_list.length === 0) {
+      //   return
+      // }
 
       // const playSound = () => {
       //   if (bar === true && newOrder.pending_list[0].type === 1) {
@@ -81,6 +81,10 @@ export default function useKitchenGetOrders (bar = false) {
         const copyOrders = [...prev]
 
         const isExistOrder = copyOrders.some(o => o.id === newOrder.id)
+
+        if (newOrder.pending_list.length === 0 && isExistOrder) {
+          return copyOrders.filter(o => o.id !== newOrder.id)
+        }
 
         if (isExistOrder) {
           console.log('isExistOrder', isExistOrder)
