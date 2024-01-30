@@ -74,8 +74,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
       <FlatList
         data={tables}
         contentContainerStyle={{
-          gap: 10,
-          height: '100%'
+          gap: 10
         }}
         renderItem={({ item: table, index: i }) => (
           <TouchableOpacity

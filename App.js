@@ -23,7 +23,7 @@ import Empleados from './src/app/pages/admin/empleados'
 import * as Notifications from 'expo-notifications'
 import { LowConnectionModal } from './src/app/components/LowConnectionModal'
 import { useRegisterNotifications } from './src/app/hooks/register-notifications'
-import { Calendar } from './src/app/components/calendar'
+// import { Calendar } from './src/app/components/calendar'
 
 LogBox.ignoreLogs(['new NativeEventEmitter', 'Aborted'])
 
@@ -48,6 +48,9 @@ function App () {
       <LowConnectionModal />
       <Route name='login'>
         <Login />
+      </Route>
+      <Route name={routes[6]}>
+        <Waiter leader />
       </Route>
       <Route name={routes[2]}>
         <Waiter />
@@ -108,20 +111,20 @@ function App () {
   )
 }
 
-function AppTest () {
-  return (
-    <View>
-      <StatusBar hidden />
-      <Calendar
-        isOpen
-        onChangeDate={
-          (date) => {
-            console.log(date)
-          }
-        }
-      />
-    </View>
-  )
-}
+// function AppTest () {
+//   return (
+//     <View>
+//       <StatusBar hidden />
+//       <Calendar
+//         isOpen
+//         onChangeDate={
+//           (date) => {
+//             console.log(date)
+//           }
+//         }
+//       />
+//     </View>
+//   )
+// }
 
 export default App

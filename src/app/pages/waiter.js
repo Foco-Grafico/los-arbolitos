@@ -13,9 +13,9 @@ import useWaiterGetTablesinZone from '../hooks/getTablesbyZone'
 // import DishList from '../components/waiters/dish-list'
 // import { sendToCashier, sendTokitchen } from '../../lib/api-call/order/move-order'
 
-export function Waiter () {
+export function Waiter ({ leader = false }) {
   const setTable = tableStore(state => state.setTable)
-  const { tables, setTables } = useWaiterGetTablesinZone()
+  const { tables, setTables } = useWaiterGetTablesinZone(leader)
   const table = tableStore(state => state.table)
 
   const [visibleSendCommand, setVisibleSendCommand] = useState(false)
