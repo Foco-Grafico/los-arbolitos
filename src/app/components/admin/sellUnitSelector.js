@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
-import useGetSuppliesTypes from '../../hooks/useGetSuppliesTypes'
-import { supplyCatStore } from '../../../../stores/admin'
+import useGetMeasurementUnit from '../../hooks/useGetMeasurementUnit'
 
-export default function SupplyCategorySelector (category) {
+export default function SellUnitSelector () {
   const [value, setValue] = useState(null)
-  const { types } = useGetSuppliesTypes()
-  const selectedCategory = supplyCatStore(state => state.selectedSupplyCategory)
+  const { units } = useGetMeasurementUnit()
 
   return (
     <View>
@@ -17,12 +15,12 @@ export default function SupplyCategorySelector (category) {
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
-        data={types}
+        data={units}
         mode='modal'
         maxHeight={300}
         labelField='name'
         valueField='id'
-        placeholder={selectedCategory?.name}
+        placeholder='Selecciona un rol'
         value={value}
         onChange={item => {
           setValue(item.id)
@@ -34,15 +32,15 @@ export default function SupplyCategorySelector (category) {
 const styles = StyleSheet.create({
   dropdown: {
     height: 50,
-    width: '80%',
+    width: 280,
     borderBottomColor: 'gray',
     borderBottomWidth: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     paddingLeft: 10,
-    borderRadius: 10
-
+    borderBottomLeftRadius: 10,
+    borderTopLeftRadius: 10
   },
   icon: {
     marginRight: 5

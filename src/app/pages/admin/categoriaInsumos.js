@@ -86,7 +86,7 @@ export default function CategoriaInsumos () {
       </HeaderAdmin>
       <FlatList
         numColumns={2}
-        data={types.data}
+        data={types}
         keyExtractor={(item) => item?.id.toString()}
         contentContainerStyle={{ alignItems: 'center', gap: 20 }}
         renderItem={({ item, index }) => (
@@ -130,7 +130,7 @@ export default function CategoriaInsumos () {
       />
       <TouchableOpacity
         style={{ alignItems: 'flex-end', paddingHorizontal: 20 }}
-        onPress={() => { nav('nuevoInsumo') }}
+        onPress={() => { setModalCreate(true) }}
       >
         <SignoMas style={{ width: 40, height: 40 }} />
       </TouchableOpacity>

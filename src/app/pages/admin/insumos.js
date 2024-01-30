@@ -6,6 +6,7 @@ import SignoMas from '../../../../assets/signodemas'
 import { useState } from 'react'
 import { supplyCatStore } from '../../../../stores/admin'
 import useGetSupplies from '../../hooks/getSupplies'
+import { routerStore } from '../../../../stores/router'
 
 const formatName = (name) => {
   const canFormat = name.toLowerCase().startsWith('de') || name.toLowerCase().startsWith('del') || name.toLowerCase().startsWith('la') || name.toLowerCase().startsWith('el') || name.toLowerCase().startsWith('los') || name.toLowerCase().startsWith('las') || name.toLowerCase().startsWith('para')
@@ -18,18 +19,19 @@ const formatName = (name) => {
 }
 
 export default function InsumosList () {
+  const nav = routerStore(state => state.nav)
   const selectedCategory = supplyCatStore(state => state.selectedSupplyCategory)
   const [updateModal, setUpdateModal] = useState(false)
   const [updateProductName, setUpdateProductName] = useState('')
-  const [createModal, setCreateModal] = useState(false)
-  const [newProductName, setNewProductName] = useState('')
+  // const [newProductName, setNewProductName] = useState('')
 
   const { supplies } = useGetSupplies({
     all: true,
-    q: selectedCategory.name
+    q: ''
   })
 
-  console.log(supplies)
+  console.log(supplies[0]?.name)
+
   return (
     <View style={styles.main}>
       <HeaderAdmin>
@@ -37,12 +39,12 @@ export default function InsumosList () {
       </HeaderAdmin>
       <FlatList
         numColumns={2}
-        data={supplies}
-        keyExtractor={(supply) => supply.id.toString()}
+        data={supplies?.filter(supply => supply?.type?.id === selectedCategory?.id)}
+        keyExtractor={(supply) => supply?.id?.toString()}
         contentContainerStyle={{ alignItems: 'center', gap: 20 }}
-        renderItem={({ supply, index }) => (
+        renderItem={({ item: supply, index }) => (
           <View
-            key={supply.key} style={{
+            key={supply?.key} style={{
               borderWidth: 1,
               borderRadius: 10,
               justifyContent: 'center',
@@ -50,8 +52,9 @@ export default function InsumosList () {
               margin: 10
             }}
           >
+            {/* { color: '#005943', fontWeight: 'bold' } */}
             <TouchableOpacity style={styles.container}>
-              <Text style={{ color: '#000', fontWeight: 'bold' }}>{supply?.name}</Text>
+              <Text style={styles.text}>{supply?.name}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ position: 'absolute', right: 7, top: 50 }}
@@ -69,112 +72,15 @@ export default function InsumosList () {
           </View>
         )}
       />
-      <View>
+      <View style={{ }}>
         <TouchableOpacity
-          style={{ alignItems: 'flex-end', paddingHorizontal: 20, padding: 20 }}
-          onPress={() => { setCreateModal(true) }}
+          style={{ alignSelf: 'flex-end', width: 40, height: 40, margin: 20 }}
+          onPress={() => nav('nuevoInsumo')}
         >
+          {/* nav('nuevoInsumo') */}
           <SignoMas style={{ width: 40, height: 40 }} />
         </TouchableOpacity>
       </View>
-      <Modal
-        statusBarTranslucent
-        transparent
-        animationType='fade'
-        visible={createModal}
-      >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            paddingHorizontal: 20
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: 10,
-              padding: 20,
-              elevation: 10,
-              gap: 20,
-              alignItems: 'center'
-            }}
-          >
-            <Text
-              style={{
-                textAlign: 'center',
-                fontSize: 20
-              }}
-            >
-              ¿Deseas crear el producto?
-            </Text>
-            <TextInput style={{ width: 250, borderWidth: 1, paddingHorizontal: 10 }} autoFocus onChangeText={setNewProductName} />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                gap: 20
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  setCreateModal(false)
-                  // Aqui se crea el producto
-                }}
-                style={{
-                  backgroundColor: '#005943',
-                  borderRadius: 10,
-                  fontSize: 20,
-                  elevation: 10,
-                  textAlign: 'center',
-                  paddingVertical: 5,
-                  paddingHorizontal: 10,
-                  flex: 1
-                }}
-              >
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: 14,
-                    fontWeight: 'bold',
-                    textAlign: 'center'
-                  }}
-                >
-                  Aceptar
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setCreateModal(false)
-                }}
-                style={{
-                  backgroundColor: 'red',
-                  borderRadius: 10,
-                  fontSize: 20,
-                  elevation: 10,
-                  textAlign: 'center',
-                  paddingVertical: 5,
-                  paddingHorizontal: 10,
-                  flex: 1
-                }}
-              >
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: 14,
-                    fontWeight: 'bold',
-                    textAlign: 'center'
-                  }}
-                >
-                  Cancelar
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
       <Modal
         statusBarTranslucent
         transparent
@@ -290,5 +196,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row'
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    width: '70%',
+    textAlign: 'center'
   }
 })

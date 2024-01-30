@@ -21,5 +21,6 @@ export const APIENDPOINTS = {
   finishOrder: `${API_URL}/cashier/paid-order`,
   getReconciliation: `${API_URL}/reports/reconciliation`,
   getBoxList: `${API_URL}/boxes`,
-  getOrdersHistory: `${API_URL}/reports/history`
+  getOrdersHistory: `${API_URL}/reports/history`,
+  getMeasurementUnit: `${API_URL}/supplies/measurement_unit`
 }

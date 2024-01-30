@@ -17,20 +17,18 @@ export default function useGetSupplies ({ q, all = false }) {
         }
 
         if (res.status === 404) {
-          return { data: [] }
+          return []
         }
 
         throw new Error('Error al obtener los productos')
       })
-      .then(res => {
-        setSupplies(res.data)
-      })
-      .catch(err => {
+      .then(res => setSupplies(res.data))
+      .catch((err) => {
         console.error(err)
       })
   }, [q])
 
   return {
-    supplies
+    supplies, setSupplies
   }
 }

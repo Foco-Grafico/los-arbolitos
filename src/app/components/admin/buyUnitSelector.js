@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
-import useGetUserRoles from '../../hooks/useGetUserRoles'
+import useGetMeasurementUnit from '../../hooks/useGetMeasurementUnit'
 
 export default function BuyUnitSelector () {
   const [value, setValue] = useState(null)
-  const { roles } = useGetUserRoles()
+  const { units } = useGetMeasurementUnit()
 
   return (
     <View>
@@ -15,7 +15,7 @@ export default function BuyUnitSelector () {
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
-        data={roles}
+        data={units}
         mode='modal'
         maxHeight={300}
         labelField='name'

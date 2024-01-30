@@ -29,7 +29,7 @@ export default function Admin () {
     {
       id: 5,
       name: 'INSUMOS',
-      route: 'insumos'
+      route: 'categoriaInsumos'
     },
     {
       id: 6,
