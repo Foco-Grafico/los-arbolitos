@@ -14,6 +14,7 @@ import AlmacenInv from './src/app/pages/admin/menuAlmacen'
 import CategoriaInsumos from './src/app/pages/admin/categoriaInsumos'
 import InsumosList from './src/app/pages/admin/insumos'
 import NuevoInsumo from './src/app/pages/admin/nuevoInsumo'
+import NuevoProducto from './src/app/pages/admin/nuevoProducto'
 import Zonas from './src/app/pages/admin/zonas'
 import { LogBox, View } from 'react-native'
 import { Waiter } from './src/app/pages/waiter'
@@ -105,6 +106,9 @@ function App () {
       </Route>
       <Route name='zonas' orientation={ORIENTATIONS.PORTRAIT}>
         <Zonas />
+      </Route>
+      <Route name='nuevoProducto' orientation={ORIENTATIONS.PORTRAIT}>
+        <NuevoProducto />
       </Route>
 
     </View>

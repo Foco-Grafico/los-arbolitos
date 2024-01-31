@@ -11,7 +11,6 @@ import SellUnitSelector from '../../components/admin/sellUnitSelector'
 import { routerStore } from '../../../../stores/router'
 import { supplyCatStore } from '../../../../stores/admin'
 import createSupply from '../../func/create-supply'
-import { Calendar } from '../../components/calendar'
 
 export default function NuevoInsumo () {
   const nav = routerStore(state => state.nav)
@@ -24,20 +23,24 @@ export default function NuevoInsumo () {
   const [buyValue, setBuyValue] = useState()
   const [sellValue, setSellValue] = useState()
   const [minQuantity, setMinQuantity] = useState()
-  const [maxQuantity, setMaxQuantity] = useState()
+  const [actualQuantity, setActualQuantity] = useState()
 
-  console.log(name, category.id, buyUnit, sellUnit, sellXBuy, buyValue, sellValue, minQuantity, maxQuantity)
+  // console.log(name, category.id, buyUnit, sellUnit, sellXBuy, buyValue.id, sellValue.id, minQuantity, actualQuantity)
+
   const handleCreateSupply = () => {
+    createSupply(1, minQuantity, actualQuantity,
+      name,
+      sellValue?.id,
+      buyValue?.id,
+      sellUnit,
+      buyUnit,
+      category?.id,
+      sellXBuy,
+      minQuantity,
+      actualQuantity
+    )
+    console.log('Supply created')
   }
-  // name: '',
-  //     sell_unit_measurement: 0,
-  //     buy_unit_measurement: 0,
-  //     sell_cost: 0,
-  //     buy_cost: 0,
-  //     type: 0,
-  //     sell_x_buy_equivalent: 0,
-  //     min_quantity: 0,
-  //     max_quantity: 0
 
   return (
     <View style={styles.main}>
@@ -82,7 +85,7 @@ export default function NuevoInsumo () {
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <TextInput style={{ borderWidth: 1, width: '40%', height: 40, paddingHorizontal: 10, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }} placeholder='MÍNIMO' placeholderTextColor='#000' onChangeText={setMinQuantity} keyboardType='numeric' />
-          <TextInput style={{ borderWidth: 1, width: '40%', height: 40, paddingHorizontal: 10, borderTopRightRadius: 10, borderBottomRightRadius: 10 }} placeholder='ACTUAL' placeholderTextColor='#000' onChangeText={setMaxQuantity} keyboardType='numeric' />
+          <TextInput style={{ borderWidth: 1, width: '40%', height: 40, paddingHorizontal: 10, borderTopRightRadius: 10, borderBottomRightRadius: 10 }} placeholder='ACTUAL' placeholderTextColor='#000' onChangeText={setActualQuantity} keyboardType='numeric' />
         </View>
 
         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', alignSelf: 'flex-end', paddingRight: 60, height: 40 }}>

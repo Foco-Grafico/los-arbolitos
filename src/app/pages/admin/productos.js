@@ -6,6 +6,7 @@ import { productCatStore } from '../../../../stores/waiter'
 import useWaiterGetProductsInCategory from '../../hooks/getProductsinCategory'
 import SignoMas from '../../../../assets/signodemas'
 import { useState } from 'react'
+import { routerStore } from '../../../../stores/router'
 
 const formatName = (name) => {
   const canFormat = name.toLowerCase().startsWith('de') || name.toLowerCase().startsWith('del') || name.toLowerCase().startsWith('la') || name.toLowerCase().startsWith('el') || name.toLowerCase().startsWith('los') || name.toLowerCase().startsWith('las') || name.toLowerCase().startsWith('para')
@@ -22,8 +23,7 @@ export default function ProductosList () {
   const { dishes } = useWaiterGetProductsInCategory(selectedCategory?.id)
   const [updateModal, setUpdateModal] = useState(false)
   const [updateProductName, setUpdateProductName] = useState('')
-  const [createModal, setCreateModal] = useState(false)
-  const [newProductName, setNewProductName] = useState('')
+  const nav = routerStore(state => state.nav)
 
   return (
     <View style={styles.main}>
@@ -67,109 +67,11 @@ export default function ProductosList () {
       <View>
         <TouchableOpacity
           style={{ alignItems: 'flex-end', paddingHorizontal: 20, padding: 20 }}
-          onPress={() => { setCreateModal(true) }}
+          onPress={() => { nav('nuevoProducto') }}
         >
           <SignoMas style={{ width: 40, height: 40 }} />
         </TouchableOpacity>
       </View>
-      <Modal
-        statusBarTranslucent
-        transparent
-        animationType='fade'
-        visible={createModal}
-      >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            paddingHorizontal: 20
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: 10,
-              padding: 20,
-              elevation: 10,
-              gap: 20,
-              alignItems: 'center'
-            }}
-          >
-            <Text
-              style={{
-                textAlign: 'center',
-                fontSize: 20
-              }}
-            >
-              ¿Deseas crear el producto?
-            </Text>
-            <TextInput style={{ width: 250, borderWidth: 1, paddingHorizontal: 10 }} autoFocus onChangeText={setNewProductName} />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                gap: 20
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  setCreateModal(false)
-                  // Aqui se crea el producto
-                }}
-                style={{
-                  backgroundColor: '#005943',
-                  borderRadius: 10,
-                  fontSize: 20,
-                  elevation: 10,
-                  textAlign: 'center',
-                  paddingVertical: 5,
-                  paddingHorizontal: 10,
-                  flex: 1
-                }}
-              >
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: 14,
-                    fontWeight: 'bold',
-                    textAlign: 'center'
-                  }}
-                >
-                  Aceptar
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setCreateModal(false)
-                }}
-                style={{
-                  backgroundColor: 'red',
-                  borderRadius: 10,
-                  fontSize: 20,
-                  elevation: 10,
-                  textAlign: 'center',
-                  paddingVertical: 5,
-                  paddingHorizontal: 10,
-                  flex: 1
-                }}
-              >
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: 14,
-                    fontWeight: 'bold',
-                    textAlign: 'center'
-                  }}
-                >
-                  Cancelar
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
       <Modal
         statusBarTranslucent
         transparent
