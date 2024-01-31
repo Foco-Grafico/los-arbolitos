@@ -1,11 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
 import useGetUserRoles from '../../hooks/useGetUserRoles'
 
-export default function RoleSelector () {
+export default function RoleSelector ({ onChange }) {
   const [value, setValue] = useState(null)
   const { roles } = useGetUserRoles()
+
+  useEffect(() => {
+    if (roles.length > 0) {
+      setValue(roles[0].id)
+      onChange(roles[0])
+    }
+  }, [roles])
 
   return (
     <View>
@@ -24,6 +31,7 @@ export default function RoleSelector () {
         value={value}
         onChange={item => {
           setValue(item.id)
+          onChange(item)
         }}
       />
     </View>

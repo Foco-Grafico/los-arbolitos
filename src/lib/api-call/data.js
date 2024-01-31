@@ -8,6 +8,7 @@ export const APIENDPOINTS = {
   getGategoriesbyId: (id) => `${API_URL}/dishes/category/${id}`,
   setSupply: `${API_URL}/dishes/supply/`,
   createSupply: `${API_URL}/supplies`,
+  createSupplyCategory: `${API_URL}/supplies/types`,
   getTablesbyZone: (waiterId) => `${API_URL}/zones/table/${waiterId}`,
   addDishToOrder: (dishId, orderId) => `${API_URL}/orders/${orderId}/dish/${dishId}`,
   getSupplies: `${API_URL}/supplies`,
@@ -22,5 +23,6 @@ export const APIENDPOINTS = {
   getReconciliation: `${API_URL}/reports/reconciliation`,
   getBoxList: `${API_URL}/boxes`,
   getOrdersHistory: `${API_URL}/reports/history`,
-  getMeasurementUnit: `${API_URL}/supplies/measurement_unit`
+  getMeasurementUnit: `${API_URL}/supplies/measurement_unit`,
+  createProductCategory: `${API_URL}/dishes/category`
 }

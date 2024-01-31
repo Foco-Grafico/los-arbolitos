@@ -6,7 +6,8 @@ import Kitchen from './src/app/pages/kitchen'
 import CreateEmployee from './src/app/pages/admin/crearEmpleado'
 import CorteDeCaja from './src/app/components/cashier/corteCaja'
 import Almacenes from './src/app/pages/admin/almacenes'
-import ReporteVentas from './src/app/pages/admin/reporteVentaProductos'
+import ReporteVentas from './src/app/pages/admin/reporteVentas'
+import ReporteVentasPorProducto from './src/app/pages/admin/reporteVentaProductos'
 import CategoriaProductos from './src/app/pages/admin/categoriaProductos'
 import ProductosList from './src/app/pages/admin/productos'
 import ActualizarStock from './src/app/pages/admin/actualizarStock'
@@ -110,6 +111,9 @@ function App () {
       </Route>
       <Route name='nuevoProducto' orientation={ORIENTATIONS.PORTRAIT}>
         <NuevoProducto />
+      </Route>
+      <Route name='reporteVentasPorProducto' orientation={ORIENTATIONS.PORTRAIT}>
+        <ReporteVentasPorProducto />
       </Route>
 
     </View>

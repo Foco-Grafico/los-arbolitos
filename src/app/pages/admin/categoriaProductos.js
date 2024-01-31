@@ -6,7 +6,7 @@ import Editar from '../../../../assets/editar'
 import Footer from '../../components/admin/footer'
 import SignoMas from '../../../../assets/signodemas'
 import updateCategories from '../../func/update-categories'
-import CreateCategory from '../../func/create-category'
+import CreateProductCategory from '../../func/create-product-category'
 import { routerStore } from '../../../../stores/router'
 import { productCatStore } from '../../../../stores/waiter'
 
@@ -236,7 +236,7 @@ export default function CategoriaProductos () {
                     return
                   }
                   newCategory(newCat)
-                  CreateCategory(newCat)
+                  CreateProductCategory(newCat)
                   setModalCreate(false)
                 }}
                 style={{

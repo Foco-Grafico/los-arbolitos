@@ -13,13 +13,18 @@ import ProductCategorySelector from '../../components/admin/productCategorySelec
 export default function NuevoProducto () {
   const nav = routerStore(state => state.nav)
   const [category, setCategory] = useState()
-  const [sellValue, setSellValue] = useState()
   const [sellCost, setSellCost] = useState()
   const [prepTime, setPrepTime] = useState()
   const [name, setName] = useState()
 
   const handleCreateProduct = () => {
-    console.log(category, sellValue, name, sellCost, prepTime)
+    console.log(category, name, sellCost, prepTime)
+
+    const data = new FormData()
+
+    data.append('name', 'a')
+
+    console.log(data)
   }
 
   return (

@@ -1,12 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { TouchableOpacity, Animated, View, StyleSheet } from 'react-native'
 
-export default function SwitchSlider ({ onPress = () => {}, defaultValue = false }) {
+export default function SwitchSlider ({ onPress = () => {}, defaultValue = true }) {
   const [active, setActive] = useState(defaultValue)
-
-  useEffect(() => {
-    setActive(defaultValue)
-  }, [defaultValue])
 
   const handleClick = () => {
     setActive(prev => {

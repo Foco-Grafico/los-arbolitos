@@ -1,6 +1,6 @@
 import { APIENDPOINTS } from '../../lib/api-call/data'
 
-export default function CreateCategory (cat) {
+export default function CreateProductCategory (cat) {
   const headers = new Headers()
   headers.append('accept', 'application/json')
 
@@ -9,5 +9,5 @@ export default function CreateCategory (cat) {
     headers
   }
 
-  return fetch(`${APIENDPOINTS.updateCategories}?category=${cat}`, options)
+  return fetch(`${APIENDPOINTS.createProductCategory}?category=${cat}`, options)
 }

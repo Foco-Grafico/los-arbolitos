@@ -1,6 +1,6 @@
 import { APIENDPOINTS } from '../../lib/api-call/data'
 
-export default function createSupply (boxId, minQuantity, quantity) {
+export default function createSupply (boxId, minQuantity, quantity, name, sellUnitM, buyUnitM, sellCost, buyCost, type, sellXBuyEquivalent, minQuantityStock, maxQuantityStock) {
   const headers = new Headers()
   headers.append('Content-Type', 'application/json')
   headers.append('accept', 'application/json')
@@ -9,15 +9,15 @@ export default function createSupply (boxId, minQuantity, quantity) {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      name: '',
-      sell_unit_measurement: 0,
-      buy_unit_measurement: 0,
-      sell_cost: 0,
-      buy_cost: 0,
-      type: 0,
-      sell_x_buy_equivalent: 0,
-      min_quantity: 0,
-      max_quantity: 0
+      name,
+      sell_unit_measurement: sellUnitM,
+      buy_unit_measurement: buyUnitM,
+      sell_cost: sellCost,
+      buy_cost: buyCost,
+      type,
+      sell_x_buy_equivalent: sellXBuyEquivalent,
+      min_quantity: minQuantityStock,
+      max_quantity: maxQuantityStock
     })
   }
 

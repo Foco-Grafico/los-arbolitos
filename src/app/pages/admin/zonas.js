@@ -8,7 +8,7 @@ export default function Zones () {
   const { tables } = useWaiterGetTablesinZone()
   const { users } = useGetUsers()
 
-  console.log(users, tables[users[0].id])
+  console.log(users, tables[users[0]?.id])
 
   return (
     <View style={{ flex: 1 }}>

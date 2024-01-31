@@ -7,6 +7,8 @@ import { routerStore } from '../../../../stores/router'
 import { supplyCatStore } from '../../../../stores/admin'
 import Editar from '../../../../assets/editar'
 import SignoMas from '../../../../assets/signodemas'
+import CreateSupplyCategory from '../../func/create-supply-category'
+import updateSupplyCategory from '../../func/update-supply-category'
 
 export default function CategoriaInsumos () {
   const { types } = useGetSuppliesTypes()
@@ -19,59 +21,15 @@ export default function CategoriaInsumos () {
   const [newCatName, setNewCatName] = useState('')
   const [newCat, setNewCat] = useState('')
 
-  //   const editLocalCatName = (name, index) => {
-  //     const newTypes = [...types]
-  //     newTypes[index].name = name
-  //     setSelectedCategory({
-  //       name,
-  //       id: selectedInfo.id,
-  //       index
-  //     })
-  //   }
-  //   const updateCategories = async (name, id) => {
-  //     const response = await fetch(`http://localhost:3000/api/supplies/types/?name=${name}&id=${id}`, {
-  //       method: 'PUT',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify({
-  //         name
-  //       })
-  //     })
-  //     const data = await response.json()
-  //     if (data.error) {
-  //       throw new Error(data.error)
-  //     }
-  //   }
-
-  //   const CreateCategory = async (name) => {
-  //     const response = await fetch('http://localhost:3000/api/supplies/types', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify({
-  //         name
-  //       })
-  //     })
-  //     const data = await response.json()
-  //     if (data.error) {
-  //       throw new Error(data.error)
-  //     }
-  //   }
-
-  //   const newCategory = (name) => {
-  //     const newTypes = [...types]
-  //     newTypes.push({
-  //       name,
-  //       id: types.length + 1
-  //     })
-  //     setSelectedCategory({
-  //       name,
-  //       id: types.length + 1,
-  //       index: types.length
-  //     })
-  //   }
+  const editLocalCatName = (name, index) => {
+    const newTypes = [...types]
+    newTypes[index].name = name
+    setSelectedCategory({
+      name,
+      id: selectedInfo.id,
+      index
+    })
+  }
 
   console.log(selectedCategory)
   const [selectedInfo, setInfo] = useState({
@@ -182,13 +140,14 @@ export default function CategoriaInsumos () {
                     return
                   }
                   setModal(false)
-                  //   editLocalCatName(newCatName, selectedInfo.index)
+                  editLocalCatName(newCatName, selectedInfo.index)
 
-                //   updateCategories(newCatName, selectedInfo.id)
-                //     .catch(() => {
-                //       ToastAndroid.show(`No se pudo actualizar la categoría ${selectedInfo.name}`, ToastAndroid.SHORT)
-                //       editLocalCatName(selectedInfo.name, selectedInfo.index)
-                //     })
+                  updateSupplyCategory(newCatName, selectedInfo.id)
+                    .catch(() => {
+                      ToastAndroid.show(`No se pudo actualizar la categoría ${selectedInfo.name}`, ToastAndroid.SHORT)
+                      editLocalCatName(selectedInfo.name, selectedInfo.index)
+                    })
+                  ToastAndroid.show('Categoría actualizada', ToastAndroid.SHORT)
                 }}
                 style={{
                   backgroundColor: '#005943',
@@ -289,8 +248,8 @@ export default function CategoriaInsumos () {
                     ToastAndroid.show('No se puede actualizar con un campo vacio', ToastAndroid.SHORT)
                     return
                   }
-                  //   newCategory(newCat)
-                  //   CreateCategory(newCat)
+                  CreateSupplyCategory(newCat)
+                  ToastAndroid.show('Categoría creada', ToastAndroid.SHORT)
                   setModalCreate(false)
                 }}
                 style={{

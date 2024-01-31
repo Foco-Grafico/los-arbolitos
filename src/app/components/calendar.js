@@ -82,7 +82,7 @@ const getLastChunk = (array = [], chunkSize) => {
   return [...elements].reverse()
 }
 
-export const Calendar = ({ isOpen, defaultDate = new Date(), onChangeDate = (date) => {} }) => {
+export const Calendar = ({ isOpen = false, defaultDate = new Date(), onChangeDate = (date) => {} }) => {
   const [date, setDate] = useState(defaultDate)
   const [selectedDate, setSelectedDate] = useState(defaultDate)
 

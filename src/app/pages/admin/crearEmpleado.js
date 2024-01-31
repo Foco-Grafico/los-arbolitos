@@ -5,59 +5,87 @@ import SwitchSlider from '../../components/switch-slider'
 import { Cancelar } from '../../../../assets/cancelar'
 import Aceptar from '../../../../assets/aceptar'
 import RoleSelector from '../../components/admin/roleSelector'
+import { useState } from 'react'
+import VerPass from '../../../../assets/verPass'
+import { routerStore } from '../../../../stores/router'
+import CreateUser from '../../func/createUser'
 
 export default function CreateEmployee () {
+  const nav = routerStore(state => state.nav)
+  const [name, setName] = useState()
+  const [lastName, setLastName] = useState()
+  const [username, setUsername] = useState()
+  const [password, setPassword] = useState()
+  const [phone, setPhone] = useState()
+  const [role, setRole] = useState()
+  const [salary, setSalary] = useState()
+  const [visible, setVisible] = useState(true)
+  const [active, setActive] = useState(true)
+
+  console.log(role?.id, name, lastName, username, password, phone, salary, active)
+
+  const handleCreateUser = () => {
+    CreateUser(role?.id, name, lastName, phone, username, password, salary)
+      .then(res => res.json())
+      .then(data => console.log(data))
+      .catch(err => console.log(err))
+    console.log('Usuario creado')
+  }
+
   return (
     <View style={styles.main}>
       <HeaderAdmin>CREAR EMPLEADO</HeaderAdmin>
       <View style={styles.container}>
         <View style={{ flexDirection: 'columm', justifyContent: 'center', gap: 10 }}>
           <View style={{ flexDirection: 'row', alignSelf: 'center', gap: 150 }}>
-            <Text>NOMBRE</Text>
-            <Text>APELLIDO</Text>
+            <Text style={styles.text}>NOMBRE</Text>
+            <Text style={styles.text}>APELLIDO</Text>
           </View>
           <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-            <TextInput style={{ borderWidth: 1, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} />
-            <TextInput style={{ borderWidth: 1, borderTopRightRadius: 10, borderBottomRightRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} />
+            <TextInput style={{ borderWidth: 1, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} onChangeText={setName} />
+            <TextInput style={{ borderWidth: 1, borderTopRightRadius: 10, borderBottomRightRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} onChangeText={setLastName} />
           </View>
         </View>
         <View style={{ flexDirection: 'columm', justifyContent: 'center', gap: 10 }}>
           <View style={{ flexDirection: 'row', alignSelf: 'center', gap: 150 }}>
-            <Text>USUARIO</Text>
-            <Text>CONTRASEÑA</Text>
+            <Text style={styles.text}>USUARIO</Text>
+            <Text style={styles.text}>CONTRASEÑA</Text>
           </View>
           <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-            <TextInput style={{ borderWidth: 1, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} />
-            <TextInput style={{ borderWidth: 1, borderTopRightRadius: 10, borderBottomRightRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} />
+            <TextInput style={{ borderWidth: 1, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} onChangeText={setUsername} />
+            <View style={{ borderWidth: 1, borderTopRightRadius: 10, borderBottomRightRadius: 10, width: '40%', height: 50, paddingLeft: 10, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10 }}>
+              <TextInput style={{ flex: 1 }} onChangeText={setPassword} secureTextEntry={visible} />
+              <VerPass style={{ width: 35, height: 35 }} onPress={() => setVisible(!visible)} />
+            </View>
           </View>
         </View>
         <View style={{ flexDirection: 'columm', justifyContent: 'center', gap: 10, width: '80%' }}>
           <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-            <Text>TELÉFONO</Text>
+            <Text style={styles.text}>TELÉFONO</Text>
           </View>
           <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-            <TextInput style={{ borderWidth: 1, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, width: '100%', height: 50, paddingLeft: 10 }} />
+            <TextInput style={{ borderWidth: 1, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, width: '100%', height: 50, paddingLeft: 10 }} onChangeText={setPhone} />
           </View>
         </View>
         <View style={{ flexDirection: 'columm', justifyContent: 'center', gap: 10 }}>
           <View style={{ flexDirection: 'row', alignSelf: 'center', gap: 150 }}>
-            <Text>PUESTO</Text>
-            <Text>SALARIO</Text>
+            <Text style={styles.text}>PUESTO</Text>
+            <Text style={styles.text}>SALARIO</Text>
           </View>
           <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}>
-            <RoleSelector />
-            <TextInput style={{ borderWidth: 1, borderTopRightRadius: 10, borderBottomRightRadius: 10, width: '30%', height: 50, paddingLeft: 10 }} />
+            <RoleSelector onChange={setRole} />
+            <TextInput style={{ borderWidth: 1, borderTopRightRadius: 10, borderBottomRightRadius: 10, width: '30%', height: 50, paddingLeft: 10 }} onChangeText={setSalary} />
           </View>
         </View>
         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
           <Text>DESHABILITAR / HABILITAR</Text>
-          <SwitchSlider />
+          <SwitchSlider onPress={setActive} />
         </View>
         <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => { nav('empleados') }}>
             <Cancelar style={{ width: 35, height: 35 }} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleCreateUser}>
             <Aceptar style={{ width: 35, height: 35 }} />
           </TouchableOpacity>
         </View>
@@ -80,5 +108,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     gap: 20
+  },
+  text: {
+    fontSize: 20,
+    color: '#000',
+    fontWeight: 'bold'
   }
 })

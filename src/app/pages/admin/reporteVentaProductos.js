@@ -7,7 +7,7 @@ import Footer from '../../components/admin/footer'
 // import ReportTable from '../../../classes/table'
 // import DateHeader from '../../../classes/dateHeader'
 
-export default function ReporteVentas () {
+export default function ReporteVentasPorProducto () {
   // const salesReport = () => {
   //   const header = new DateHeader({
   //     report: 'CORTE DE CAJA'

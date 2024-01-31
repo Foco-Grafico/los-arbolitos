@@ -95,10 +95,9 @@ export default function Cashier () {
         </table>
         <p style=" font-family: Helvetica Neue; font-weight: normal;">
         ${(discount !== '0' && discount !== '' && discount != null && discount !== 0)
-       ? `SubTotal: ${priceFormatter.format(subtotal)}<br>
+       ? `
           Descuento: ${priceFormatter.format(descuento)}<br>
-          IVA: ${priceFormatter.format(iva)}<br>
-          <b style='font-size: 24' >Total: </b><b style='font-size: 24'>${priceFormatter.format(total)} (IVA incluido)</b><br><br>
+          <b style='font-size: 24' >Total: </b><b style='font-size: 24'>${priceFormatter.format(total)}</b><br><br>
           <br>
           <br>
           Propina sugerida (10%): ${priceFormatter.format(total * 0.10)}<br>
@@ -107,9 +106,8 @@ export default function Cashier () {
           Gracias por su preferencia<br>
           ¡Vuelva pronto!
           `
-        : `SubTotal: ${priceFormatter.format(subtotal)}<br>
-          IVA: ${priceFormatter.format(iva)}<br>
-          <b style='font-size: 24' >Total: </b><b style='font-size: 24'>${priceFormatter.format(total)} (IVA incluido)</b><br><br>
+        : `
+          <b style='font-size: 24' >Total: </b><b style='font-size: 24'>${priceFormatter.format(total)}</b><br><br>
           <br>
           <br>
           Propina sugerida (10%): ${priceFormatter.format(total * 0.10)}<br>
