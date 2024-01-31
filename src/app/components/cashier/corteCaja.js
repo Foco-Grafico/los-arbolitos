@@ -93,7 +93,7 @@ export default function CorteDeCaja () {
        ? `SubTotal: ${priceFormatter.format(subtotal)}<br>
           Descuento: ${priceFormatter.format(descuento)}<br>
           IVA: ${priceFormatter.format(iva)}<br>
-          <b>Total: </b>${priceFormatter.format(total)} (IVA incluido)<br><br>
+          <b style='font-size: 24' >Total: </b><b style='font-size: 24'>${priceFormatter.format(total)} (IVA incluido)</b><br><br>
           <br>
           <br>
           Propina sugerida (10%): ${priceFormatter.format(total * 0.10)}<br>
@@ -104,7 +104,7 @@ export default function CorteDeCaja () {
           `
         : `SubTotal: ${priceFormatter.format(subtotal)}<br>
           IVA: ${priceFormatter.format(iva)}<br>
-          <b>Total: </b>${priceFormatter.format(total)} (IVA incluido)<br><br>
+          <b style='font-size: 24' >Total: </b><b style='font-size: 24'>${priceFormatter.format(total)} (IVA incluido)</b><br><br>
           <br>
           <br>
           Propina sugerida (10%): ${priceFormatter.format(total * 0.10)}<br>
