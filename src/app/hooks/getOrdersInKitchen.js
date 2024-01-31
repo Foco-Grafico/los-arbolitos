@@ -36,7 +36,7 @@ export default function useKitchenGetOrders (bar = false) {
           orderIndex: 0,
           table: res.data[0]?.table_id
         })
-        markAsPreparation(res.data[0]?.id, res.data[0]?.pending_list[0].ids)
+        markAsPreparation(res.data[0]?.id, res.data[0]?.pending_list[0]?.ids ?? [])
       })
       .catch(err => {
         console.error(err)
@@ -87,11 +87,10 @@ export default function useKitchenGetOrders (bar = false) {
         }
 
         if (isExistOrder) {
-          console.log('isExistOrder', isExistOrder)
           const index = copyOrders.findIndex(o => o.id === newOrder.id)
 
-          const newIds = newOrder.pending_list.flatMap(dish => dish.ids)
-          const oldIds = copyOrders[index].pending_list.flatMap(dish => dish.ids)
+          const newIds = newOrder.pending_list.flatMap(dish => dish?.ids ?? [])
+          const oldIds = copyOrders[index].pending_list.flatMap(dish => dish?.ids ?? [])
 
           const isExistDish = isAllValuesInArray(newIds, oldIds)
 
@@ -135,7 +134,7 @@ export default function useKitchenGetOrders (bar = false) {
             orderIndex: 0,
             table: newOrder?.table_id
           })
-          markAsPreparation(newOrder?.id, newOrder?.pending_list[0].ids)
+          markAsPreparation(newOrder?.id, newOrder?.pending_list[0]?.ids ?? [])
           return copyOrders
         }
 
