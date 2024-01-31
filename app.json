@@ -51,6 +51,14 @@
         {
           "initialOrientation": "LANDSCAPE"
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "sounds": [
+            "./src/assets/horrible-sound.mp3"
+          ]
+        }
       ]
     ]
   }
