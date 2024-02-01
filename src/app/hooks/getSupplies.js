@@ -22,7 +22,7 @@ export default function useGetSupplies ({ q, all = false }) {
 
         throw new Error('Error al obtener los productos')
       })
-      .then(res => setSupplies(res.data))
+      .then(res => setSupplies(res?.data ?? []))
       .catch((err) => {
         console.error(err)
       })

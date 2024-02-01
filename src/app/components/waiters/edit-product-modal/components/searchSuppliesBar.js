@@ -41,7 +41,7 @@ export const SearchBarSupply = ({ onAddSupplyClick }) => {
         />
         {/* <SignoMas style={{ width: 24, height: 24 }} /> */}
       </View>
-      {supplies.length > 0 && (
+      {Array.isArray(supplies) && supplies?.length > 0 && (
         <View
           style={{
             position: 'absolute',

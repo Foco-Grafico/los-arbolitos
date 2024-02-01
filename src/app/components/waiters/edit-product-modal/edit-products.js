@@ -66,8 +66,6 @@ export default function EditProducts ({ editProductController }) {
   const [isModified, setIsModified] = useState(false)
   const [quantityProducts, setQuantityProducts] = useState(1)
 
-  console.log(quantityProducts)
-
   const deleteProduct = (item) => {
     editProductController?.setData(prev => {
       const newItems = [...prev?.items]

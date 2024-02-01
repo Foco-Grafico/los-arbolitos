@@ -25,6 +25,11 @@ export default function useKitchenGetOrders (bar = false) {
       })
       .then(res => {
         setOrders(res.data)
+
+        if (res.data.length === 0) {
+          return
+        }
+
         configNewInfo({
           mesero: {
             id: res.data[0]?.user?.id,
@@ -91,6 +96,10 @@ export default function useKitchenGetOrders (bar = false) {
 
           const newIds = newOrder.pending_list.flatMap(dish => dish?.ids ?? [])
           const oldIds = copyOrders[index].pending_list.flatMap(dish => dish?.ids ?? [])
+
+          if (newIds.length === 0) {
+            return copyOrders.filter(o => o.id !== newOrder.id)
+          }
 
           const isExistDish = isAllValuesInArray(newIds, oldIds)
 

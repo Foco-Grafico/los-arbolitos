@@ -15,7 +15,7 @@ const dateFormatter = new Intl.DateTimeFormat('es-MX', {
   hour12: true
 })
 
-export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash, setTables, setData, setVisible }) {
+export default function OrderSection ({ editProductController, setShowSendCommand, setVisibleSendToCash, setTables, setData, setVisible }) {
   const status = tableStore(state => state.status)
   const order = tableStore(state => state.order)
   const setTable = tableStore(state => state.setTable)
@@ -316,6 +316,8 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
       <TouchableOpacity
         onPress={() => {
           setCantadito(true)
+          editProductController.setVisible(false)
+          editProductController.setData({})
         }}
         style={{
           backgroundColor: '#005943',
@@ -350,6 +352,7 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
               setShowSendCommand,
               setVisibleSendToCash,
               dishes: order?.dishes,
+              editProductController,
               orderId: order?.id,
               cb: order => {
                 setTable({
@@ -390,6 +393,9 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
+            editProductController.setVisible(false)
+            editProductController.setData({})
+
             setMasterMode(true)
           }}
           style={{
@@ -425,6 +431,9 @@ export default function OrderSection ({ setShowSendCommand, setVisibleSendToCash
             <Switch
               value={!alwaysPriority ? order?.priority : alwaysPriority}
               onValueChange={(priority) => {
+                editProductController.setVisible(false)
+                editProductController.setData({})
+
                 setViewPriorityModal(true)
                 // togglePriority(order?.id, priority)
                 // tableStore.setState({ order: { ...order, priority } })
