@@ -91,15 +91,18 @@ export default function useKitchenGetOrders (bar = false) {
           return copyOrders.filter(o => o.id !== newOrder.id)
         }
 
+        const newIds = newOrder.pending_list.flatMap(dish => dish?.ids ?? [])
+
+        console.log('newIds', newIds)
+
+        if (newIds.length === 0) {
+          return copyOrders.filter(o => o.id !== newOrder.id)
+        }
+
         if (isExistOrder) {
           const index = copyOrders.findIndex(o => o.id === newOrder.id)
 
-          const newIds = newOrder.pending_list.flatMap(dish => dish?.ids ?? [])
           const oldIds = copyOrders[index].pending_list.flatMap(dish => dish?.ids ?? [])
-
-          if (newIds.length === 0) {
-            return copyOrders.filter(o => o.id !== newOrder.id)
-          }
 
           const isExistDish = isAllValuesInArray(newIds, oldIds)
 
