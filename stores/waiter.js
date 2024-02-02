@@ -10,9 +10,9 @@ const ORDER_STATES = {
     bgColor: '#005943', // Green color
     color: '#fff',
     next: 2,
-    click: ({ setShowSendCommand, dishes, editProductController }) => {
-      editProductController.setVisible(false)
-      editProductController.setData({})
+    click: ({ setShowSendCommand = {}, dishes, editProductController }) => {
+      editProductController?.setVisible(false)
+      editProductController?.setData({})
 
       if (typeof setShowSendCommand !== 'function') {
         ToastAndroid.show('No se pudo enviar a cocina', ToastAndroid.SHORT)

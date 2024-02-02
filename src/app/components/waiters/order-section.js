@@ -15,7 +15,7 @@ const dateFormatter = new Intl.DateTimeFormat('es-MX', {
   hour12: true
 })
 
-export default function OrderSection ({ editProductController, setShowSendCommand, setVisibleSendToCash, setTables, setData, setVisible }) {
+export default function OrderSection ({ editProductController = {}, setShowSendCommand, setVisibleSendToCash, setTables, setData, setVisible }) {
   const status = tableStore(state => state.status)
   const order = tableStore(state => state.order)
   const setTable = tableStore(state => state.setTable)
@@ -24,8 +24,6 @@ export default function OrderSection ({ editProductController, setShowSendComman
   const [viewPriorityModal, setViewPriorityModal] = useState(false)
   const [masterMode, setMasterMode] = useState(false)
   const [cantadito, setCantadito] = useState(false)
-
-  console.log(JSON.stringify(order?.pretty_list))
 
   return (
     <View style={{
@@ -112,7 +110,7 @@ export default function OrderSection ({ editProductController, setShowSendComman
                           key={id}
                         >
                           <Text>
-                            Hora de adición: <Text style={{ color: '#005943' }}>{dateFormatter.format(new Date(dish?.created_at[index]))}</Text>
+                            Hora de adición: <Text style={{ color: '#005943' }}>{dateFormatter.format(new Date(dish?.created_at?.[index] ?? null))}</Text>
                           </Text>
                           {isComment && (
                             <>
@@ -236,6 +234,8 @@ export default function OrderSection ({ editProductController, setShowSendComman
                   togglePriority(order?.id, !order?.priority)
                   tableStore.setState({ order: { ...order, priority: !order?.priority } })
                   setViewPriorityModal(false)
+                  editProductController?.setVisible(false)
+                  editProductController?.setData({})
                 }}
                 style={{
                   backgroundColor: '#005943',
@@ -316,8 +316,8 @@ export default function OrderSection ({ editProductController, setShowSendComman
       <TouchableOpacity
         onPress={() => {
           setCantadito(true)
-          editProductController.setVisible(false)
-          editProductController.setData({})
+          editProductController?.setVisible(false)
+          editProductController?.setData({})
         }}
         style={{
           backgroundColor: '#005943',
@@ -393,8 +393,8 @@ export default function OrderSection ({ editProductController, setShowSendComman
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            editProductController.setVisible(false)
-            editProductController.setData({})
+            editProductController?.setVisible(false)
+            editProductController?.setData({})
 
             setMasterMode(true)
           }}
