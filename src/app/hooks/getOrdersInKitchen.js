@@ -25,6 +25,11 @@ export default function useKitchenGetOrders (bar = false) {
       })
       .then(res => {
         setOrders(res.data)
+
+        if (res.data.length === 0) {
+          return
+        }
+
         configNewInfo({
           mesero: {
             id: res.data[0]?.user?.id,
@@ -36,7 +41,7 @@ export default function useKitchenGetOrders (bar = false) {
           orderIndex: 0,
           table: res.data[0]?.table_id
         })
-        markAsPreparation(res.data[0]?.id, res.data[0]?.pending_list[0].ids)
+        markAsPreparation(res.data[0]?.id, res.data[0]?.pending_list[0]?.ids ?? [])
       })
       .catch(err => {
         console.error(err)
@@ -86,12 +91,18 @@ export default function useKitchenGetOrders (bar = false) {
           return copyOrders.filter(o => o.id !== newOrder.id)
         }
 
+        const newIds = newOrder.pending_list.flatMap(dish => dish?.ids ?? [])
+
+        console.log('newIds', newIds)
+
+        if (newIds.length === 0) {
+          return copyOrders.filter(o => o.id !== newOrder.id)
+        }
+
         if (isExistOrder) {
-          console.log('isExistOrder', isExistOrder)
           const index = copyOrders.findIndex(o => o.id === newOrder.id)
 
-          const newIds = newOrder.pending_list.flatMap(dish => dish.ids)
-          const oldIds = copyOrders[index].pending_list.flatMap(dish => dish.ids)
+          const oldIds = copyOrders[index].pending_list.flatMap(dish => dish?.ids ?? [])
 
           const isExistDish = isAllValuesInArray(newIds, oldIds)
 
@@ -135,7 +146,7 @@ export default function useKitchenGetOrders (bar = false) {
             orderIndex: 0,
             table: newOrder?.table_id
           })
-          markAsPreparation(newOrder?.id, newOrder?.pending_list[0].ids)
+          markAsPreparation(newOrder?.id, newOrder?.pending_list[0]?.ids ?? [])
           return copyOrders
         }
 

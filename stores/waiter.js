@@ -10,7 +10,10 @@ const ORDER_STATES = {
     bgColor: '#005943', // Green color
     color: '#fff',
     next: 2,
-    click: ({ setShowSendCommand, dishes }) => {
+    click: ({ setShowSendCommand, dishes, editProductController }) => {
+      editProductController.setVisible(false)
+      editProductController.setData({})
+
       if (typeof setShowSendCommand !== 'function') {
         ToastAndroid.show('No se pudo enviar a cocina', ToastAndroid.SHORT)
         return
@@ -37,7 +40,10 @@ const ORDER_STATES = {
     bgColor: '#005943', // Green color
     color: '#fff',
     next: null,
-    click: ({ setVisibleSendToCash }) => {
+    click: ({ setVisibleSendToCash, editProductController }) => {
+      editProductController.setVisible(false)
+      editProductController.setData({})
+
       if (typeof setVisibleSendToCash !== 'function') {
         ToastAndroid.show('No se pudo enviar a caja', ToastAndroid.SHORT)
         return
@@ -59,7 +65,10 @@ const ORDER_STATES = {
     bgColor: '#005943', // Green color
     color: '#fff',
     next: null,
-    click: ({ orderId, cb }) => {
+    click: ({ orderId, cb, editProductController }) => {
+      editProductController.setVisible(false)
+      editProductController.setData({})
+
       liberateTable(orderId)
         .then(({ new_current_order: newCurrentOrder }) => {
           getOrder(newCurrentOrder)
