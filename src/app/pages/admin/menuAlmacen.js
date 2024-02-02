@@ -14,7 +14,7 @@ export default function AlmacenInv () {
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            nav('insumos')
+            nav('categoriaInsumos')
           }}
           style={styles.box}
         >
