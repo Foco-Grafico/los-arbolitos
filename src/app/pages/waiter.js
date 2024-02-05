@@ -44,7 +44,7 @@ export function Waiter ({ leader = false }) {
             signal: abortController.current.signal
           })
             .then(order => {
-              console.log(order.status)
+              console.log('order', JSON.stringify(order))
 
               setTable({ ...table, order })
             })

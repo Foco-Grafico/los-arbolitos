@@ -60,6 +60,9 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
     if (hasSelected) {
       return
     }
+
+    console.log('tables', tables)
+
     onPressItem(tables[0], abortController)
   }, [tables, hasSelected])
 
