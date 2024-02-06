@@ -1,11 +1,9 @@
-import { FlatList, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import HeaderAdmin from '../../components/admin/header'
 import Footer from '../../components/admin/footer'
 import { Calendar } from '../../components/calendar'
 import { useState } from 'react'
 import Calendario from '../../../../assets/calendario'
-import { Cancelar } from '../../../../assets/cancelar'
-import Aceptar from '../../../../assets/aceptar'
 import Descargar from '../../../../assets/descargar'
 import ClassHeader from '../../../classes/header'
 import ReportTable from '../../../classes/table'
@@ -189,10 +187,10 @@ export default function ReporteVentas () {
         </View>
       </View>
 
-      <View style={{ flexDirection: 'row', gap: 50, paddingHorizontal: 20 }}>
+      {/* <View style={{ flexDirection: 'row', gap: 50, paddingHorizontal: 20 }}>
         <Cancelar style={{ width: 24, height: 24 }} />
         <Aceptar style={{ width: 24, height: 24 }} />
-      </View>
+      </View> */}
 
       <Footer />
     </View>
