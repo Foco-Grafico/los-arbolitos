@@ -3,8 +3,10 @@ import getSellReport from '../func/getSellReport'
 
 export default function useGetSalesReport (initialDate = new Date(), finalDate = new Date()) {
   const [data, setData] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    setLoading(true)
     getSellReport(initialDate.toISOString().split('T')[0], finalDate.toISOString().split('T')[0])
       .then((res) => {
         if (res.ok) {
@@ -21,9 +23,12 @@ export default function useGetSalesReport (initialDate = new Date(), finalDate =
       .catch(err => {
         console.error(err)
       })
-  }, [])
+      .finally(() => setLoading(false))
+  }, [initialDate, finalDate])
 
   return {
-    data, setData
+    data,
+    setData,
+    loading
   }
 }

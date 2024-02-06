@@ -15,7 +15,7 @@ export default function HeaderAdmin ({ children }) {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#005942',
-    height: '6%',
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
