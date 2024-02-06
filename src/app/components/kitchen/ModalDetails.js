@@ -81,7 +81,8 @@ export const ModalDetails = ({ dish, isVisible, onPressClose = () => {} }) => {
                 fontWeight: 'bold',
                 fontSize: 18
               }}
-              >Modificados:
+              >
+                Modificados:
               </Text>
               {/* {dish.supplies_modified.map((supply) => (
                 <View
