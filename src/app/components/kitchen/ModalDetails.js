@@ -16,7 +16,8 @@ export const ModalDetails = ({ dish, isVisible, onPressClose = () => {} }) => {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: 'rgba(0,0,0,0.5)'
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          padding: 20
         }}
       >
         <View
@@ -81,7 +82,7 @@ export const ModalDetails = ({ dish, isVisible, onPressClose = () => {} }) => {
                 fontWeight: 'bold',
                 fontSize: 18
               }}
-              >Insumos modificados:
+              >Modificados:
               </Text>
               {/* {dish.supplies_modified.map((supply) => (
                 <View
@@ -98,7 +99,7 @@ export const ModalDetails = ({ dish, isVisible, onPressClose = () => {} }) => {
               <FlatList
                 data={dish.supplies_modified}
                 keyExtractor={() => v4()}
-                style={{ maxHeight: 150 }}
+                style={{ maxHeight: 150, width: 250, paddingHorizontal: 10 }}
                 renderItem={({ item }) => (
                   <View
                     style={{
