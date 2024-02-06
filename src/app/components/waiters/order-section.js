@@ -299,7 +299,8 @@ export default function OrderSection ({ editProductController = {}, setShowSendC
         <View
           style={{
             flexDirection: 'row',
-            gap: 10
+            gap: 10,
+            justifyContent: 'space-between'
           }}
         >
           <Text style={bold}>
@@ -308,6 +309,26 @@ export default function OrderSection ({ editProductController = {}, setShowSendC
           <Text style={bold}>
             PLATILLO
           </Text>
+          <TouchableOpacity
+            onPress={() => {
+              editProductController.setVisible(false)
+              editProductController.setData({})
+
+              setMasterMode(true)
+            }}
+            style={{
+              borderRadius: 5,
+              fontSize: 20,
+              elevation: 10,
+              alignSelf: 'flex-end',
+              textAlign: 'center',
+              paddingVertical: 5,
+              paddingHorizontal: 10,
+              backgroundColor: status?.bgColor
+            }}
+          >
+            <IconEdit stroke={status?.color} />
+          </TouchableOpacity>
         </View>
 
         <DishListInOrder setData={setData} setVisible={setVisible} />
@@ -391,7 +412,7 @@ export default function OrderSection ({ editProductController = {}, setShowSendC
             {status?.label}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             editProductController?.setVisible(false)
             editProductController?.setData({})
@@ -409,7 +430,7 @@ export default function OrderSection ({ editProductController = {}, setShowSendC
           }}
         >
           <IconEdit stroke={status?.color} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       {
         status.id === 1 && (
