@@ -25,8 +25,8 @@ export default function CorteDeCaja () {
     console.log(JSON.stringify(order))
 
     const descuento = ((order.discount !== '0' && order.discount !== '' && order.discount != null) ? order.discount : 0)
-    const iva = (Number(order.total) * 0.16)
-    const subtotal = Number(order.total - iva)
+    // const iva = (Number(order.total) * 0.16)
+    // const subtotal = Number(order.total - iva)
     const total = order.total_payment
 
     const html = `

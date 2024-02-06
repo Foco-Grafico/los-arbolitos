@@ -22,16 +22,19 @@ export default function Cashier () {
   const nav = routerStore(state => state.nav)
   const [paymentTypeModal, setPaymentType] = useState(false)
   const [isEffective, setIsEffective] = useState(true)
+  const [comment, setComment] = useState('')
 
   const print = async (isEffective) => {
     setPaymentType(false)
 
+    const hasComment = comment !== '' && comment !== null && comment !== undefined
+
     const totalWithDiscount = Number(selectedTable?.total - discount)
-    const originalTotal = Number(selectedTable?.total)
+    // const originalTotal = Number(selectedTable?.total)
 
     const descuento = ((discount !== '0' && discount !== '' && discount != null) ? discount : 0)
-    const iva = (Number(totalWithDiscount) * 0.16)
-    const subtotal = Number(originalTotal - iva)
+    // const iva = (Number(totalWithDiscount) * 0.16)
+    // const subtotal = Number(originalTotal - iva)
     const total = totalWithDiscount
 
     const html = `
@@ -93,6 +96,9 @@ export default function Cashier () {
 
           </tbody>
         </table>
+
+          ${hasComment ? `<p style=" font-family: Helvetica Neue; font-weight: normal;">COMENTARIO: ${comment}</p>` : ''}
+
         <p style=" font-family: Helvetica Neue; font-weight: normal;">
         ${(discount !== '0' && discount !== '' && discount != null && discount !== 0)
        ? `
@@ -156,11 +162,14 @@ export default function Cashier () {
   }
 
   const handleFinishOrder = () => {
-    finishOrderInCashier(selectedTable?.id, discount, isEffective)
-    setData(prev => prev.filter(order => order.id !== selectedTable?.id))
-    setSelectedTable({})
-    setRequested(false)
-    setDiscount(0)
+    finishOrderInCashier(selectedTable?.id, discount, isEffective, comment)
+      .finally(() => {
+        setData(prev => prev.filter(order => order.id !== selectedTable?.id))
+        setSelectedTable({})
+        setRequested(false)
+        setDiscount(0)
+        setComment('')
+      })
   }
 
   return (
@@ -247,6 +256,22 @@ export default function Cashier () {
               <Text style={{ width: 150, paddingVertical: 5, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }}>
                 {selectedTable?.total ? priceFormatter.format(selectedTable?.total - discount) : '$0.00'}
               </Text>
+            </View>
+            <Text style={styles.text}>COMENTARIO</Text>
+            <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
+              <TextInput
+                style={{
+                  width: 150,
+                  paddingVertical: 5,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  color: '#005943',
+                  textAlign: 'center',
+                  fontSize: 15
+                }}
+                onChangeText={setComment}
+                multiline
+              />
             </View>
             <TouchableOpacity
               style={styles.buttons} onPress={
