@@ -59,7 +59,8 @@ export const ModalDetails = ({ dish, isVisible, onPressClose = () => {} }) => {
                 fontWeight: 'bold',
                 fontSize: 18
               }}
-              >Comentario:
+              >
+                Comentario:
               </Text>
               <Text
                 style={{
