@@ -2,8 +2,6 @@ import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native'
 import { v4 } from '../../../lib/uuid'
 
 export const ModalDetails = ({ dish, isVisible, onPressClose = () => {} }) => {
-  console.log(dish.supplies_modified)
-
   return (
     <Modal
       animationType='fade'
