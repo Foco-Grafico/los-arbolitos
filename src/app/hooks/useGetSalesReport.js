@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import getSellReport from '../func/getSellReport'
 
-export default function useGetSalesReport (initialDate, finalDate) {
+export default function useGetSalesReport (initialDate = new Date(), finalDate = new Date()) {
   const [data, setData] = useState([])
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
-    getSellReport(initialDate, finalDate)
+    setLoading(true)
+    getSellReport(initialDate.toISOString().split('T')[0], finalDate.toISOString().split('T')[0])
       .then((res) => {
         if (res.ok) {
           return res.json()
@@ -20,9 +23,12 @@ export default function useGetSalesReport (initialDate, finalDate) {
       .catch(err => {
         console.error(err)
       })
-  }, [])
+      .finally(() => setLoading(false))
+  }, [initialDate, finalDate])
 
   return {
-    data, setData
+    data,
+    setData,
+    loading
   }
 }

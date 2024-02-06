@@ -29,7 +29,7 @@ export default function Footer ({ user = 'admin' }) {
 const styles = StyleSheet.create({
   footer: {
     backgroundColor: '#462f27',
-    height: '6%',
+    height: 60,
     justifyContent: 'space-around',
     flexDirection: 'row',
     alignItems: 'center'
