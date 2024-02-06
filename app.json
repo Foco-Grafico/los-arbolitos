@@ -2,7 +2,7 @@
   "expo": {
     "name": "Los Arbolitos",
     "slug": "los-arbolitos",
-    "version": "2.7.5",
+    "version": "2.7.6",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
