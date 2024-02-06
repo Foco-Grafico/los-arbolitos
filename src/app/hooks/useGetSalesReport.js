@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import getSellReport from '../func/getSellReport'
 
-export default function useGetSalesReport (initialDate, finalDate) {
+export default function useGetSalesReport (initialDate = new Date(), finalDate = new Date()) {
   const [data, setData] = useState([])
+
   useEffect(() => {
-    getSellReport(initialDate, finalDate)
+    getSellReport(initialDate.toISOString().split('T')[0], finalDate.toISOString().split('T')[0])
       .then((res) => {
         if (res.ok) {
           return res.json()

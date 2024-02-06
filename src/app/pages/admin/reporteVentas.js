@@ -14,33 +14,25 @@ import { printToFileAsync } from 'expo-print'
 import { shareAsync } from 'expo-sharing'
 import { CSSPDF } from '../../components/pdfcss'
 
+const dateFormatter = new Intl.DateTimeFormat('es-MX', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+})
+
 export default function ReporteVentas () {
-  function formatDate (date) {
-    const d = new Date(date)
-    const day = String(d.getDate()).padStart(2, '0')
-    const month = String(d.getMonth() + 1).padStart(2, '0') // Los meses en JavaScript comienzan desde 0
-    const year = d.getFullYear()
-
-    return `${year}-${month}-${day}`
-  }
-
   const [calendarInitialOpen, setCalendarInitialOpen] = useState(false)
   const [calendarFinalOpen, setCalendarFinalOpen] = useState(false)
-  const [initialDate, setInitialDate] = useState()
-  const [finalDate, setFinalDate] = useState()
+  const [initialDate, setInitialDate] = useState(new Date())
+  const [finalDate, setFinalDate] = useState(new Date())
   const { data } = useGetSalesReport(initialDate, finalDate)
   const [openReport, setOpenReport] = useState(false)
 
-  const date = new Date()
-  const day = String(date.getDate()).padStart(2, '0')
-  const month = String(date.getMonth() + 1).padStart(2, '0') // Los meses en JavaScript comienzan desde 0
-  const year = date.getFullYear()
-
-  const formattedDate = `${year}-${month}-${day}`
+  console.log(data)
 
   const salesReport = () => {
     const header = new ClassHeader({
-      report: 'VENTAS POR FECHA DEL ' + initialDate + ' AL ' + finalDate
+      report: 'VENTAS POR FECHA DEL ' + dateFormatter.format(initialDate).toUpperCase() + ' AL ' + dateFormatter.format(finalDate).toUpperCase()
     })
 
     const tables = data?.map((orders) => new ReportTable({
@@ -70,13 +62,13 @@ export default function ReporteVentas () {
           ${header.render()}
           ${tables.map(table => table.getHTMLTable()).join('')}
           <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-            <span style='color:white'>Total en efectivo: ${formatDate(data?.total_cash)}</span>
+            <span style='color:white'>Total en efectivo: ${data?.total_cash}</span>
           </section>
           <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-            <span style='color:white'>Total en tarjeta: ${formatDate(data?.total_debit)}</span>
+            <span style='color:white'>Total en tarjeta: ${data?.total_debit}</span>
           </section>
           <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-            <span style='color:white'>Total general: ${formatDate(data?.total)}</span>
+            <span style='color:white'>Total general: ${data?.total}</span>
           </section>
         </section>
         </main>
@@ -94,7 +86,6 @@ export default function ReporteVentas () {
     })
   }
 
-  console.log(JSON.stringify(data))
   // const salesReport = () => {
   //   const header = new DateHeader({
   //     report: 'CORTE DE CAJA'
@@ -154,8 +145,7 @@ export default function ReporteVentas () {
           <Text style={styles.text}>FECHA DE INICIO</Text>
           <Pressable onPress={() => setCalendarInitialOpen(!calendarInitialOpen)}>
             <View style={{ borderWidth: 1, gap: 10, flexDirection: 'row', width: 180, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
-              <Calendario />
-              {initialDate === undefined ? <Text>{formattedDate}</Text> : <Text>{initialDate}</Text>}
+              <Text>{dateFormatter.format(initialDate)}</Text>
             </View>
           </Pressable>
         </View>
@@ -163,8 +153,7 @@ export default function ReporteVentas () {
           <Text style={styles.text}>FECHA DE TÉRMINO</Text>
           <Pressable onPress={() => setCalendarFinalOpen(!calendarFinalOpen)}>
             <View style={{ borderWidth: 1, gap: 10, flexDirection: 'row', width: 180, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
-              <Calendario />
-              {finalDate === undefined ? <Text>{formattedDate}</Text> : <Text>{finalDate}</Text>}
+              <Text>{dateFormatter.format(finalDate)}</Text>
             </View>
           </Pressable>
         </View>
@@ -172,14 +161,14 @@ export default function ReporteVentas () {
           isOpen={calendarInitialOpen}
           onChangeDate={date => {
             setCalendarInitialOpen(false)
-            setInitialDate(formatDate(date))
+            setInitialDate(date)
           }}
         />
         <Calendar
           isOpen={calendarFinalOpen}
           onChangeDate={date => {
             setCalendarFinalOpen(false)
-            setFinalDate(formatDate(date))
+            setFinalDate(date)
           }}
         />
       </View>
