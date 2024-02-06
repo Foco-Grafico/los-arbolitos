@@ -96,64 +96,67 @@ export default function RendimientoMesero () {
       <HeaderAdmin>
         <Text style={styles.textTitle}>RENDIMIENTO DE MESERO</Text>
       </HeaderAdmin>
-      <View style={styles.container}>
-        <View style={{ flexDirection: 'column', gap: 30 }}>
-          <Text style={styles.text}>FECHA DE INICIO</Text>
-          <Pressable onPress={() => setCalendarInitialOpen(!calendarInitialOpen)}>
-            <View style={{ borderWidth: 1, gap: 10, flexDirection: 'row', width: 180, justifyContent: 'center', alignItems: 'center', borderRadius: 10, height: 30 }}>
-              <Calendario />
-              {initialDate === undefined ? <Text>{formattedDate}</Text> : <Text>{initialDate}</Text>}
-            </View>
-          </Pressable>
+      <View style={{ flexDirection: 'column', flex: 1, alignItems: 'center' }}>
+        <View style={styles.container}>
+          <View style={{ flexDirection: 'column', gap: 30 }}>
+            <Text style={styles.text}>FECHA DE INICIO</Text>
+            <Pressable onPress={() => setCalendarInitialOpen(!calendarInitialOpen)}>
+              <View style={{ borderWidth: 1, gap: 10, flexDirection: 'row', width: 180, justifyContent: 'center', alignItems: 'center', borderRadius: 10, height: 30 }}>
+                <Calendario />
+                {initialDate === undefined ? <Text>{formattedDate}</Text> : <Text>{initialDate}</Text>}
+              </View>
+            </Pressable>
+          </View>
+          <View style={{ flexDirection: 'column', gap: 30 }}>
+            <Text style={styles.text}>FECHA DE TÉRMINO</Text>
+            <Pressable onPress={() => setCalendarFinalOpen(!calendarFinalOpen)}>
+              <View style={{ borderWidth: 1, gap: 10, flexDirection: 'row', width: 180, justifyContent: 'center', alignItems: 'center', borderRadius: 10, height: 30 }}>
+                <Calendario />
+                {finalDate === undefined ? <Text>{formattedDate}</Text> : <Text>{finalDate}</Text>}
+              </View>
+            </Pressable>
+          </View>
+          <Calendar
+            isOpen={calendarInitialOpen}
+            onChangeDate={date => {
+              setCalendarInitialOpen(false)
+              setInitialDate(formatDate(date))
+            }}
+          />
+          <Calendar
+            isOpen={calendarFinalOpen}
+            onChangeDate={date => {
+              setCalendarFinalOpen(false)
+              setFinalDate(formatDate(date))
+            }}
+          />
         </View>
-        <View style={{ flexDirection: 'column', gap: 30 }}>
-          <Text style={styles.text}>FECHA DE TÉRMINO</Text>
-          <Pressable onPress={() => setCalendarFinalOpen(!calendarFinalOpen)}>
-            <View style={{ borderWidth: 1, gap: 10, flexDirection: 'row', width: 180, justifyContent: 'center', alignItems: 'center', borderRadius: 10, height: 30 }}>
-              <Calendario />
-              {finalDate === undefined ? <Text>{formattedDate}</Text> : <Text>{finalDate}</Text>}
-            </View>
-          </Pressable>
-        </View>
-        <Calendar
-          isOpen={calendarInitialOpen}
-          onChangeDate={date => {
-            setCalendarInitialOpen(false)
-            setInitialDate(formatDate(date))
-          }}
-        />
-        <Calendar
-          isOpen={calendarFinalOpen}
-          onChangeDate={date => {
-            setCalendarFinalOpen(false)
-            setFinalDate(formatDate(date))
-          }}
-        />
-      </View>
-      <View style={{ borderWidth: 1, borderRadius: 10, width: '80%', height: 700, alignSelf: 'center' }}>
-        <View style={{ justifyContent: 'center', alignItems: 'center' }} onPress={() => { setOpenReport(true) }}>
-          <ScrollView contentContainerStyle={{ gap: 10, width: '100%' }} visible={openReport}>
-            {users?.map((user, index) => (
-              <View key={user.key} style={{ flexDirection: 'column', justifyContent: 'space-around', width: '100%', height: 40 }}>
-                <View style={{ backgroundColor: index % 2 === 0 ? '#bfd5d0' : 'white', flexDirection: 'row', width: '100%', justifyContent: 'center', alignItems: 'center', height: 40 }}>
-                  <View style={{ flexDirection: 'row', width: 200 }}>
-                    <Text style={styles.text}>{user?.name}</Text>
-                    <Text style={styles.text}>{user?.lastname}</Text>
+        <View style={{ borderWidth: 1, borderRadius: 10, width: '80%', height: 700, alignItems: 'center' }}>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }} onPress={() => { setOpenReport(true) }}>
+            <ScrollView contentContainerStyle={{ gap: 10, width: '100%' }} visible={openReport}>
+              {users?.map((user, index) => (
+                <View key={user.key} style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%', height: 40 }}>
+                  <View style={{ backgroundColor: index % 2 === 0 ? '#bfd5d0' : 'white', flexDirection: 'row', width: '100%', justifyContent: 'center', alignItems: 'center', height: 40 }}>
+                    <View style={{ flexDirection: 'row', width: 200 }}>
+                      <Text style={styles.text}>{user?.name}</Text>
+                      <Text style={styles.text}> {user?.lastname}</Text>
+                    </View>
                   </View>
                   <View style={{ borderWidth: 1, borderRadius: 10, height: 40, width: 150, paddingHorizontal: 10, justifyContent: 'center' }}>
                     <Text style={styles.text}>$ {user?.total}</Text>
+                    <TouchableOpacity style={{ alignItems: 'center' }}>
+                      <Descargar style={{ width: 20, height: 20 }} />
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity style={{ alignSelf: 'center', alignItems: 'center' }}>
-                    <Descargar style={{ width: 20, height: 20 }} />
-                  </TouchableOpacity>
                 </View>
-              </View>
-            ))}
-          </ScrollView>
+              ))}
+            </ScrollView>
+          </View>
         </View>
       </View>
       <Footer />
     </View>
+
   )
 }
 
@@ -168,7 +171,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 20,
     flexDirection: 'row',
-    marginTop: 20
+    marginTop: 20,
+    alignItems: 'center'
+
   },
   text: {
     color: 'black',
