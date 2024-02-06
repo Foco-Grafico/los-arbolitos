@@ -24,8 +24,6 @@ export default function CorteDeCaja () {
   const { reconciliation: orders, loading } = useGetReconciliation()
 
   const print = async (order) => {
-    console.log(JSON.stringify(order.comment))
-
     const hasComment = order.comment !== 'null' && order.comment !== null && order.comment !== '' && order.comment !== 'undefined'
 
     const descuento = ((order.discount !== '0' && order.discount !== '' && order.discount != null) ? order.discount : 0)
