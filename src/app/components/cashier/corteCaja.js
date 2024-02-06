@@ -18,11 +18,15 @@ const priceFormatter = new Intl.NumberFormat('es-MX', {
   currency: 'MXN'
 })
 
+// 1195
+
 export default function CorteDeCaja () {
   const { reconciliation: orders, loading } = useGetReconciliation()
 
   const print = async (order) => {
-    console.log(JSON.stringify(order))
+    console.log(JSON.stringify(order.comment))
+
+    const hasComment = order.comment !== 'null' && order.comment !== null && order.comment !== '' && order.comment !== 'undefined'
 
     const descuento = ((order.discount !== '0' && order.discount !== '' && order.discount != null) ? order.discount : 0)
     // const iva = (Number(order.total) * 0.16)
@@ -88,6 +92,8 @@ export default function CorteDeCaja () {
 
           </tbody>
         </table>
+          ${hasComment ? `<p style=" font-family: Montserrat; font-weight: normal;">COMENTARIO: ${order.comment}</p>` : ''}
+
         <p style=" font-family: Helvetica Neue; font-weight: normal;">
         ${(order.discount !== '0' && order.discount !== '' && order.discount != null && order.discount !== 0)
        ? `
