@@ -189,10 +189,10 @@ export default function ReporteVentas () {
         </View>
       </View>
 
-      <View style={{ flexDirection: 'row', gap: 50, paddingHorizontal: 20 }}>
+      {/* <View style={{ flexDirection: 'row', gap: 50, paddingHorizontal: 20 }}>
         <Cancelar style={{ width: 24, height: 24 }} />
         <Aceptar style={{ width: 24, height: 24 }} />
-      </View>
+      </View> */}
 
       <Footer />
     </View>
