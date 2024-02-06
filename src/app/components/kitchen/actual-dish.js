@@ -8,6 +8,7 @@ import { useDeviceType, types } from '../../hooks/device'
 import { markAsPreparation } from '../../../lib/api-call/kitchen/mark-as-preparation'
 import { API_URL } from '../../../lib/api-call/data'
 import { useState } from 'react'
+import { ModalDetails } from './ModalDetails'
 
 export default function ActualDish ({ setOrders, bar = false }) {
   const dish = kitchenStore(state => state.selectedDish)
@@ -15,6 +16,8 @@ export default function ActualDish ({ setOrders, bar = false }) {
   const setDish = kitchenStore(state => state.setSelectedDish)
   const type = useDeviceType()
   const [modalConfirmation, setModalConfirmation] = useState(false)
+  const [visibleDetails, setVisibleDetails] = useState(false)
+  const [detailDish, setDetailDish] = useState({})
 
   const handleFinish = () => {
     for (const id of dish.ids) {
@@ -86,6 +89,10 @@ export default function ActualDish ({ setOrders, bar = false }) {
         gap: 30
       }}
     >
+      <ModalDetails
+        onPressClose={() => setVisibleDetails(false)}
+        dish={detailDish} isVisible={visibleDetails}
+      />
       <Modal
         visible={modalConfirmation}
         transparent
@@ -221,7 +228,16 @@ export default function ActualDish ({ setOrders, bar = false }) {
           }}
           ItemSeparatorComponent={() => <View style={{ width: 1, borderRadius: 5, backgroundColor: '#000', marginHorizontal: 10 }} />}
           renderItem={({ item, index }) => (
-            <View>
+            <TouchableOpacity
+              onPress={() => {
+                setDetailDish({
+                  ...dish,
+                  comments: dish.comments[index],
+                  supplies_modified: dish.supplies_modified[item]
+                })
+                setVisibleDetails(true)
+              }}
+            >
               <View>
                 <Text
                   style={{ color: '#005943', fontWeight: 'bold', fontSize: 15 }}
@@ -238,7 +254,7 @@ export default function ActualDish ({ setOrders, bar = false }) {
               </View>
               <Text style={{ color: '#005943', fontWeight: 'bold', fontSize: 15 }}>OBSERVACIONES</Text>
               <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{(dish?.comments[index] !== 'null' && dish?.comments[index] !== 'undefined') && dish?.comments[index]}</Text>
-            </View>
+            </TouchableOpacity>
           )}
         />
         <View
