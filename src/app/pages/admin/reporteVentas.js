@@ -89,7 +89,6 @@ export default function ReporteVentas () {
       <HeaderAdmin>
         REPORTE DE VENTAS
       </HeaderAdmin>
-
       <View style={styles.container}>
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
           <Text style={styles.text}>FECHA DE INICIO</Text>

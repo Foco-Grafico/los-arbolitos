@@ -24,6 +24,7 @@ export const APIENDPOINTS = {
   getBoxList: `${API_URL}/boxes`,
   getOrdersHistory: `${API_URL}/reports/history`,
   getSellReport: `${API_URL}/reports/sell`,
+  getSellReportByUser: `${API_URL}/reports/waiter`,
   getMeasurementUnit: `${API_URL}/supplies/measurement_unit`,
   createProductCategory: `${API_URL}/dishes/category`
 }
