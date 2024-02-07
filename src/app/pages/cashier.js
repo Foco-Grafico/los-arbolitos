@@ -30,7 +30,7 @@ export default function Cashier () {
 
     const hasConcept = concept !== '' && concept !== null && concept !== undefined
 
-    const totalWithDiscount = Number((selectedTable?.total + extraPrice) - discount)
+    const totalWithDiscount = Number((selectedTable?.total + Number(extraPrice)) - discount)
     // const originalTotal = Number(selectedTable?.total)
 
     const descuento = ((discount !== '0' && discount !== '' && discount != null) ? discount : 0)
@@ -95,7 +95,7 @@ export default function Cashier () {
               `)
             }).join('')}
 
-            ${hasConcept ? `<tr><td style="solid black; padding: 5px;"></td><td style="solid black; padding: 5px;">${concept}</td><td style="solid black; padding: 5px;">${extraPrice}</td></tr>` : ''}
+            ${hasConcept ? `<tr><td style="solid black; padding: 5px;"></td><td style="solid black; padding: 5px;">${concept}</td><td style="solid black; padding: 5px;">${priceFormatter.format(Number(extraPrice))}</td></tr>` : ''}
           </tbody>
         </table>
 
