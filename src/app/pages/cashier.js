@@ -169,6 +169,7 @@ export default function Cashier () {
         setRequested(false)
         setDiscount(0)
         setConcept('')
+        setExtraPrice(0)
       })
   }
 
@@ -287,7 +288,7 @@ export default function Cashier () {
                 }}
                 keyboardType='numbers-and-punctuation'
                 onChangeText={setExtraPrice}
-                defaultValue={extraPrice.toString()}
+                value={extraPrice.toString()}
               />
             </View>
             <TouchableOpacity
