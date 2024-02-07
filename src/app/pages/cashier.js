@@ -22,16 +22,20 @@ export default function Cashier () {
   const nav = routerStore(state => state.nav)
   const [paymentTypeModal, setPaymentType] = useState(false)
   const [isEffective, setIsEffective] = useState(true)
+  const [concept, setConcept] = useState('')
+  const [extraPrice, setExtraPrice] = useState(0)
 
   const print = async (isEffective) => {
     setPaymentType(false)
 
-    const totalWithDiscount = Number(selectedTable?.total - discount)
-    const originalTotal = Number(selectedTable?.total)
+    const hasConcept = concept !== '' && concept !== null && concept !== undefined
+
+    const totalWithDiscount = Number((selectedTable?.total + extraPrice) - discount)
+    // const originalTotal = Number(selectedTable?.total)
 
     const descuento = ((discount !== '0' && discount !== '' && discount != null) ? discount : 0)
-    const iva = (Number(totalWithDiscount) * 0.16)
-    const subtotal = Number(originalTotal - iva)
+    // const iva = (Number(totalWithDiscount) * 0.16)
+    // const subtotal = Number(originalTotal - iva)
     const total = totalWithDiscount
 
     const html = `
@@ -91,8 +95,10 @@ export default function Cashier () {
               `)
             }).join('')}
 
+            ${hasConcept ? `<tr><td></td><td style="solid black; padding: 5px;">${concept}</td><td style="solid black; padding: 5px;">${extraPrice}</td></tr>` : ''}
           </tbody>
         </table>
+
         <p style=" font-family: Helvetica Neue; font-weight: normal;">
         ${(discount !== '0' && discount !== '' && discount != null && discount !== 0)
        ? `
@@ -156,11 +162,15 @@ export default function Cashier () {
   }
 
   const handleFinishOrder = () => {
-    finishOrderInCashier(selectedTable?.id, discount, isEffective)
-    setData(prev => prev.filter(order => order.id !== selectedTable?.id))
-    setSelectedTable({})
-    setRequested(false)
-    setDiscount(0)
+    finishOrderInCashier(selectedTable?.id, discount, isEffective, concept, extraPrice)
+      .finally(() => {
+        setData(prev => prev.filter(order => order.id !== selectedTable?.id))
+        setSelectedTable({})
+        setRequested(false)
+        setDiscount(0)
+        setConcept('')
+        setExtraPrice(0)
+      })
   }
 
   return (
@@ -247,6 +257,39 @@ export default function Cashier () {
               <Text style={{ width: 150, paddingVertical: 5, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }}>
                 {selectedTable?.total ? priceFormatter.format(selectedTable?.total - discount) : '$0.00'}
               </Text>
+            </View>
+            <Text style={styles.text}>COMENTARIO</Text>
+            <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
+              <TextInput
+                style={{
+                  width: 150,
+                  paddingVertical: 5,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  color: '#005943',
+                  textAlign: 'center',
+                  fontSize: 15
+                }}
+                onChangeText={setConcept}
+                multiline
+              />
+            </View>
+            <Text style={styles.text}>PRECIO EXTRA</Text>
+            <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
+              <TextInput
+                style={{
+                  width: 150,
+                  paddingVertical: 5,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  color: '#005943',
+                  textAlign: 'center',
+                  fontSize: 15
+                }}
+                keyboardType='numbers-and-punctuation'
+                onChangeText={setExtraPrice}
+                value={extraPrice.toString()}
+              />
             </View>
             <TouchableOpacity
               style={styles.buttons} onPress={

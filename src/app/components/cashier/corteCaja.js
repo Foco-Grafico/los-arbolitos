@@ -18,15 +18,17 @@ const priceFormatter = new Intl.NumberFormat('es-MX', {
   currency: 'MXN'
 })
 
+// 1195
+
 export default function CorteDeCaja () {
   const { reconciliation: orders, loading } = useGetReconciliation()
 
   const print = async (order) => {
-    console.log(JSON.stringify(order))
+    const hasConcept = order.concept !== 'null' && order.concept !== null && order.concept !== '' && order.concept !== 'undefined'
 
     const descuento = ((order.discount !== '0' && order.discount !== '' && order.discount != null) ? order.discount : 0)
-    const iva = (Number(order.total) * 0.16)
-    const subtotal = Number(order.total - iva)
+    // const iva = (Number(order.total) * 0.16)
+    // const subtotal = Number(order.total - iva)
     const total = order.total_payment
 
     const html = `
@@ -86,8 +88,19 @@ export default function CorteDeCaja () {
               `)
             }).join('')}
 
+            ${hasConcept
+? `
+              <tr>
+                <td style="solid black; padding: 5px;"></td>
+                <td style="solid black; padding: 5px;">${order.concept}</td>
+                <td style="solid black; padding: 5px; text-align: end;">${priceFormatter.format(order.extra_price)}</td>
+            `
+: ''}
+
           </tbody>
         </table>
+          
+
         <p style=" font-family: Helvetica Neue; font-weight: normal;">
         ${(order.discount !== '0' && order.discount !== '' && order.discount != null && order.discount !== 0)
        ? `
