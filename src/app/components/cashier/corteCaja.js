@@ -29,7 +29,7 @@ export default function CorteDeCaja () {
     const descuento = ((order.discount !== '0' && order.discount !== '' && order.discount != null) ? order.discount : 0)
     // const iva = (Number(order.total) * 0.16)
     // const subtotal = Number(order.total - iva)
-    const total = order.total_payment
+    const total = order.total
 
     const html = `
     <html>
@@ -339,6 +339,16 @@ export default function CorteDeCaja () {
                       </View>
                     )
                   })}
+                  {item?.concept !== 'null' && item?.concept !== null && item?.concept !== '' && item?.concept !== 'undefined' && (
+                    <View style={{ flexDirection: 'row', flex: 1 }}>
+                      <Text style={{ ...styles.text, flex: 3 }}>
+                        {item?.concept}
+                      </Text>
+                      <Text style={{ ...styles.text, flex: 1 }}>
+                        Precio: {priceFormatter.format(item?.extra_price)}
+                      </Text>
+                    </View>
+                  )}
                 </View>
                 <Text style={{ ...styles.text, textAlign: 'right' }}> Total:{priceFormatter.format(item?.total)} </Text>
               </TouchableOpacity>
