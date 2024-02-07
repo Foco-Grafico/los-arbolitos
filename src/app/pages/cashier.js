@@ -255,7 +255,7 @@ export default function Cashier () {
             <Text style={styles.text}>TOTAL</Text>
             <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={{ width: 150, paddingVertical: 5, borderWidth: 1, borderRadius: 10, color: '#005943', textAlign: 'center', fontSize: 15 }}>
-                {selectedTable?.total ? priceFormatter.format(selectedTable?.total - discount) : '$0.00'}
+                {selectedTable?.total ? priceFormatter.format((selectedTable?.total, Number(extraPrice)) - discount) : '$0.00'}
               </Text>
             </View>
             <Text style={styles.text}>CONCEPTO</Text>
