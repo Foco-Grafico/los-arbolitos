@@ -95,7 +95,7 @@ export default function Cashier () {
               `)
             }).join('')}
 
-            ${hasConcept ? `<tr><td></td><td style="solid black; padding: 5px;">${concept}</td><td style="solid black; padding: 5px;">${extraPrice}</td></tr>` : ''}
+            ${hasConcept ? `<tr><td style="solid black; padding: 5px;"></td><td style="solid black; padding: 5px;">${concept}</td><td style="solid black; padding: 5px;">${extraPrice}</td></tr>` : ''}
           </tbody>
         </table>
 
