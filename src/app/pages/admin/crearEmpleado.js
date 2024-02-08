@@ -9,6 +9,8 @@ import { useState } from 'react'
 import VerPass from '../../../../assets/verPass'
 import { routerStore } from '../../../../stores/router'
 import CreateUser from '../../func/createUser'
+import { selectedAccountStore } from '../../../../stores/account'
+import updateUsers from '../../func/updateUser'
 
 export default function CreateEmployee () {
   const nav = routerStore(state => state.nav)
@@ -21,8 +23,10 @@ export default function CreateEmployee () {
   const [salary, setSalary] = useState()
   const [visible, setVisible] = useState(true)
   const [active, setActive] = useState(true)
+  const selectedAccount = selectedAccountStore(state => state.selectedAccount)
 
   console.log(role?.id, name, lastName, username, password, phone, salary, active)
+  console.log(selectedAccount)
 
   const handleCreateUser = () => {
     CreateUser(role?.id, name, lastName, phone, username, password, salary)
@@ -30,6 +34,14 @@ export default function CreateEmployee () {
       .then(data => console.log(data))
       .catch(err => console.log(err))
     console.log('Usuario creado')
+  }
+
+  const handleUpdateUser = () => {
+    updateUsers(selectedAccount?.id, name, lastName, phone, username, role?.id, active, password)
+      .then(res => res.json())
+      .then(data => console.log(data))
+      .catch(err => console.log(err))
+    console.log('Usuario actualizado')
   }
 
   return (
@@ -42,8 +54,8 @@ export default function CreateEmployee () {
             <Text style={styles.text}>APELLIDO</Text>
           </View>
           <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-            <TextInput style={{ borderWidth: 1, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} onChangeText={setName} />
-            <TextInput style={{ borderWidth: 1, borderTopRightRadius: 10, borderBottomRightRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} onChangeText={setLastName} />
+            <TextInput style={{ borderWidth: 1, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} onChangeText={setName} placeholder={selectedAccount?.name} />
+            <TextInput style={{ borderWidth: 1, borderTopRightRadius: 10, borderBottomRightRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} onChangeText={setLastName} placeholder={selectedAccount?.lastname} />
           </View>
         </View>
         <View style={{ flexDirection: 'columm', justifyContent: 'center', gap: 10 }}>
@@ -52,9 +64,9 @@ export default function CreateEmployee () {
             <Text style={styles.text}>CONTRASEÑA</Text>
           </View>
           <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-            <TextInput style={{ borderWidth: 1, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} onChangeText={setUsername} />
+            <TextInput style={{ borderWidth: 1, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, width: '40%', height: 50, paddingLeft: 10 }} onChangeText={setUsername} placeholder={selectedAccount?.username} />
             <View style={{ borderWidth: 1, borderTopRightRadius: 10, borderBottomRightRadius: 10, width: '40%', height: 50, paddingLeft: 10, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10 }}>
-              <TextInput style={{ flex: 1 }} onChangeText={setPassword} secureTextEntry={visible} />
+              <TextInput style={{ flex: 1 }} onChangeText={setPassword} secureTextEntry={visible} placeholder={selectedAccount?.password} />
               <VerPass style={{ width: 35, height: 35 }} onPress={() => setVisible(!visible)} />
             </View>
           </View>
@@ -64,7 +76,7 @@ export default function CreateEmployee () {
             <Text style={styles.text}>TELÉFONO</Text>
           </View>
           <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-            <TextInput style={{ borderWidth: 1, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, width: '100%', height: 50, paddingLeft: 10 }} onChangeText={setPhone} />
+            <TextInput style={{ borderWidth: 1, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, width: '100%', height: 50, paddingLeft: 10 }} onChangeText={setPhone} placeholder={selectedAccount?.phone} />
           </View>
         </View>
         <View style={{ flexDirection: 'columm', justifyContent: 'center', gap: 10 }}>
@@ -85,7 +97,7 @@ export default function CreateEmployee () {
           <TouchableOpacity onPress={() => { nav('empleados') }}>
             <Cancelar style={{ width: 35, height: 35 }} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleCreateUser}>
+          <TouchableOpacity onPress={selectedAccount ? handleUpdateUser() : handleCreateUser()}>
             <Aceptar style={{ width: 35, height: 35 }} />
           </TouchableOpacity>
         </View>

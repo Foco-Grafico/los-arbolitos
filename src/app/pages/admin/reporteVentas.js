@@ -27,6 +27,7 @@ export default function ReporteVentas () {
   const { data, loading } = useGetSalesReport(initialDate, finalDate)
   const [openReport, setOpenReport] = useState(false)
 
+  console.log(data)
   const salesReport = () => {
     const header = new ClassHeader({
       report: 'VENTAS POR FECHA DEL ' + dateFormatter.format(initialDate).toUpperCase() + ' AL ' + dateFormatter.format(finalDate).toUpperCase()
