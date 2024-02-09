@@ -10,8 +10,6 @@ import { shareAsync } from 'expo-sharing'
 import * as FileSystem from 'expo-file-system'
 import * as IntentLauncher from 'expo-intent-launcher'
 import * as Print from 'expo-print'
-import { NetPrinter } from 'react-native-thermal-receipt-printer'
-import { useEffect, useState } from 'react'
 
 const ExcelJS = require('exceljs')
 
@@ -24,18 +22,6 @@ const priceFormatter = new Intl.NumberFormat('es-MX', {
 
 export default function CorteDeCaja () {
   const { reconciliation: orders, loading } = useGetReconciliation()
-  const [printers, setPrinters] = useState([])
-
-  useEffect(() => {
-    NetPrinter.init()
-      .then(() => {
-        setPrinters([{
-        }])
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
 
   const print = async (order) => {
     const hasConcept = order.concept !== 'null' && order.concept !== null && order.concept !== '' && order.concept !== 'undefined'
