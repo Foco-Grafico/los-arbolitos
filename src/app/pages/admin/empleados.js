@@ -37,7 +37,12 @@ export default function Empleados () {
               </TouchableOpacity>
             </View>}
         />
-        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5 }} onPress={() => nav('createEmployee')}>
+        <TouchableOpacity
+          style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5 }} onPress={() => {
+            nav('createEmployee')
+            setSelectedAccount(null)
+          }}
+        >
           <SignoMas style={{ width: 50, height: 50 }} />
         </TouchableOpacity>
       </View>

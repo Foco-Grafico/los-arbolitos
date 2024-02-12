@@ -37,9 +37,20 @@ export default function CreateEmployee () {
   }
 
   const handleUpdateUser = () => {
-    updateUsers(selectedAccount?.id, name, lastName, phone, username, role?.id, active, password)
+    // selectedAccount?.id, name, lastName, password, username, role?.id, active, password
+
+    updateUsers({
+      active,
+      id: selectedAccount?.id,
+      lastname: lastName,
+      name,
+      password,
+      phone,
+      username,
+      role: role?.id
+    })
       .then(res => res.json())
-      .then(data => console.log(data))
+      .then(data => console.log(JSON.stringify(data)))
       .catch(err => console.log(err))
     console.log('Usuario actualizado')
   }
