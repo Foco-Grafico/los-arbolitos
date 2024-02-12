@@ -113,7 +113,7 @@ function App () {
       <Route name='nuevoProducto' orientation={ORIENTATIONS.PORTRAIT}>
         <NuevoProducto />
       </Route>
-      <Route name='reporteVentasPorProducto' orientation={ORIENTATIONS.PORTRAIT}>
+      <Route name='reporteVentaProductos' orientation={ORIENTATIONS.PORTRAIT}>
         <ReporteVentasPorProducto />
       </Route>
       <Route name='rendimientoMesero' orientation={ORIENTATIONS.PORTRAIT}>
