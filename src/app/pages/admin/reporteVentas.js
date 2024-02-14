@@ -25,7 +25,6 @@ export default function ReporteVentas () {
   const [initialDate, setInitialDate] = useState(new Date())
   const [finalDate, setFinalDate] = useState(new Date())
   const { data, loading } = useGetSalesReport(initialDate, finalDate)
-  const [openReport, setOpenReport] = useState(false)
 
   console.log(data)
   const salesReport = () => {
@@ -91,23 +90,58 @@ export default function ReporteVentas () {
         REPORTE DE VENTAS
       </HeaderAdmin>
       <View style={styles.container}>
-        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+        <View style={{
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 10,
+          flex: 1
+        }}
+        >
           <Text style={styles.text}>FECHA DE INICIO</Text>
           <Pressable onPress={() => setCalendarInitialOpen(prev => !prev)}>
-            <View style={{ borderWidth: 1, gap: 10, flexDirection: 'row', width: 180, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
+            <View style={{
+              borderWidth: 1,
+              gap: 10,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 10,
+              padding: 10
+            }}
+            >
+              <Calendario />
               <Text
                 style={[styles.text, {
                   fontSize: 18
                 }]}
-              >{dateFormatter.format(initialDate)}
+              >
+                {dateFormatter.format(initialDate)}
               </Text>
             </View>
           </Pressable>
         </View>
-        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+        <View style={{
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 10,
+          flex: 1
+        }}
+        >
           <Text style={styles.text}>FECHA DE TÉRMINO</Text>
           <Pressable onPress={() => setCalendarFinalOpen(prev => !prev)}>
-            <View style={{ borderWidth: 1, gap: 10, flexDirection: 'row', width: 180, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
+            <View style={{
+              borderWidth: 1,
+              gap: 10,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 10,
+              padding: 10
+            }}
+            >
+              <Calendario />
               <Text
                 style={[styles.text, {
                   fontSize: 18
