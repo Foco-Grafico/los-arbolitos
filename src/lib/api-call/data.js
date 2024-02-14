@@ -1,5 +1,5 @@
-// export const API_URL = 'https://f463-74-208-129-103.ngrok-free.app'
-export const API_URL = 'http://192.168.1.132:3001'
+export const API_URL = 'https://f463-74-208-129-103.ngrok-free.app'
+// export const API_URL = 'http://192.168.1.132:3001'
 
 export const APIENDPOINTS = {
   getProducts: `${API_URL}/dishes`,
@@ -26,5 +26,6 @@ export const APIENDPOINTS = {
   getSellReport: `${API_URL}/reports/sell`,
   getSellReportByUser: `${API_URL}/reports/waiter`,
   getMeasurementUnit: `${API_URL}/supplies/measurement_unit`,
-  createProductCategory: `${API_URL}/dishes/category`
+  createProductCategory: `${API_URL}/dishes/category`,
+  getReportXProduct: `${API_URL}/reports/report_x_product`
 }

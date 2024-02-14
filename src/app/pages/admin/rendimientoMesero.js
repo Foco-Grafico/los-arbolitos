@@ -14,15 +14,6 @@ import { LoadingModal } from '../../components/loading-modal'
 // import ReportTable from '../../../classes/table'
 // import { CSSPDF } from '../../components/pdfcss'
 
-function formatDate (date) {
-  const d = new Date(date)
-  const day = String(d.getDate()).padStart(2, '0')
-  const month = String(d.getMonth() + 1).padStart(2, '0') // Los meses en JavaScript comienzan desde 0
-  const year = d.getFullYear()
-
-  return `${year}-${month}-${day}`
-}
-
 const dateFormatter = new Intl.DateTimeFormat('es-MX', {
   year: 'numeric',
   month: 'long',

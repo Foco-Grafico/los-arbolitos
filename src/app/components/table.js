@@ -6,7 +6,13 @@ export const Table = ({
   rows = [[]]
 }) => {
   return (
-    <View>
+    <View
+      style={{
+        borderWidth: 1,
+        borderRadius: 10,
+        padding: 10
+      }}
+    >
       <View
         style={{
           flexDirection: 'row',
