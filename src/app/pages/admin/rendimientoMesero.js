@@ -14,29 +14,27 @@ import { LoadingModal } from '../../components/loading-modal'
 // import ReportTable from '../../../classes/table'
 // import { CSSPDF } from '../../components/pdfcss'
 
-export default function RendimientoMesero () {
-  function formatDate (date) {
-    const d = new Date(date)
-    const day = String(d.getDate()).padStart(2, '0')
-    const month = String(d.getMonth() + 1).padStart(2, '0') // Los meses en JavaScript comienzan desde 0
-    const year = d.getFullYear()
+function formatDate (date) {
+  const d = new Date(date)
+  const day = String(d.getDate()).padStart(2, '0')
+  const month = String(d.getMonth() + 1).padStart(2, '0') // Los meses en JavaScript comienzan desde 0
+  const year = d.getFullYear()
 
-    return `${year}-${month}-${day}`
-  }
+  return `${year}-${month}-${day}`
+}
+
+const dateFormatter = new Intl.DateTimeFormat('es-MX', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+})
+
+export default function RendimientoMesero () {
   const [calendarInitialOpen, setCalendarInitialOpen] = useState(false)
   const [calendarFinalOpen, setCalendarFinalOpen] = useState(false)
-  const [initialDate, setInitialDate] = useState()
-  const [finalDate, setFinalDate] = useState()
-  const [openReport, setOpenReport] = useState(false)
-  const { users } = useGetUsers()
-  const { sells, loading } = useGetSellReportByUser()
-
-  const date = new Date()
-  const day = String(date.getDate()).padStart(2, '0')
-  const month = String(date.getMonth() + 1).padStart(2, '0') // Los meses en JavaScript comienzan desde 0
-  const year = date.getFullYear()
-
-  const formattedDate = `${year}-${month}-${day}`
+  const [initialDate, setInitialDate] = useState(new Date())
+  const [finalDate, setFinalDate] = useState(new Date())
+  const { data: sells, loading } = useGetSellReportByUser(initialDate, finalDate)
 
   //   const salesReport = () => {
   //     const header = new ClassHeader({
@@ -93,10 +91,11 @@ export default function RendimientoMesero () {
   //       shareAsync(file.uri)
   //     })
   //   }
-  console.log(sells)
+
+  // console.log(initialDate, finalDate)
   return (
     <View style={styles.main}>
-      <LoadingModal loading={false} />
+      <LoadingModal loading={loading} />
       <HeaderAdmin>
         <Text style={styles.textTitle}>RENDIMIENTO DE MESERO</Text>
       </HeaderAdmin>
@@ -124,21 +123,21 @@ export default function RendimientoMesero () {
             isOpen={calendarInitialOpen}
             onChangeDate={date => {
               setCalendarInitialOpen(false)
-              setInitialDate(formatDate(date))
+              setInitialDate(date)
             }}
           />
           <Calendar
             isOpen={calendarFinalOpen}
             onChangeDate={date => {
               setCalendarFinalOpen(false)
-              setFinalDate(formatDate(date))
+              setFinalDate(date)
             }}
           />
         </View>
         <View style={{ height: 700, alignItems: 'center' }}>
           <View style={{ justifyContent: 'center', alignItems: 'center', width: '100%', flex: 1 }}>
             <ScrollView contentContainerStyle={{ gap: 10 }} visible={openReport}>
-              {users?.map((user, index) => (
+              {sells?.map((user, index) => (
                 <View key={user.key} style={{ flexDirection: 'row', justifyContent: 'space-around', height: 40, gap: -5 }}>
                   <View style={{ backgroundColor: index % 2 === 0 ? '#bfd5d0' : 'white', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 40 }}>
                     <View style={{ flexDirection: 'row', width: 280, justifyContent: 'center' }}>

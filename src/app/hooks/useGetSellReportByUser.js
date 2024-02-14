@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import getSellReportByUser from '../func/get-sell-report-user'
 
 export default function useGetSellReportByUser (initialDate = new Date(), finalDate = new Date()) {
-  const [sells, setSells] = useState([])
+  const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -19,15 +19,15 @@ export default function useGetSellReportByUser (initialDate = new Date(), finalD
         }
         throw new Error('Error al obtener las ventas')
       })
-      .then(res => setSells(res.data))
+      .then(res => setData(res.data))
       .catch(err => {
         console.error(err)
       })
       .finally(() => setLoading(false))
-  }, [])
+  }, [initialDate, finalDate])
   return {
-    sells,
-    setSells,
+    data,
+    setData,
     loading
   }
 }
