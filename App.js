@@ -28,7 +28,7 @@ import { LowConnectionModal } from './src/app/components/LowConnectionModal'
 import { useRegisterNotifications } from './src/app/hooks/register-notifications'
 // import { Calendar } from './src/app/components/calendar'
 
-LogBox.ignoreLogs(['new NativeEventEmitter', 'Aborted'])
+LogBox.ignoreLogs(['new NativeEventEmitter', 'Aborted', 'Maximum call stack'])
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({

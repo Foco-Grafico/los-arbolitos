@@ -12,11 +12,17 @@ import { printToFileAsync } from 'expo-print'
 import { shareAsync } from 'expo-sharing'
 import { CSSPDF } from '../../components/pdfcss'
 import { LoadingModal } from '../../components/loading-modal'
+import { Table } from '../../components/table'
 
 const dateFormatter = new Intl.DateTimeFormat('es-MX', {
   year: 'numeric',
   month: 'long',
   day: 'numeric'
+})
+
+const priceFormatter = new Intl.NumberFormat('es-MX', {
+  style: 'currency',
+  currency: 'MXN'
 })
 
 export default function ReporteVentas () {
@@ -26,7 +32,7 @@ export default function ReporteVentas () {
   const [finalDate, setFinalDate] = useState(new Date())
   const { data, loading } = useGetSalesReport(initialDate, finalDate)
 
-  console.log(data)
+  console.log(JSON.stringify(data))
   const salesReport = () => {
     const header = new ClassHeader({
       report: 'VENTAS POR FECHA DEL ' + dateFormatter.format(initialDate).toUpperCase() + ' AL ' + dateFormatter.format(finalDate).toUpperCase()
@@ -203,18 +209,26 @@ export default function ReporteVentas () {
               paddingHorizontal: 10
             }}
             data={data}
+            contentContainerStyle={{
+              gap: 10
+            }}
             renderItem={({ item }) => (
-              <View>
-                <Text style={styles.text}>PRODUCTO {item?.table?.name}</Text>
-                <View style={{ flexDirection: 'row', gap: 10 }}>
-                  <Text style={styles.text}>PRECIO {item?.table?.name}</Text>
-                  <Text style={styles.text}>MESA {item?.table?.name}</Text>
-                </View>
-                <View style={{ flexDirection: 'row', gap: 10 }}>
-                  <Text style={styles.text}>MESA {item?.table?.name}</Text>
-                  <Text style={styles.text}>TOTAL: {item?.total}</Text>
-                </View>
-              </View>
+              <Table
+                header={['PRODUCTO', `PRECIO (${item?.is_effective ? 'E' : 'T'})`, `MESA ${item?.table?.name}`]}
+                rows={
+                  item?.dishes?.reduce((acc, dish) => {
+                    acc.push([dish?.name, priceFormatter.format(dish?.total), ''])
+
+                    if (dish?.supplies?.length) {
+                      dish?.supplies?.forEach(supply => {
+                        acc.push([` - ${supply?.name}`, priceFormatter.format(supply?.extra_cost), ''])
+                      })
+                    }
+
+                    return acc
+                  }, [])
+                }
+              />
             )}
           />
 
