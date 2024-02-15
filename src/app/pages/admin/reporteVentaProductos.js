@@ -9,6 +9,11 @@ import useGetReportXProduct from '../../hooks/useGetReportXProduct'
 import { Table } from '../../components/table'
 import { v4 } from '../../../lib/uuid'
 import { dateFormatter, priceFormatter } from '../../../utils/formatters'
+import ClassHeader from '../../../classes/header'
+import ReportTable from '../../../classes/table'
+import { printToFileAsync } from 'expo-print'
+import { shareAsync } from 'expo-sharing'
+import { CSSPDF } from '../../components/pdfcss'
 // import Descargar from '../../../../assets/descargar'
 
 export default function ReporteVentasPorProducto () {
@@ -20,23 +25,23 @@ export default function ReporteVentasPorProducto () {
 
   console.log(initialDate, finalDate)
 
-  //   const salesReport = () => {
-  //     const header = new ClassHeader({
-  //       report: 'VENTAS POR FECHA DEL ' + initialDate + ' AL ' + finalDate
-  //     })
+  // const salesReport = () => {
+  //   const header = new ClassHeader({
+  //     report: 'VENTAS POR PRODUCTO CON FECHA DEL ' + initialDate + ' AL ' + finalDate
+  //   })
 
-  //     const tables = data?.map((orders) => new ReportTable({
-  //       header: ['PRODUCTO', `PRECIO (${orders?.is_effective ? 'E' : 'T'})`, `MESA ${orders?.table?.name}`],
+  //   const tables = data?.map((orders) => new ReportTable({
+  //     header: ['PRODUCTO', `PRECIO (${orders?.is_effective ? 'E' : 'T'})`, `MESA ${orders?.table?.name}`],
 
-  //       items: orders?.dishes?.map((dish) => ({
-  //         name: dish?.name,
-  //         price: dish?.total,
-  //         supplies: dish?.supplies
-  //       })),
-  //       total: orders?.total
-  //     }))
+  //     items: orders?.dishes?.map((dish) => ({
+  //       name: dish?.name,
+  //       price: dish?.total,
+  //       supplies: dish?.supplies
+  //     })),
+  //     total: orders?.total
+  //   }))
 
-  //     const html = `
+  //   const html = `
   //         <html lang="en">
   //         <head>
   //           <meta charset="UTF-8" />
@@ -52,13 +57,13 @@ export default function ReporteVentasPorProducto () {
   //               ${header.render()}
   //               ${tables.map(table => table.getHTMLTable()).join('')}
   //               <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-  //                 <span style='color:white'>Total en efectivo: ${formatDate(data?.total_cash)}</span>
+  //                 <span style='color:white'>Total en efectivo: ${dateFormatter(data?.total_cash)}</span>
   //               </section>
   //               <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-  //                 <span style='color:white'>Total en tarjeta: ${formatDate(data?.total_debit)}</span>
+  //                 <span style='color:white'>Total en tarjeta: ${dateFormatter(data?.total_debit)}</span>
   //               </section>
   //               <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-  //                 <span style='color:white'>Total general: ${formatDate(data?.total)}</span>
+  //                 <span style='color:white'>Total general: ${dateFormatter(data?.total)}</span>
   //               </section>
   //             </section>
   //             </main>
@@ -67,55 +72,6 @@ export default function ReporteVentasPorProducto () {
 
   //       ${CSSPDF}
   //         `
-
-  //     printToFileAsync({
-  //       html,
-  //       base64: false
-  //     }).then((file) => {
-  //       shareAsync(file.uri)
-  //     })
-  //   }
-
-  // const salesReport = () => {
-  //   const header = new DateHeader({
-  //     report: 'CORTE DE CAJA'
-  //   })
-
-  //   // const tables = orders?.data?.map((order) => new ReportTable({
-  //   //   header: ['PRODUCTO', 'PRECIO'],
-  //   //   items: order?.dishes?.map((dish) => ({
-  //   //     name: dish?.name,
-  //   //     price: dish?.total,
-  //   //     supplies: dish?.supplies
-  //   //   })),
-  //   //   total: order?.total
-  //   // }))
-
-  //   const html = `
-  //   <html lang="en">
-  //   <head>
-  //     <meta charset="UTF-8" />
-  //     <meta name="description" content="Astro description">
-  //     <meta name="viewport" content="width=device-width" />
-  //     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  //     <meta name="generator" content={Astro.generator} />
-  //     <title>{title}</title>
-  //   </head>
-  //   <body>
-  //     <main class="px-16 py-16 flex-col flex gap-11 m-10">
-  //       <section class="flex flex-col gap-5">
-  //         ${header.render()}
-  //         ${tables.map(table => table.getHTMLTable()).join('')}
-  //       </section>
-  //       <section style='background-color: #005942; margin-top: 10px;' class=" flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-  //         <span style='color:white'>Total: ${orders?.total}</span>
-  //       </section>
-  //     </main>
-  //   </body>
-  // </html>
-
-  // ${CSSPDF}
-  //   `
 
   //   printToFileAsync({
   //     html,
