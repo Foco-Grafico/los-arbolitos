@@ -8,13 +8,8 @@ import { LoadingModal } from '../../components/loading-modal'
 import useGetReportXProduct from '../../hooks/useGetReportXProduct'
 import { Table } from '../../components/table'
 import { v4 } from '../../../lib/uuid'
+import { dateFormatter, priceFormatter } from '../../../utils/formatters'
 // import Descargar from '../../../../assets/descargar'
-
-const dateFormatter = new Intl.DateTimeFormat('es-MX', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric'
-})
 
 export default function ReporteVentasPorProducto () {
   const [calendarInitialOpen, setCalendarInitialOpen] = useState(false)
@@ -185,7 +180,7 @@ export default function ReporteVentasPorProducto () {
                   fontSize: 18
                 }]}
               >
-                {dateFormatter.format(initialDate)}
+                {dateFormatter(initialDate)}
               </Text>
             </View>
           </Pressable>
@@ -216,7 +211,7 @@ export default function ReporteVentasPorProducto () {
                   fontSize: 18
                 }]}
               >
-                {dateFormatter.format(finalDate)}
+                {dateFormatter(finalDate)}
               </Text>
             </View>
           </Pressable>
@@ -244,7 +239,7 @@ export default function ReporteVentasPorProducto () {
                 header={[key, 'Cantidad', 'Total']}
                 rows={
                   value.map((item) => {
-                    return ([item.name, item.quantity, item.total])
+                    return ([item.name, item.quantity, priceFormatter(item.total)])
                   })
                 }
               />
