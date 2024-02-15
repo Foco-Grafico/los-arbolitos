@@ -237,15 +237,32 @@ export default function ReporteVentasPorProducto () {
               <Table
                 key={v4()}
                 header={[key, 'Cantidad', 'Total']}
-                rows={
-                  value.map((item) => {
+                rows={[
+                  ...value.products.map((item) => {
                     return ([item.name, item.quantity, priceFormatter(item.total)])
                   })
-                }
+                ]}
+                footer={['Total', '', priceFormatter(value.total)]}
               />
             )
           })}
         </ScrollView>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          padding: 10
+        }}
+      >
+        <Text
+          style={[styles.text, {
+            fontSize: 18,
+            fontWeight: 'bold'
+          }]}
+        >Total: {priceFormatter(total)}
+        </Text>
       </View>
       <Footer />
     </View>

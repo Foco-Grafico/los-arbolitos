@@ -3,7 +3,8 @@ import { v4 } from '../../lib/uuid'
 
 export const Table = ({
   header = [],
-  rows = [[]]
+  rows = [[]],
+  footer = []
 }) => {
   return (
     <View
@@ -64,6 +65,32 @@ export const Table = ({
                 </Text>
               </View>
             ))}
+          </View>
+        ))}
+      </View>
+
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: 10
+        }}
+      >
+        {footer.map((f) => (
+          <View
+            style={{
+              flex: 1
+            }}
+            key={v4()}
+          >
+            <Text
+              style={{
+                fontWeight: 'bold'
+              }}
+            >
+              {f}
+            </Text>
           </View>
         ))}
       </View>
