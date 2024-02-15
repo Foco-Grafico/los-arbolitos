@@ -22,6 +22,7 @@ export function Waiter ({ leader = false }) {
   const [visibleSendToCash, setVisibleSendToCash] = useState(false)
   const [visibleEditProduct, setVisibleEditProduct] = useState(false)
   const [dataEditProduct, setDataEditProduct] = useState({})
+  const [blockButton, setBlockButton] = useState(false)
 
   return (
     <View style={{
@@ -60,6 +61,7 @@ export function Waiter ({ leader = false }) {
           data: dataEditProduct,
           setData: setDataEditProduct
         }}
+        blockButton={blockButton}
         setVisible={setVisibleEditProduct} setTables={setTables} setVisibleSendToCash={setVisibleSendToCash} setShowSendCommand={setVisibleSendCommand}
       />
 
@@ -78,6 +80,7 @@ export function Waiter ({ leader = false }) {
           isVisible: visibleSendToCash,
           setVisible: setVisibleSendToCash
         }}
+        setBlockButton={setBlockButton}
       />
     </View>
   )

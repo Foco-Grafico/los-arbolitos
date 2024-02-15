@@ -9,13 +9,14 @@ import { Image } from 'expo-image'
 import { v4 } from '../../../lib/uuid'
 // import { togglePriority } from '../../../lib/api-call/order/toggle'
 
-export function DishList ({ dishes, editProductController, resetSearch }) {
+export function DishList ({ dishes, editProductController, resetSearch, setBlockButton = () => {} }) {
   const order = tableStore(state => state.order)
   const status = tableStore(state => state.status)
   const setStatus = tableStore(state => state.setStatus)
   const setShow = modalStore(state => state.setShow)
 
   const addProduct = async (item) => {
+    setBlockButton(true)
     resetSearch()
 
     const dish = { ...item }
@@ -129,6 +130,8 @@ export function DishList ({ dishes, editProductController, resetSearch }) {
             ...dishesInOrder[newIndex],
             index: newIndex
           })
+
+          setBlockButton(false)
         })
     })
   }
