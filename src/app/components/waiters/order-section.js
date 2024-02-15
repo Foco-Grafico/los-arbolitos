@@ -15,7 +15,7 @@ const dateFormatter = new Intl.DateTimeFormat('es-MX', {
   hour12: true
 })
 
-export default function OrderSection ({ editProductController = {}, setShowSendCommand, setVisibleSendToCash, setTables, setData, setVisible }) {
+export default function OrderSection ({ editProductController = {}, setShowSendCommand, setVisibleSendToCash, setTables, setData, setVisible, blockButton = false }) {
   const status = tableStore(state => state.status)
   const order = tableStore(state => state.order)
   const setTable = tableStore(state => state.setTable)
@@ -368,6 +368,7 @@ export default function OrderSection ({ editProductController = {}, setShowSendC
         }}
       >
         <TouchableOpacity
+          disabled={blockButton}
           onPress={() => {
             status.click?.({
               setShowSendCommand,

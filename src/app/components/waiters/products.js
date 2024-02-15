@@ -11,7 +11,7 @@ import { v4 } from '../../../lib/uuid'
 import { routerStore } from '../../../../stores/router'
 import { Cerrar } from '../../../../assets/cerrar'
 
-export const Products = ({ isVisibleSendCommand, sendToCash, editProductController }) => {
+export const Products = ({ isVisibleSendCommand, sendToCash, editProductController, setBlockButton = () => {} }) => {
   const { dishes, setCategory, setSearch } = useWaiterGetProductsInCategory()
   const order = tableStore(state => state.order)
   const setDefault = tableStore(state => state.setDefault)
@@ -79,7 +79,7 @@ export const Products = ({ isVisibleSendCommand, sendToCash, editProductControll
             }}
           />
         </View>
-        <DishList resetSearch={resetSearch} editProductController={editProductController} dishes={dishes} />
+        <DishList setBlockButton={setBlockButton} resetSearch={resetSearch} editProductController={editProductController} dishes={dishes} />
       </View>
       <Footer
         onPressInCat={(category) => {
