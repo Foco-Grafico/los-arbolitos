@@ -23,7 +23,7 @@ export default function ReporteVentasPorProducto () {
   const [finalDate, setFinalDate] = useState(new Date())
   const { data, loading, total } = useGetReportXProduct(initialDate, finalDate)
 
-  console.log(JSON.stringify(data))
+  console.log(data, total)
   //   const salesReport = () => {
   //     const header = new ClassHeader({
   //       report: 'VENTAS POR FECHA DEL ' + initialDate + ' AL ' + finalDate
@@ -203,7 +203,7 @@ export default function ReporteVentasPorProducto () {
 
         </View>
       </View>
-      <View style={{ height: 450 }}>
+      <View>
         <ScrollView
           contentContainerStyle={{
             gap: 10
