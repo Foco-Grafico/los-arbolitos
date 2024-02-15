@@ -23,7 +23,8 @@ export default function ReporteVentasPorProducto () {
   const [finalDate, setFinalDate] = useState(new Date())
   const { data, loading, total } = useGetReportXProduct(initialDate, finalDate)
 
-  console.log(data, total)
+  console.log(initialDate, finalDate)
+
   //   const salesReport = () => {
   //     const header = new ClassHeader({
   //       report: 'VENTAS POR FECHA DEL ' + initialDate + ' AL ' + finalDate
@@ -132,6 +133,24 @@ export default function ReporteVentasPorProducto () {
   return (
     <View style={styles.main}>
       <LoadingModal loading={loading} />
+      <Calendar
+        isOpen={calendarInitialOpen}
+        onChangeDate={
+          (date) => {
+            setInitialDate(date)
+            setCalendarInitialOpen(false)
+          }
+        }
+      />
+      <Calendar
+        isOpen={calendarFinalOpen}
+        onChangeDate={
+          (date) => {
+            setFinalDate(date)
+            setCalendarFinalOpen(false)
+          }
+        }
+      />
       <HeaderAdmin>
         <Text style={styles.textTitle}>REPORTE DE VENTAS POR PLATILLO</Text>
       </HeaderAdmin>
@@ -147,7 +166,7 @@ export default function ReporteVentasPorProducto () {
           <Text style={styles.text}>FECHA DE INICIO</Text>
           <Pressable
             onPress={() => {
-              setCalendarInitialOpen(prev => !prev)
+              setCalendarInitialOpen(true)
             }}
           >
             <View style={{
@@ -180,7 +199,7 @@ export default function ReporteVentasPorProducto () {
         }}
         >
           <Text style={styles.text}>FECHA DE TÉRMINO</Text>
-          <Pressable onPress={() => setCalendarFinalOpen(prev => !prev)}>
+          <Pressable onPress={() => setCalendarFinalOpen(true)}>
             <View style={{
               borderWidth: 1,
               gap: 10,
@@ -196,17 +215,25 @@ export default function ReporteVentasPorProducto () {
                 style={[styles.text, {
                   fontSize: 18
                 }]}
-              >{dateFormatter.format(finalDate)}
+              >
+                {dateFormatter.format(finalDate)}
               </Text>
             </View>
           </Pressable>
 
         </View>
       </View>
-      <View>
+      <View
+        style={{
+          flex: 1
+        }}
+      >
         <ScrollView
           contentContainerStyle={{
             gap: 10
+          }}
+          style={{
+            paddingHorizontal: 20
           }}
         >
           <Text>Reporte de ventas por producto</Text>
@@ -214,12 +241,12 @@ export default function ReporteVentasPorProducto () {
             return (
               <Table
                 key={v4()}
-                header={[key, 'cantidad', 'total']}
+                header={[key, 'Cantidad', 'Total']}
                 rows={
                   value.map((item) => {
                     return ([item.name, item.quantity, item.total])
                   })
-              }
+                }
               />
             )
           })}
@@ -233,14 +260,12 @@ export default function ReporteVentasPorProducto () {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fff',
     flexDirection: 'row',
-    width: '100%',
-    height: '100%',
     justifyContent: 'space-around',
     alignItems: 'flex-start',
-    marginTop: 30
+    marginTop: 30,
+    marginBottom: 30
   },
   main: {
     flex: 1,

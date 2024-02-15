@@ -5,6 +5,7 @@ export default function useGetReportXProduct (initialDate = new Date(), finalDat
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState(0)
+
   useEffect(() => {
     setLoading(true)
     getReportXProduct(initialDate.toISOString().split('T')[0], finalDate.toISOString().split('T')[0])
