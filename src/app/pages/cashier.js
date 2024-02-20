@@ -231,7 +231,7 @@ export default function Cashier () {
         />
         <View style={{ flex: 1 }}>
           <ScrollView contentContainerStyle={{ width: '100%', backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', gap: 30, paddingVertical: 10 }}>
-            <Products table={selectedTable} />
+            <Products setSelectedTable={setSelectedTable} table={selectedTable} />
           </ScrollView>
           <View style={{ justifyContent: 'center', alignItems: 'center', gap: 5, paddingVertical: 10 }}>
             <Text style={styles.text}>DESCUENTO</Text>
