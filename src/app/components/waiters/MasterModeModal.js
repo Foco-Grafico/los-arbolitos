@@ -1,16 +1,19 @@
 import { useState } from 'react'
-import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Modal, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native'
 import { tableStore } from '../../../../stores/waiter'
 import { Cancelar } from '../../../../assets/cancelar'
 import finishOrderInKitchen from '../../func/finish-order-in-kitchen'
 import { sendToCashier } from '../../../lib/api-call/order/move-order'
 import finishOrderInCashier from '../../func/finish-order-in.cashier'
+import { useConfig } from '../../hooks/use-get-config'
 
 export const MasterModeModal = ({ isActive, onClose }) => {
   const [section, setSection] = useState('main')
   const order = tableStore(state => state.order)
   const [selectedDish, setSelectedDish] = useState(null)
   const setStatus = tableStore((state) => state.setStatus)
+  const [pass, setPass] = useState('')
+  const config = useConfig()
 
   const forceQuit = () => {
     onClose?.()
@@ -244,6 +247,41 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                   gap: 30
                 }}
               >
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: 20
+                  }}
+                >
+                  <Button
+                    onPress={() => {
+                      if (pass === '') return ToastAndroid.show('Ingrese la contraseña', ToastAndroid.SHORT)
+
+                      if (pass !== config?.pass) return ToastAndroid.show('Contraseña incorrecta', ToastAndroid.SHORT)
+
+                      forceQuit()
+                      finishOrderInCashier(order?.id, 0, true)
+                    }}
+                  >
+                    Liberar mesa
+                  </Button>
+
+                  <TextInput
+                    placeholder='Contraseña'
+                    secureTextEntry
+                    onChangeText={setPass}
+                    style={{
+                      width: 200,
+                      borderRadius: 10,
+                      fontSize: 20,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                      borderWidth: 1,
+                      borderColor: '#000'
+                    }}
+                  />
+                </View>
+
                 <Button
                   onPress={() => {
                     forceQuit()
@@ -288,15 +326,7 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                 >
                   Solicitar cuenta
                 </Button>
-                <Button
-                  onPress={() => {
-                    forceQuit()
 
-                    finishOrderInCashier(order?.id, 0, true)
-                  }}
-                >
-                  Liberar mesa
-                </Button>
               </View>
             </>
           )}
