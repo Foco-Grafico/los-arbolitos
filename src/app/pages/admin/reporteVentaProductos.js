@@ -10,10 +10,11 @@ import { Table } from '../../components/table'
 import { v4 } from '../../../lib/uuid'
 import { dateFormatter, priceFormatter } from '../../../utils/formatters'
 import ClassHeader from '../../../classes/header'
-import ReportTable from '../../../classes/table'
 import { printToFileAsync } from 'expo-print'
 import { shareAsync } from 'expo-sharing'
 import { CSSPDF } from '../../components/pdfcss'
+import Descargar from '../../../../assets/descargar'
+import ReportXProductTable from '../../../classes/tablexproduct'
 // import Descargar from '../../../../assets/descargar'
 
 export default function ReporteVentasPorProducto () {
@@ -23,63 +24,55 @@ export default function ReporteVentasPorProducto () {
   const [finalDate, setFinalDate] = useState(new Date())
   const { data, loading, total } = useGetReportXProduct(initialDate, finalDate)
 
-  console.log(initialDate, finalDate)
+  console.log(JSON.stringify(data))
 
-  // const salesReport = () => {
-  //   const header = new ClassHeader({
-  //     report: 'VENTAS POR PRODUCTO CON FECHA DEL ' + initialDate + ' AL ' + finalDate
-  //   })
+  const salesReport = () => {
+    const header = new ClassHeader({
+      report: 'VENTAS POR PRODUCTO CON FECHA DEL ' + initialDate.toISOString().split('T')[0] + ' AL ' + finalDate.toISOString().split('T')[0]
+    })
 
-  //   const tables = data?.map((orders) => new ReportTable({
-  //     header: ['PRODUCTO', `PRECIO (${orders?.is_effective ? 'E' : 'T'})`, `MESA ${orders?.table?.name}`],
+    const tables = Object.entries(data).map(([key, value]) => new ReportXProductTable({
+      header: [`${key}`, 'PRODUCTO', 'CANTIDAD'],
 
-  //     items: orders?.dishes?.map((dish) => ({
-  //       name: dish?.name,
-  //       price: dish?.total,
-  //       supplies: dish?.supplies
-  //     })),
-  //     total: orders?.total
-  //   }))
+      items: value.products.map((dish) => ({
+        name: dish?.name,
+        quantity: dish?.quantity,
+        total: dish?.total
+      })),
+      total: value?.total
 
-  //   const html = `
-  //         <html lang="en">
-  //         <head>
-  //           <meta charset="UTF-8" />
-  //           <meta name="description" content="Astro description">
-  //           <meta name="viewport" content="width=device-width" />
-  //           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  //           <meta name="generator" content={Astro.generator} />
-  //           <title>{title}</title>
-  //         </head>
-  //         <body>
-  //           <main class="px-16 py-16 flex-col flex gap-11 m-10">
-  //             <section class="flex flex-col gap-5">
-  //               ${header.render()}
-  //               ${tables.map(table => table.getHTMLTable()).join('')}
-  //               <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-  //                 <span style='color:white'>Total en efectivo: ${dateFormatter(data?.total_cash)}</span>
-  //               </section>
-  //               <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-  //                 <span style='color:white'>Total en tarjeta: ${dateFormatter(data?.total_debit)}</span>
-  //               </section>
-  //               <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-  //                 <span style='color:white'>Total general: ${dateFormatter(data?.total)}</span>
-  //               </section>
-  //             </section>
-  //             </main>
-  //         </body>
-  //       </html>
+    }))
 
-  //       ${CSSPDF}
-  //         `
+    const html = `
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="description" content="Astro description">
+            <meta name="viewport" content="width=device-width" />
+            <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+            <meta name="generator" content={Astro.generator} />
+            <title>{title}</title>
+          </head>
+          <body>
+            <main class="px-16 py-16 flex-col flex gap-11 m-10">
+              <section class="flex flex-col gap-5">
+                ${header.render()}
+                ${tables.map(table => table.getHTMLTable()).join('')}
+              </section>
+              </main>
+          </body>
+        </html>
 
-  //   printToFileAsync({
-  //     html,
-  //     base64: false
-  //   }).then((file) => {
-  //     shareAsync(file.uri)
-  //   })
-  // }
+        ${CSSPDF}
+          `
+
+    printToFileAsync({
+      html,
+      base64: false
+    }).then((file) => {
+      shareAsync(file.uri)
+    })
+  }
 
   return (
     <View style={styles.main}>
@@ -187,7 +180,10 @@ export default function ReporteVentasPorProducto () {
             paddingHorizontal: 20
           }}
         >
-          <Text>Reporte de ventas por producto</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <Text>Reporte de ventas por producto</Text>
+            <Descargar style={{ width: 24, height: 24 }} onPress={() => { salesReport() }} />
+          </View>
           {Object.entries(data).map(([key, value]) => {
             return (
               <Table
