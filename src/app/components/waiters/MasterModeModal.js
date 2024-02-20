@@ -257,6 +257,8 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                     onPress={() => {
                       if (pass === '') return ToastAndroid.show('Ingrese la contraseña', ToastAndroid.SHORT)
 
+                      if (config?.pass === null) return ToastAndroid.show('No hay contraseña configurada', ToastAndroid.SHORT)
+
                       if (pass !== config?.pass) return ToastAndroid.show('Contraseña incorrecta', ToastAndroid.SHORT)
 
                       forceQuit()
