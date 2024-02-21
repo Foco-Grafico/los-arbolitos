@@ -1,7 +1,8 @@
-import { FlatList, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Modal, Pressable, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native'
 import { removeDishFromOrder } from '../../func/remove-dish-from-order'
 import { Cancelar } from '../../../../assets/cancelar'
 import { useState } from 'react'
+import { useConfig } from '../../hooks/use-get-config'
 
 const priceFormatter = new Intl.NumberFormat('es-MX', {
   style: 'currency',
@@ -15,6 +16,9 @@ export default function CashierProducts ({ table, setSelectedTable }) {
   })
 
   const [isListVisibleModal, setIsListVisibleModal] = useState(false)
+  const [password, setPassword] = useState('')
+  const config = useConfig()
+
   const [confirmDeleteModal, setIsConfirmDeleteModal] = useState({
     visible: false,
     dishId: 0
@@ -162,13 +166,18 @@ export default function CashierProducts ({ table, setSelectedTable }) {
         statusBarTranslucent
       >
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '80%', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ backgroundColor: 'white', padding: 20, gap: 20, borderRadius: 10, width: '80%', justifyContent: 'center', alignItems: 'center' }}>
 
             <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>¿Desea eliminar el producto "{modalInfo.dish?.name}"?</Text>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 20 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%', marginTop: 20 }}>
               <Pressable
                 onPress={() => {
+                  if (password === '') return ToastAndroid.show('Ingrese la contraseña', ToastAndroid.SHORT)
+
+                  if (config?.pass === null) return ToastAndroid.show('No hay contraseña configurada', ToastAndroid.SHORT)
+
+                  if (password !== config?.pass) return ToastAndroid.show('Contraseña incorrecta', ToastAndroid.SHORT)
                   removeDishFromOrder({
                     orderDishId: confirmDeleteModal.dishId,
                     orderId: table?.id
@@ -195,15 +204,20 @@ export default function CashierProducts ({ table, setSelectedTable }) {
                   setIsConfirmDeleteModal({ visible: false, dishId: 0 })
                 }}
               >
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Sí</Text>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', borderWidth: 1, borderRadius: 10, padding: 5, width: 40, textAlign: 'center' }}>Sí</Text>
               </Pressable>
               <Pressable
                 onPress={() => {
                   setIsConfirmDeleteModal({ visible: false, dishId: 0 })
                 }}
               >
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>No</Text>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', borderWidth: 1, borderRadius: 10, padding: 5, width: 40, textAlign: 'center' }}>No</Text>
               </Pressable>
+
+            </View>
+            <View style={{ justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+              <Text>CONTRASEÑA DE AUTORIZACIÓN</Text>
+              <TextInput placeholder='Contraseña' required style={{ borderRadius: 1, borderWidth: 1, width: 200, height: 34, paddingHorizontal: 10 }} onChangeText={setPassword} secureTextEntry />
             </View>
 
           </View>
@@ -215,6 +229,7 @@ export default function CashierProducts ({ table, setSelectedTable }) {
           <Text style={styles.textProduct}>CANT.</Text>
           <Text style={styles.textProduct}>PLATILLO</Text>
           <Text style={styles.textProduct}>COSTO</Text>
+          <Text />
         </View>
         <View style={{ gap: 10 }}>
           {table?.pretty_list?.map((dish, index) => {
@@ -234,11 +249,9 @@ export default function CashierProducts ({ table, setSelectedTable }) {
                   })}
                 </View>
                 <View style={{ justifyContent: 'center', alignItems: 'flex-end', gap: 5 }}>
-
                   <Text style={styles.textProduct}>
                     {priceFormatter.format(dish?.price * dish?.quantity)}
                   </Text>
-
                   {Object.keys(dish?.supplies_modified).map(key => {
                     return dish?.supplies_modified[key].map(supply => {
                       return (
