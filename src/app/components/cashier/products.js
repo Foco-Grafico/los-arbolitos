@@ -1,6 +1,7 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { removeDishFromOrder } from '../../func/remove-dish-from-order'
 import { Cancelar } from '../../../../assets/cancelar'
+import { useState } from 'react'
 
 const priceFormatter = new Intl.NumberFormat('es-MX', {
   style: 'currency',
@@ -8,80 +9,262 @@ const priceFormatter = new Intl.NumberFormat('es-MX', {
 })
 
 export default function CashierProducts ({ table, setSelectedTable }) {
-  const handleDeleteProduct = (productId, productIndex) => {
-    removeDishFromOrder({
-      orderDishId: productId,
-      orderId: table?.id
-    })
+  const [modalInfo, setModalInfo] = useState({
+    dish: {},
+    index: 0
+  })
 
-    setSelectedTable(table => {
-      const newTotal = table?.total - (table?.pretty_list[productIndex].price * table?.pretty_list[productIndex]?.quantity) - Object.keys(table?.pretty_list[productIndex]?.supplies_modified).reduce((acc, key) => {
-        return acc + newTable?.pretty_list[productIndex]?.supplies_modified[key]?.reduce((acc, supply) => {
-          return acc + supply?.extra_cost
-        }, 0)
-      }, 0)
-      const newTable = { ...table, total: newTotal }
+  const [isListVisibleModal, setIsListVisibleModal] = useState(false)
+  const [confirmDeleteModal, setIsConfirmDeleteModal] = useState({
+    visible: false,
+    dishId: 0
+  })
 
-      newTable.pretty_list = newTable?.pretty_list.filter((_, index) => index !== productIndex)
-      return newTable
-    })
+  console.log('dish', JSON.stringify(modalInfo.dish))
+  const handleDeleteProduct = (dish, index) => {
+    setModalInfo({ dish, index })
+
+    if (dish?.ids.length <= 1) {
+      setIsListVisibleModal(false)
+      setIsConfirmDeleteModal({
+        visible: true,
+        dishId: dish?.ids[0]
+      })
+
+      return
+    }
+
+    setIsListVisibleModal(true)
   }
 
+  console.log('table', JSON.stringify(table))
+
   return (
-    <View style={styles.products}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text style={styles.textProduct}>CANT.</Text>
-        <Text style={styles.textProduct}>PLATILLO</Text>
-        <Text style={styles.textProduct}>COSTO</Text>
-      </View>
-      <View style={{ gap: 10 }}>
-        {table?.pretty_list?.map((dish, index) => {
-          return (
-            <View key={dish?.id} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.textProduct}>{dish?.quantity}</Text>
-              <View style={{ justifyContent: 'center', alignItems: 'center', gap: 5 }}>
-                <Text style={styles.textProduct}>{dish?.name}</Text>
-                {Object.keys(dish?.supplies_modified).map(key => {
-                  return dish?.supplies_modified[key].map(supply => {
-                    return (
-                      <View key={supply.key} style={{ flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={styles.textProduct}>({supply.quantity}) {supply.name}</Text>
-                      </View>
-                    )
-                  })
-                })}
-              </View>
-              <View style={{ justifyContent: 'center', alignItems: 'flex-end', gap: 5 }}>
+    <>
+      <Modal
+        animationType='fade'
+        transparent
+        visible={isListVisibleModal}
+        statusBarTranslucent
+      >
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '80%', justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Seleccione el producto que desea eliminar</Text>
+            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 10, width: '100%', marginTop: 20 }}>
 
-                <Text style={styles.textProduct}>
-                  {priceFormatter.format(dish?.price * dish?.quantity)}
-                </Text>
+              {(table?.id != null && Array.isArray(modalInfo.dish?.ids)) && (
+                <FlatList
+                  data={table?.dishes.filter(dish => modalInfo.dish?.ids.includes(dish?.id))}
+                  style={{
+                    width: '100%'
+                  }}
+                  contentContainerStyle={{
+                    gap: 5,
+                    width: '50%',
+                    alignSelf: 'center'
+                  }}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      style={{
 
-                {Object.keys(dish?.supplies_modified).map(key => {
-                  return dish?.supplies_modified[key].map(supply => {
-                    return (
-                      <View key={supply.key} style={{ flexDirection: 'row', gap: 20 }}>
-                        <Text style={styles.textProduct}>
-                          {priceFormatter.format(supply.extra_cost)}
+                        backgroundColor: '#8d89898a',
+                        padding: 5,
+                        borderRadius: 5
+                      }}
+                      onPress={() => {
+                        setIsListVisibleModal(false)
+                        setIsConfirmDeleteModal({
+                          visible: true,
+                          dishId: item?.id
+                        })
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          borderBottomWidth: 1,
+                          padding: 5
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: '#005943',
+                            fontSize: 15,
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          {item?.name?.toUpperCase()}
                         </Text>
                       </View>
-                    )
-                  })
-                })}
-              </View>
+
+                      <View
+                        style={{
+                          padding: 5
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: '#000',
+                            fontSize: 15,
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          Observaciones:
+                        </Text>
+                        {(item?.comment !== 'undefined' && item?.comment !== 'null' && item?.comment !== '' && item?.comment != null) && (
+                          <Text
+                            style={{
+                              color: '#005943',
+                              fontSize: 13,
+                              fontWeight: 'bold'
+                            }}
+                          >
+                            {item?.comment}
+                          </Text>
+                        )}
+                        <Text
+                          style={{
+                            color: '#000',
+                            fontSize: 15,
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          Extras:
+                        </Text>
+                        {item?.supplies?.map((supply) => (
+                          <Text
+                            key={supply?.key}
+                            style={{
+                              color: '#005943',
+                              fontSize: 13,
+                              fontWeight: 'bold'
+                            }}
+                          >
+                            {supply?.name} x {supply?.quantity}
+                          </Text>
+                        ))}
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                />
+              )}
+            </View>
+
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType='fade'
+        transparent
+        visible={confirmDeleteModal.visible}
+        statusBarTranslucent
+      >
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '80%', justifyContent: 'center', alignItems: 'center' }}>
+
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>¿Desea eliminar el producto "{modalInfo.dish?.name}"?</Text>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 20 }}>
               <Pressable
                 onPress={() => {
-                  console.log('delete', dish, index)
-                  handleDeleteProduct(dish?.id, index)
+                  removeDishFromOrder({
+                    orderDishId: confirmDeleteModal.dishId,
+                    orderId: table?.id
+                  })
+
+                  setSelectedTable(table => {
+                    const newTotal = table?.total - Number(modalInfo.dish?.total[confirmDeleteModal.dishId])
+                    const newTable = { ...table, total: newTotal }
+
+                    const prettyEl = newTable?.pretty_list[modalInfo.index]
+
+                    prettyEl.ids.splice(prettyEl?.ids.indexOf(confirmDeleteModal.dishId), 1)
+                    prettyEl.quantity -= 1
+
+                    if (prettyEl?.ids.length === 0) {
+                      newTable?.pretty_list.splice(modalInfo.index, 1)
+                    } else {
+                      newTable.pretty_list[modalInfo.index] = prettyEl
+                    }
+
+                    return newTable
+                  })
+
+                  setIsConfirmDeleteModal({ visible: false, dishId: 0 })
                 }}
               >
-                <Cancelar width={30} height={30} />
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Sí</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  setIsConfirmDeleteModal({ visible: false, dishId: 0 })
+                }}
+              >
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>No</Text>
               </Pressable>
             </View>
-          )
-        })}
+
+          </View>
+        </View>
+      </Modal>
+
+      <View style={styles.products}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.textProduct}>CANT.</Text>
+          <Text style={styles.textProduct}>PLATILLO</Text>
+          <Text style={styles.textProduct}>COSTO</Text>
+        </View>
+        <View style={{ gap: 10 }}>
+          {table?.pretty_list?.map((dish, index) => {
+            return (
+              <View key={dish?.id} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={styles.textProduct}>{dish?.quantity}</Text>
+                <View style={{ justifyContent: 'center', alignItems: 'center', gap: 5 }}>
+                  <Text style={styles.textProduct}>{dish?.name}</Text>
+                  {Object.keys(dish?.supplies_modified).map(key => {
+                    return dish?.supplies_modified[key].map(supply => {
+                      return (
+                        <View key={supply.key} style={{ flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                          <Text style={styles.textProduct}>({supply.quantity}) {supply.name}</Text>
+                        </View>
+                      )
+                    })
+                  })}
+                </View>
+                <View style={{ justifyContent: 'center', alignItems: 'flex-end', gap: 5 }}>
+
+                  <Text style={styles.textProduct}>
+                    {priceFormatter.format(dish?.price * dish?.quantity)}
+                  </Text>
+
+                  {Object.keys(dish?.supplies_modified).map(key => {
+                    return dish?.supplies_modified[key].map(supply => {
+                      return (
+                        <View key={supply.key} style={{ flexDirection: 'row', gap: 20 }}>
+                          <Text style={styles.textProduct}>
+                            {priceFormatter.format(supply.extra_cost)}
+                          </Text>
+                        </View>
+                      )
+                    })
+                  })}
+                </View>
+                <Pressable
+                  onPress={() => {
+                    handleDeleteProduct(dish, index)
+                  }}
+                >
+                  <Cancelar width={30} height={30} />
+                </Pressable>
+              </View>
+            )
+          })}
+        </View>
       </View>
-    </View>
+
+    </>
   )
 }
 
