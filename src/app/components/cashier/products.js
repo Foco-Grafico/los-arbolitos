@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { removeDishFromOrder } from '../../func/remove-dish-from-order'
+import { Cancelar } from '../../../../assets/cancelar'
 
 const priceFormatter = new Intl.NumberFormat('es-MX', {
   style: 'currency',
@@ -14,14 +15,14 @@ export default function CashierProducts ({ table, setSelectedTable }) {
     })
 
     setSelectedTable(table => {
-      const newTotal = table.total - (table.pretty_list[productIndex].price * table.pretty_list[productIndex].quantity) - Object.keys(table.pretty_list[productIndex].supplies_modified).reduce((acc, key) => {
-        return acc + newTable.pretty_list[productIndex].supplies_modified[key].reduce((acc, supply) => {
-          return acc + supply.extra_cost
+      const newTotal = table?.total - (table?.pretty_list[productIndex].price * table?.pretty_list[productIndex]?.quantity) - Object.keys(table?.pretty_list[productIndex]?.supplies_modified).reduce((acc, key) => {
+        return acc + newTable?.pretty_list[productIndex]?.supplies_modified[key]?.reduce((acc, supply) => {
+          return acc + supply?.extra_cost
         }, 0)
       }, 0)
       const newTable = { ...table, total: newTotal }
 
-      newTable.pretty_list = newTable.pretty_list.filter((_, index) => index !== productIndex)
+      newTable.pretty_list = newTable?.pretty_list.filter((_, index) => index !== productIndex)
       return newTable
     })
   }
@@ -70,9 +71,12 @@ export default function CashierProducts ({ table, setSelectedTable }) {
               </View>
               <Pressable
                 onPress={() => {
+                  console.log('delete', dish, index)
                   handleDeleteProduct(dish?.id, index)
                 }}
-              />
+              >
+                <Cancelar width={30} height={30} />
+              </Pressable>
             </View>
           )
         })}
