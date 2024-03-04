@@ -36,6 +36,7 @@ export default function CreateEmployee () {
     console.log('Usuario creado')
   }
 
+  console.log(active)
   const handleUpdateUser = () => {
     // selectedAccount?.id, name, lastName, password, username, role?.id, active, password
 

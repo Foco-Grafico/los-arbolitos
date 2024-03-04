@@ -11,9 +11,9 @@ export default function CreateUser (type, name, lastName, phone, username, passw
     body: JSON.stringify({
       name,
       last_name: lastName,
+      phone,
       username,
       password,
-      phone,
       salary
     })
   }
