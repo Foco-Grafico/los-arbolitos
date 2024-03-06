@@ -10,13 +10,19 @@ import { Products } from '../components/waiters/products'
 import { useState } from 'react'
 import { getOrder } from '../../lib/api-call/order/get-order'
 import useWaiterGetTablesinZone from '../hooks/getTablesbyZone'
+import { ordersStore } from '../../../stores/waiter-v2'
+import { accountStore } from '../../../stores/account'
 // import DishList from '../components/waiters/dish-list'
 // import { sendToCashier, sendTokitchen } from '../../lib/api-call/order/move-order'
 
 export function Waiter ({ leader = false }) {
   const setTable = tableStore(state => state.setTable)
   const { tables, setTables } = useWaiterGetTablesinZone(leader)
+  const account = accountStore(state => state.account)
   const table = tableStore(state => state.table)
+  const updateOrders = ordersStore(state => state.updateOrders)
+
+  updateOrders(leader, account.id)
 
   const [visibleSendCommand, setVisibleSendCommand] = useState(false)
   const [visibleSendToCash, setVisibleSendToCash] = useState(false)
