@@ -7,3 +7,9 @@ export const ordersStore = create(set => ({
     // Template for the updateOrders function
   }
 }))
+
+export const selectedOrderStore = create(set => ({
+  selectedOrder: {},
+
+  setSelectedOrder: order => set({ selectedOrder: order })
+}))
