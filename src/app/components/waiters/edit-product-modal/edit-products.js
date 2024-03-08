@@ -60,6 +60,8 @@ const Layout = ({ children }) => {
 }
 
 export default function EditProducts ({ editProductController }) {
+  const setStatus = tableStore(state => state.setStatus)
+
   const [dishSelected, setSelectDish] = useState(null)
   const editProducts = tableStore(state => state.editProducts)
   const [productToDelete, setProductToDelete] = useState(null)
@@ -532,6 +534,7 @@ export default function EditProducts ({ editProductController }) {
               setQuantityProducts(1)
               setSelectDish(null)
               editProductController?.setVisible?.(false)
+              setStatus(1)
             }}
           >
             <Aceptar style={{ width: 24, height: 24 }} />
