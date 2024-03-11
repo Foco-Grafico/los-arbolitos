@@ -4,11 +4,13 @@ import { socket } from '../../services/socket'
 import getOrdersInKitchen from '../func/get-orders-in-kitchen'
 import { useEffect, useState } from 'react'
 import { useHorribleSound } from './play-sounds'
+import { useConfig } from './use-get-config'
 
 export default function useKitchenGetOrders (bar = false) {
   const [orders, setOrders] = useState([])
   const configNewInfo = kitchenStore(state => state.configNewInfo)
   const { play } = useHorribleSound()
+  const { chef_perm: permittedDishes } = useConfig()
 
   useEffect(() => {
     getOrdersInKitchen(bar)
@@ -159,8 +161,8 @@ export default function useKitchenGetOrders (bar = false) {
             return acc
           }, -1)
 
-          if (lastOrderPriority === -1 || lastOrderPriority <= 1) {
-            const position = copyOrders.length >= 2 ? 2 : 1
+          if (lastOrderPriority === -1 || lastOrderPriority <= (permittedDishes - 1)) {
+            const position = copyOrders.length >= permittedDishes ? permittedDishes : 1
 
             copyOrders.splice(position, 0, newOrder)
           } else {

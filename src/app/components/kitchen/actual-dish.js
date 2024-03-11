@@ -9,6 +9,7 @@ import { markAsPreparation } from '../../../lib/api-call/kitchen/mark-as-prepara
 import { API_URL } from '../../../lib/api-call/data'
 import { useState } from 'react'
 import { ModalDetails } from './ModalDetails'
+import { useConfig } from '../../hooks/use-get-config'
 
 export default function ActualDish ({ setOrders, bar = false }) {
   const dish = kitchenStore(state => state.selectedDish)
@@ -18,6 +19,7 @@ export default function ActualDish ({ setOrders, bar = false }) {
   const [modalConfirmation, setModalConfirmation] = useState(false)
   const [visibleDetails, setVisibleDetails] = useState(false)
   const [detailDish, setDetailDish] = useState({})
+  const { chef_perm: permittedDishes } = useConfig()
 
   const handleFinish = () => {
     for (const id of dish.ids) {
@@ -262,7 +264,8 @@ export default function ActualDish ({ setOrders, bar = false }) {
             alignItems: 'flex-end'
           }}
         >
-          {!(orderIndex > 1) && (
+          {/* Cambiar el limite de ordenes admitidas al preprar */}
+          {!(orderIndex > (permittedDishes - 1)) && (
             <TouchableOpacity
               onPress={
                 () => setModalConfirmation(true)
