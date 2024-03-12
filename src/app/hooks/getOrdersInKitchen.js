@@ -161,8 +161,8 @@ export default function useKitchenGetOrders (bar = false) {
             return acc
           }, -1)
 
-          if (lastOrderPriority === -1 || lastOrderPriority <= (permittedDishes - 1)) {
-            const position = copyOrders.length >= permittedDishes ? permittedDishes : 1
+          if (lastOrderPriority === -1) {
+            const position = copyOrders.length >= permittedDishes ? permittedDishes : copyOrders.length
 
             copyOrders.splice(position, 0, newOrder)
           } else {
