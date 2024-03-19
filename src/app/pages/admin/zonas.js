@@ -1,27 +1,45 @@
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native'
 import HeaderAdmin from '../../components/admin/header'
 import Footer from '../../components/admin/footer'
-import useWaiterGetTablesinZone from '../../hooks/getTablesbyZone'
-import useGetUsers from '../../hooks/getUsers'
+import useGetTables from '../../hooks/useGetTables'
 
 export default function Zones () {
-  const { tables } = useWaiterGetTablesinZone()
-  const { users } = useGetUsers()
+  const { tables } = useGetTables()
 
-  console.log(users, tables[users[0]?.id])
+  const tablesByZone = tables.reduce((acc, table) => {
+    if (!acc[table.zone_id]) {
+      acc[table.zone_id] = []
+    }
+    acc[table.zone_id].push(table)
+    return acc
+  }, {})
+
+  console.log(tablesByZone)
 
   return (
     <View style={{ flex: 1 }}>
       <HeaderAdmin>
         <Text>Zonas</Text>
       </HeaderAdmin>
-      <View style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1, gap: 5, paddingHorizontal: 10 }}>
         <Text>Zonas</Text>
-        {tables?.map(table => (
-          <Text key={table.id}>{table.name}</Text>
+        {Object.entries(tablesByZone).map(([zoneId, tables]) => (
+          <View key={zoneId} style={{ columnGap: 5, borderWidth: 1, gap: 5, padding: 5 }}>
+            <Text>{`Zona ${zoneId}`}</Text>
+            <FlatList
+              data={tables}
+              renderItem={({ item: table }) => (
+                <TouchableOpacity key={table.id} style={{ borderRadius: 50, borderWidth: 1, backgroundColor: 'white', width: 80, height: 80, alignItems: 'center', justifyContent: 'center' }}>
+                  <Text>Zona: {table.zone_id}</Text>
+                  <Text>Mesa: {table.name}</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={table => table.id}
+              numColumns={2}
+            />
+          </View>
         ))}
-
-      </View>
+      </ScrollView>
       <Footer />
     </View>
   )

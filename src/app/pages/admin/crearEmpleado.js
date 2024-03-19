@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native'
 import HeaderAdmin from '../../components/admin/header'
 import Footer from '../../components/admin/footer'
 import SwitchSlider from '../../components/switch-slider'
@@ -14,13 +14,13 @@ import updateUsers from '../../func/updateUser'
 
 export default function CreateEmployee () {
   const nav = routerStore(state => state.nav)
-  const [name, setName] = useState()
-  const [lastName, setLastName] = useState()
-  const [username, setUsername] = useState()
-  const [password, setPassword] = useState()
-  const [phone, setPhone] = useState()
-  const [role, setRole] = useState()
-  const [salary, setSalary] = useState()
+  const [name, setName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [phone, setPhone] = useState('')
+  const [role, setRole] = useState(null)
+  const [salary, setSalary] = useState('')
   const [visible, setVisible] = useState(true)
   const [active, setActive] = useState(true)
   const selectedAccount = selectedAccountStore(state => state.selectedAccount)
@@ -36,10 +36,7 @@ export default function CreateEmployee () {
     console.log('Usuario creado')
   }
 
-  console.log(active)
   const handleUpdateUser = () => {
-    // selectedAccount?.id, name, lastName, password, username, role?.id, active, password
-
     updateUsers({
       active,
       id: selectedAccount?.id,
@@ -53,7 +50,8 @@ export default function CreateEmployee () {
       .then(res => res.json())
       .then(data => console.log(JSON.stringify(data)))
       .catch(err => console.log(err))
-    console.log('Usuario actualizado')
+    ToastAndroid.show('Usuario actualizado', ToastAndroid.SHORT)
+    nav('empleados')
   }
 
   return (
@@ -109,7 +107,7 @@ export default function CreateEmployee () {
           <TouchableOpacity onPress={() => { nav('empleados') }}>
             <Cancelar style={{ width: 35, height: 35 }} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={selectedAccount ? handleUpdateUser() : handleCreateUser()}>
+          <TouchableOpacity onPress={() => { selectedAccount ? handleUpdateUser() : handleCreateUser() }}>
             <Aceptar style={{ width: 35, height: 35 }} />
           </TouchableOpacity>
         </View>
