@@ -21,13 +21,14 @@ export default function Zones () {
       <HeaderAdmin>
         <Text>Zonas</Text>
       </HeaderAdmin>
-      <ScrollView style={{ flex: 1, gap: 5, paddingHorizontal: 10 }}>
+      <ScrollView style={{ flex: 1, gap: 5, width: '100%', paddingHorizontal: 10 }}>
         <Text>Zonas</Text>
         {Object.entries(tablesByZone).map(([zoneId, tables]) => (
           <View key={zoneId} style={{ columnGap: 5, borderWidth: 1, gap: 5, padding: 5 }}>
             <Text>{`Zona ${zoneId}`}</Text>
             <FlatList
               data={tables}
+              contentContainerStyle={{ width: '100%', justifyContent: 'space-between', alignItems: 'center' }}
               renderItem={({ item: table }) => (
                 <TouchableOpacity key={table.id} style={{ borderRadius: 50, borderWidth: 1, backgroundColor: 'white', width: 80, height: 80, alignItems: 'center', justifyContent: 'center' }}>
                   <Text>Zona: {table.zone_id}</Text>
@@ -35,7 +36,7 @@ export default function Zones () {
                 </TouchableOpacity>
               )}
               keyExtractor={table => table.id}
-              numColumns={2}
+              numColumns={3}
             />
           </View>
         ))}
