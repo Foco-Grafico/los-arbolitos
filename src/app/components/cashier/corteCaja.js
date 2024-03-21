@@ -42,7 +42,7 @@ export default function CorteDeCaja () {
          DIRECCIÓN: AV. ANTONIO TOLEDO CORRO #14 HUERTOS FAMILIARES<br>
          MAZATLÁN, SINALOA CP. 82137<br>
           MESA ${order?.table?.name}<br>
-          FOLIO: ${order?.id}<br>
+          FOLIO: ${order?.folio}<br>
           FECHA: ${new Date().toLocaleDateString()}<br>
           HORA: ${order?.timestamp.split('T')[1]}<br>
           ${(order?.is_effective === true)
