@@ -7,7 +7,7 @@ import Logo from '../../../assets/logo.png'
 import Ok from '../../../assets/ok'
 import No from '../../../assets/no'
 import { Image } from 'expo-image'
-import Rest from '../../../assets/rest.jpg'
+import Rest from '../../../assets/logoArbolitos.jpg'
 import { routes } from '../../lib/data'
 
 export default function Login () {
