@@ -14,6 +14,10 @@ const priceFormatter = new Intl.NumberFormat('es-MX', {
   currency: 'MXN'
 })
 
+const dateFormatter = new Intl.DateTimeFormat('es-MX', {
+  timeStyle: 'short'
+})
+
 export default function Cashier () {
   const [selectedTable, setSelectedTable] = useState({})
   const [requested, setRequested] = useState(false)
@@ -53,7 +57,7 @@ export default function Cashier () {
           MESA ${selectedTable?.table?.name}<br>
           FOLIO: ${selectedTable?.folio}<br>
           FECHA: ${new Date().toLocaleDateString()}<br>
-          HORA: ${selectedTable?.timestamp.split('T')[1]}<br>
+          HORA: ${dateFormatter.format(new Date())}<br>
           ${(isEffective === true)
             ? `
             TIPO DE PAGO: EFECTIVO<br>

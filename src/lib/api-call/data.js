@@ -1,5 +1,5 @@
-export const API_URL = 'https://f463-74-208-129-103.ngrok-free.app'
-// export const API_URL = 'http://192.168.1.136:3001'
+// export const API_URL = 'https://f463-74-208-129-103.ngrok-free.app'
+export const API_URL = 'http://192.168.1.194:3001'
 
 export const APIENDPOINTS = {
   getProducts: `${API_URL}/dishes`,
