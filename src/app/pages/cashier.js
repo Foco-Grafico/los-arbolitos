@@ -148,7 +148,7 @@ export default function Cashier () {
         return copyPrev
       })
     } catch (e) {
-      console.log(e)
+      print(isEffective)
     }
   }
 
