@@ -7,7 +7,6 @@ import { tableStore } from '../../../../stores/waiter'
 import { SendCommandModal } from './send-command-modal'
 import { SendToCashModal } from './send-to-cash-modal'
 import { DishList } from './dish-list'
-import { v4 } from '../../../lib/uuid'
 import { routerStore } from '../../../../stores/router'
 import { Cerrar } from '../../../../assets/cerrar'
 
@@ -15,15 +14,7 @@ export const Products = ({ isVisibleSendCommand, sendToCash, editProductControll
   const { dishes, setCategory, setSearch } = useWaiterGetProductsInCategory()
   const order = tableStore(state => state.order)
   const setDefault = tableStore(state => state.setDefault)
-  const [textKey, setTextKey] = useState(v4())
   const nav = routerStore(state => state.nav)
-  const resetSearch = () => {
-    setSearch(() => {
-      setTextKey(v4())
-
-      return ''
-    })
-  }
 
   return (
     <View
@@ -66,7 +57,6 @@ export const Products = ({ isVisibleSendCommand, sendToCash, editProductControll
           }}
         >
           <TextInput
-            key={textKey}
             onChangeText={setSearch}
             placeholder='BUSCAR'
             style={{
@@ -79,12 +69,11 @@ export const Products = ({ isVisibleSendCommand, sendToCash, editProductControll
             }}
           />
         </View>
-        <DishList setBlockButton={setBlockButton} resetSearch={resetSearch} editProductController={editProductController} dishes={dishes} />
+        <DishList setBlockButton={setBlockButton} editProductController={editProductController} dishes={dishes} />
       </View>
       <Footer
         onPressInCat={(category) => {
           setCategory(category?.id)
-          resetSearch()
         }}
       />
       <EditProducts editProductController={editProductController} />
