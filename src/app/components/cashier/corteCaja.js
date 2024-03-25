@@ -99,7 +99,6 @@ export default function CorteDeCaja () {
 
           </tbody>
         </table>
-          
 
         <p style=" font-family: Helvetica Neue; font-weight: normal;">
         ${(order.discount !== '0' && order.discount !== '' && order.discount != null && order.discount !== 0)
@@ -111,8 +110,19 @@ export default function CorteDeCaja () {
           Propina sugerida (10%): ${priceFormatter.format(total * 0.10)}<br>
           Propina sugerida (15%): ${priceFormatter.format(total * 0.15)}<br>
           Propina sugerida (20%): ${priceFormatter.format(total * 0.20)}<br>
-          Gracias por su preferencia<br>
-          ¡Vuelva pronto!
+          <br>
+          <br>
+          <br>
+          Para realizar facturas, puede ingresar en esta liga:<br><br>
+          https://losarbolitos.realizatufactura.com/<br><br>
+
+          O escanear este QR
+          <br>
+          <br>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://losarbolitos.realizatufactura.com/"><br>
+          <br><br>
+         ¡Gracias por su preferencia,<br>
+          Vuelva pronto!
           `
         : `
           <b style='font-size: 24' >Total: </b><b style='font-size: 24'>${priceFormatter.format(total)}</b><br><br>
@@ -121,8 +131,19 @@ export default function CorteDeCaja () {
           Propina sugerida (10%): ${priceFormatter.format(total * 0.10)}<br>
           Propina sugerida (15%): ${priceFormatter.format(total * 0.15)}<br>
           Propina sugerida (20%): ${priceFormatter.format(total * 0.20)}<br>
-          Gracias por su preferencia<br>
-          ¡Vuelva pronto!
+          <br>
+          <br>
+          <br>
+          Para realizar facturas, puede ingresar en esta liga:<br><br>
+          https://losarbolitos.realizatufactura.com/<br><br>
+
+          O escanear este QR
+          <br>
+          <br>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://losarbolitos.realizatufactura.com/"><br>
+          <br><br>
+         ¡Gracias por su preferencia,<br>
+          Vuelva pronto!
           `
       }
         </p>
