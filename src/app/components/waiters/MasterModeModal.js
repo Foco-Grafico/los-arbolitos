@@ -247,42 +247,36 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                   gap: 30
                 }}
               >
-                <View
+
+                <TextInput
+                  placeholder='Contraseña'
+                  secureTextEntry
+                  onChangeText={setPass}
                   style={{
-                    flexDirection: 'row',
-                    gap: 20
+                    width: 200,
+                    borderRadius: 10,
+                    fontSize: 20,
+                    paddingVertical: 5,
+                    paddingHorizontal: 10,
+                    borderWidth: 1,
+                    borderColor: '#000'
+                  }}
+                />
+
+                <Button
+                  onPress={() => {
+                    if (pass === '') return ToastAndroid.show('Ingrese la contraseña', ToastAndroid.SHORT)
+
+                    if (config?.pass === null) return ToastAndroid.show('No hay contraseña configurada', ToastAndroid.SHORT)
+
+                    if (pass !== config?.pass) return ToastAndroid.show('Contraseña incorrecta', ToastAndroid.SHORT)
+
+                    forceQuit()
+                    finishOrderInCashier(order?.id, 0, true)
                   }}
                 >
-                  <Button
-                    onPress={() => {
-                      if (pass === '') return ToastAndroid.show('Ingrese la contraseña', ToastAndroid.SHORT)
-
-                      if (config?.pass === null) return ToastAndroid.show('No hay contraseña configurada', ToastAndroid.SHORT)
-
-                      if (pass !== config?.pass) return ToastAndroid.show('Contraseña incorrecta', ToastAndroid.SHORT)
-
-                      forceQuit()
-                      finishOrderInCashier(order?.id, 0, true)
-                    }}
-                  >
-                    Liberar mesa
-                  </Button>
-
-                  <TextInput
-                    placeholder='Contraseña'
-                    secureTextEntry
-                    onChangeText={setPass}
-                    style={{
-                      width: 200,
-                      borderRadius: 10,
-                      fontSize: 20,
-                      paddingVertical: 5,
-                      paddingHorizontal: 10,
-                      borderWidth: 1,
-                      borderColor: '#000'
-                    }}
-                  />
-                </View>
+                  Liberar mesa
+                </Button>
 
                 <Button
                   onPress={() => {
@@ -309,6 +303,12 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                 </Button>
                 <Button
                   onPress={() => {
+                    if (pass === '') return ToastAndroid.show('Ingrese la contraseña', ToastAndroid.SHORT)
+
+                    if (config?.pass === null) return ToastAndroid.show('No hay contraseña configurada', ToastAndroid.SHORT)
+
+                    if (pass !== config?.pass) return ToastAndroid.show('Contraseña incorrecta', ToastAndroid.SHORT)
+
                     forceQuit()
 
                     for (const dish of order?.dishes) {
