@@ -29,7 +29,7 @@ export default function Cashier () {
   const [concept, setConcept] = useState('')
   const [extraPrice, setExtraPrice] = useState(0)
 
-  console.log('selectedTable', JSON.stringify(selectedTable))
+  console.log('selectedTable', JSON.stringify(selectedTable?.total))
 
   const print = async (isEffective) => {
     setPaymentType(false)
@@ -259,7 +259,7 @@ export default function Cashier () {
         />
         <View style={{ flex: 1 }}>
           <ScrollView contentContainerStyle={{ width: '100%', backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', gap: 30, paddingVertical: 10 }}>
-            <Products setSelectedTable={setSelectedTable} table={selectedTable} />
+            <Products setSelectedTable={setSelectedTable} setData={setData} table={selectedTable} />
           </ScrollView>
           <View style={{ justifyContent: 'center', alignItems: 'center', gap: 5, paddingVertical: 10 }}>
             <Text style={styles.text}>DESCUENTO</Text>

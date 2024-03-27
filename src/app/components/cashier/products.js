@@ -9,7 +9,7 @@ const priceFormatter = new Intl.NumberFormat('es-MX', {
   currency: 'MXN'
 })
 
-export default function CashierProducts ({ table, setSelectedTable }) {
+export default function CashierProducts ({ table, setSelectedTable, setData }) {
   const [modalInfo, setModalInfo] = useState({
     dish: {},
     index: 0
@@ -27,6 +27,8 @@ export default function CashierProducts ({ table, setSelectedTable }) {
   console.log('dish', JSON.stringify(modalInfo.dish))
   const handleDeleteProduct = (dish, index) => {
     setModalInfo({ dish, index })
+
+    console.log('dish', JSON.stringify(dish))
 
     if (dish?.ids.length <= 1) {
       setIsListVisibleModal(false)
@@ -186,6 +188,18 @@ export default function CashierProducts ({ table, setSelectedTable }) {
                   setSelectedTable(table => {
                     const newTotal = table?.total - Number(modalInfo.dish?.total[confirmDeleteModal.dishId])
                     const newTable = { ...table, total: newTotal }
+
+                    setData(data => {
+                      const newData = data.map(table => {
+                        if (table.id === newTable.id) {
+                          return newTable
+                        }
+
+                        return table
+                      })
+
+                      return newData
+                    })
 
                     const prettyEl = newTable?.pretty_list[modalInfo.index]
 
