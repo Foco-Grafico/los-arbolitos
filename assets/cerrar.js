@@ -21,3 +21,33 @@ export const Cerrar = ({ fill = '#EC2024', ...props }) => (
     </G>
   </Svg>
 )
+
+export const BlockIcon = (props) => (
+  <Svg
+    xmlns='http://www.w3.org/2000/svg'
+    width={24}
+    height={24}
+    viewBox='0 0 24 24'
+    fill='none'
+    stroke='currentColor'
+    strokeWidth={2}
+    strokeLinecap='round'
+    strokeLinejoin='round'
+    className='icon icon-tabler icons-tabler-outline icon-tabler-container-off'
+    {...props}
+  >
+    <Path stroke='none' d='M0 0h24v24H0z' fill='none' />
+    <Path d='M20 4v.01' />
+    <Path d='M20 20v.01' />
+    <Path d='M20 16v.01' />
+    <Path d='M20 12v.01' />
+    <Path d='M20 8v.01' />
+    <Path d='M8.297 4.289a1 1 0 0 1 .703 -.289h6a1 1 0 0 1 1 1v7m0 4v3a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1v-11' />
+    <Path d='M4 4v.01' />
+    <Path d='M4 20v.01' />
+    <Path d='M4 16v.01' />
+    <Path d='M4 12v.01' />
+    <Path d='M4 8v.01' />
+    <Path d='M3 3l18 18' />
+  </Svg>
+)

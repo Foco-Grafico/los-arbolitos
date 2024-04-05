@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, StyleSheet, FlatList, ToastAndroid } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, FlatList, ToastAndroid, Modal } from 'react-native'
 import { useEffect, useRef, useState } from 'react'
 import { AlimentoPreparado } from '../../../../assets/alimento-preparado'
 import { socket } from '../../../services/socket'
@@ -7,6 +7,7 @@ import { socket } from '../../../services/socket'
 import { useHorribleSound } from '../../hooks/play-sounds'
 import { accountStore } from '../../../../stores/account'
 import { tableStore } from '../../../../stores/waiter'
+import { BlockIcon } from '../../../../assets/cerrar'
 
 export function TableList ({ onPressItem = () => {}, data = [], hasSelected = false }) {
   const [tableSelected, setTableSelected] = useState(0)
@@ -14,6 +15,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
   const abortController = useRef(new AbortController())
   const account = accountStore(state => state.account)
   const setStatus = tableStore(state => state.setStatus)
+  const [block, setBlock] = useState(false)
 
   // const nav = routerStore(state => state.nav)
 
@@ -128,17 +130,69 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
           </TouchableOpacity>
         )}
       />
-      {/* <TouchableOpacity
+      <TouchableOpacity
         style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#fe8c00',
+          padding: 10,
+          borderRadius: 6
+        }}
+        onPress={() => {
+          setBlock(true)
+        }}
+      >
+        <BlockIcon fill='#fff' style={{ width: 20, height: 20 }} />
+      </TouchableOpacity>
+
+      <Modal
+        visible={block}
+        transparent
+        statusBarTranslucent
+        animationType='fade'
+        onRequestClose={() => {
+          setBlock(false)
+        }}
+      >
+        <View style={{
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          flex: 1,
           justifyContent: 'center',
           alignItems: 'center'
         }}
-        onPress={() => {
-          nav('login')
-        }}
-      >
-        <Cerrar fill='#fff' style={{ width: 20, height: 20 }} />
-      </TouchableOpacity> */}
+        >
+          <View style={{
+            backgroundColor: '#fff',
+            width: 300,
+            padding: 20,
+            borderRadius: 6
+          }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                setBlock(false)
+              }}
+              style={{
+                backgroundColor: '#fe8c00',
+                padding: 10,
+                borderRadius: 6,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Text
+                style={{
+                  color: '#000',
+                  fontSize: 20,
+                  fontWeight: 'bold'
+                }}
+              >
+                Desbloquear
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }
