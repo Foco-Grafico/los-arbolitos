@@ -119,8 +119,10 @@ export default function CorteDeCaja () {
           O escanear este QR
           <br>
           <br>
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://losarbolitos.realizatufactura.com/"><br>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://losarbolitos.realizatufactura.com/">
           <br><br>
+
+          Nota: Es obligatorio colocar sus datos fiscales idénticos a la constancia fiscal para evitar errores de facturación.<br><br>
          ¡Gracias por su preferencia,<br>
           Vuelva pronto!
           `
@@ -140,8 +142,10 @@ export default function CorteDeCaja () {
           O escanear este QR
           <br>
           <br>
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://losarbolitos.realizatufactura.com/"><br>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://losarbolitos.realizatufactura.com/">
           <br><br>
+
+          Nota: Es obligatorio colocar sus datos fiscales idénticos a la constancia fiscal para evitar errores de facturación.<br><br>
          ¡Gracias por su preferencia,<br>
           Vuelva pronto!
           `
