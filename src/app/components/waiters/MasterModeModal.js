@@ -19,6 +19,7 @@ export const MasterModeModal = ({ isActive, onClose }) => {
     onClose?.()
     setSelectedDish(null)
     setSection('main')
+    setPass('')
   }
 
   return (
@@ -49,7 +50,7 @@ export const MasterModeModal = ({ isActive, onClose }) => {
               if (section === 'products') return setSection('main')
               if (section === 'dish') return setSection('products')
               if (section === 'status') return setSection('main')
-              onClose?.()
+              forceQuit()
             }}
           />
         </View>
@@ -109,6 +110,22 @@ export const MasterModeModal = ({ isActive, onClose }) => {
               >
                 Productos
               </Text>
+              <TextInput
+                placeholder='Contraseña'
+                secureTextEntry
+                onChangeText={setPass}
+                value={pass}
+                style={{
+                  width: 200,
+                  borderRadius: 10,
+                  fontSize: 20,
+                  paddingVertical: 5,
+                  paddingHorizontal: 10,
+                  borderWidth: 1,
+                  borderColor: '#000',
+                  marginBottom: 10
+                }}
+              />
               <FlatList
                 data={order?.dishes}
                 style={{
@@ -126,6 +143,12 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                       borderRadius: 5
                     }}
                     onPress={() => {
+                      if (pass === '') return ToastAndroid.show('Ingrese la contraseña', ToastAndroid.SHORT)
+
+                      if (config?.pass === null) return ToastAndroid.show('No hay contraseña configurada', ToastAndroid.SHORT)
+
+                      if (pass !== config?.pass) return ToastAndroid.show('Contraseña incorrecta', ToastAndroid.SHORT)
+
                       setSelectedDish(item)
                       setSection('dish')
                     }}
@@ -252,6 +275,7 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                   placeholder='Contraseña'
                   secureTextEntry
                   onChangeText={setPass}
+                  value={pass}
                   style={{
                     width: 200,
                     borderRadius: 10,
@@ -300,6 +324,12 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                 </Button>
                 <Button
                   onPress={() => {
+                    if (pass === '') return ToastAndroid.show('Ingrese la contraseña', ToastAndroid.SHORT)
+
+                    if (config?.pass === null) return ToastAndroid.show('No hay contraseña configurada', ToastAndroid.SHORT)
+
+                    if (pass !== config?.pass) return ToastAndroid.show('Contraseña incorrecta', ToastAndroid.SHORT)
+
                     forceQuit()
 
                     setStatus(1)
