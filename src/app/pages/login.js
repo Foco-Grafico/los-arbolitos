@@ -14,13 +14,14 @@ export default function Login () {
   const nav = routerStore(state => state.nav)
   const setAccount = accountStore(state => state.setAccount)
   const [authParams, setAuthParams] = useState({
+    currentName: '',
     user: '',
     pass: ''
   })
   const [status, setStatus] = useState('nulo')
 
   useEffect(() => {
-    if (authParams.user === '' && authParams.pass === '') {
+    if (authParams.user === '' && authParams.pass === '' && authParams.currentName === '') {
       setStatus('nulo')
       return
     }
@@ -32,7 +33,10 @@ export default function Login () {
         return
       }
 
-      setAccount(user)
+      setAccount({
+        ...user,
+        currentName: authParams.currentName
+      })
       setStatus('success')
 
       setTimeout(() => {
@@ -60,6 +64,16 @@ export default function Login () {
         }}
       >
         <Image source={Logo} style={styles.image} contentFit='cover' />
+
+        <View style={styles.inputBox}>
+          <TextInput
+            style={styles.input}
+            placeholder='NOMBRE'
+            onChangeText={(text) => setAuthParams(prev => ({ ...prev, currentName: text }))}
+            textContentType='name'
+          />
+        </View>
+
         <View style={styles.inputBox}>
           <TextInput
             style={styles.input}

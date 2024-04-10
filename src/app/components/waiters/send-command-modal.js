@@ -55,7 +55,7 @@ export const SendCommandModal = ({ orderId, visibleController }) => {
             <TouchableOpacity
               onPress={() => {
                 visibleController.setVisible(false)
-                sendTokitchen(orderId, account?.id)
+                sendTokitchen(orderId, account?.id, account?.currentName)
                   .then(() => {
                     setStatus(2)
                   })
