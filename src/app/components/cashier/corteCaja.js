@@ -151,7 +151,7 @@ export default function CorteDeCaja () {
           <br>
           `
       }
-        ${order?.waiter_name}
+      Atendido por: ${order?.waiter_name}
         </p>
       </body>
     </html>
