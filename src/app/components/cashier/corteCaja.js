@@ -148,8 +148,10 @@ export default function CorteDeCaja () {
           Nota: Es obligatorio colocar sus datos fiscales idénticos a la constancia fiscal para evitar errores de facturación.<br><br>
          ¡Gracias por su preferencia,<br>
           Vuelva pronto!
+          <br>
           `
       }
+        ${order?.waiter_name}
         </p>
       </body>
     </html>
