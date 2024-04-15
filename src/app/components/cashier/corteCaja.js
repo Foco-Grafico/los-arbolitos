@@ -237,7 +237,7 @@ export default function CorteDeCaja () {
     const matriz = orders?.data?.reduce((acc, curr, index) => {
       headersIndex.push(acc.length)
 
-      const header = [`FOLIO ${curr?.folio}`, `MESERO ${curr?.user?.name}`, `MESA ${curr?.table?.name}`, curr?.is_effective ? 'EFECTIVO' : 'TARJETA']
+      const header = [`FOLIO ${curr?.folio}`, `MESERO ${curr?.waiter_name}`.toUpperCase(), `MESA ${curr?.table?.name}`, curr?.is_effective ? 'EFECTIVO' : 'TARJETA']
 
       const itemsHeader = ['PRODUCTO', 'PRECIO']
       const items = curr?.dishes?.map((dish) => {
