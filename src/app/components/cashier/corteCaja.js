@@ -171,7 +171,7 @@ export default function CorteDeCaja () {
     })
 
     const tables = orders?.data?.map((order) => new ReportTable({
-      header: ['PRODUCTO', `PRECIO (${order?.is_effective ? 'E' : 'T'})`, `MESA ${order?.table?.name}`],
+      header: ['PRODUCTO', `PRECIO (${order?.is_effective ? 'E' : 'T'})`, `MESA ${order?.table?.name}`, `MESERO ${order?.waiter_name}`.toUpperCase()],
 
       items: order?.dishes?.map((dish) => ({
         name: dish?.name,
