@@ -2,7 +2,7 @@ import { kitchenStore } from '../../../stores/kitchen'
 import { markAsPreparation } from '../../lib/api-call/kitchen/mark-as-preparation'
 import { socket } from '../../services/socket'
 import getOrdersInKitchen from '../func/get-orders-in-kitchen'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useHorribleSound } from './play-sounds'
 import { useConfig } from './use-get-config'
 
@@ -12,7 +12,7 @@ export default function useKitchenGetOrders (bar = false) {
   const { play } = useHorribleSound()
   const { chef_perm: permittedDishes } = useConfig()
 
-  useEffect(() => {
+  const reloadOrders = useCallback(() => {
     getOrdersInKitchen(bar)
       .then(res => {
         if (res.ok) {
@@ -48,6 +48,10 @@ export default function useKitchenGetOrders (bar = false) {
       .catch(err => {
         console.error(err)
       })
+  }, [bar])
+
+  useEffect(() => {
+    reloadOrders()
   }, [bar])
 
   useEffect(() => {
@@ -184,6 +188,8 @@ export default function useKitchenGetOrders (bar = false) {
   }, [])
 
   return {
-    orders, setOrders
+    orders,
+    setOrders,
+    reloadOrders
   }
 }
