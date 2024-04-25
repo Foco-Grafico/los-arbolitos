@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import getOrdersInCashier from '../func/get-orders-in-cashier'
 import { socket } from '../../services/socket'
 
 export default function useGetOrdersInCashier () {
   const [data, setData] = useState([])
 
-  useEffect(() => {
+  const reloadOrders = useCallback(() => {
     getOrdersInCashier()
       .then(res => {
         if (res.ok) {
@@ -30,6 +30,10 @@ export default function useGetOrdersInCashier () {
   }, [])
 
   useEffect(() => {
+    reloadOrders()
+  }, [])
+
+  useEffect(() => {
     socket.on('new_cash_order', order => {
       setData(prev => [...prev, {
         ...order,
@@ -43,6 +47,8 @@ export default function useGetOrdersInCashier () {
   }, [])
 
   return {
-    data, setData
+    data,
+    setData,
+    reloadOrders
   }
 }

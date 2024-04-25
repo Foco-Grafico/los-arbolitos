@@ -8,6 +8,7 @@ import useGetOrdersInCashier from '../hooks/getOrdersInCashier'
 import { Cerrar } from '../../../assets/cerrar'
 import { routerStore } from '../../../stores/router'
 import Footer from '../components/admin/footer'
+import { IconRefresh } from '../components/icons'
 
 const priceFormatter = new Intl.NumberFormat('es-MX', {
   style: 'currency',
@@ -21,7 +22,7 @@ const dateFormatter = new Intl.DateTimeFormat('es-MX', {
 export default function Cashier () {
   const [selectedTable, setSelectedTable] = useState({})
   const [requested, setRequested] = useState(false)
-  const { data, setData } = useGetOrdersInCashier()
+  const { data, setData, reloadOrders } = useGetOrdersInCashier()
   const [discount, setDiscount] = useState(0)
   const nav = routerStore(state => state.nav)
   const [paymentTypeModal, setPaymentType] = useState(false)
@@ -245,6 +246,14 @@ export default function Cashier () {
         </View>
       </Modal>
       <View style={styles.header}>
+        <TouchableOpacity
+          onPress={reloadOrders}
+        >
+          <IconRefresh
+            fill='#fff'
+            style={{ width: 20, height: 20 }}
+          />
+        </TouchableOpacity>
         <Text style={{ color: 'white', fontSize: 25, fontWeight: 'bold', flex: 1, textAlign: 'center' }}>CAJA</Text>
         <TouchableOpacity
           onPress={() => {
