@@ -14,9 +14,10 @@ import useWaiterGetTablesinZone from '../hooks/getTablesbyZone'
 // import { sendToCashier, sendTokitchen } from '../../lib/api-call/order/move-order'
 
 export function Waiter ({ leader = false }) {
-  const setTable = tableStore(state => state.setTable)
   const { tables, setTables } = useWaiterGetTablesinZone(leader)
+
   const table = tableStore(state => state.table)
+  const setTable = tableStore(state => state.setTable)
 
   const [visibleSendCommand, setVisibleSendCommand] = useState(false)
   const [visibleSendToCash, setVisibleSendToCash] = useState(false)

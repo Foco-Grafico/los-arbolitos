@@ -8,6 +8,7 @@ import { togglePriority } from '../../../lib/api-call/order/toggle'
 import { useState } from 'react'
 import { MasterModeModal } from './MasterModeModal'
 import { IconEdit } from '../../../../assets/edit'
+import { IconRefresh } from '../icons'
 
 const dateFormatter = new Intl.DateTimeFormat('es-MX', {
   hour: '2-digit',
@@ -20,6 +21,7 @@ export default function OrderSection ({ editProductController = {}, setShowSendC
   const order = tableStore(state => state.order)
   const setTable = tableStore(state => state.setTable)
   const table = tableStore(state => state.table)
+  const reloadOrder = tableStore(state => state.reloadOrder)
   const alwaysPriority = tableStore(state => state.alwaysPriority)
   const [viewPriorityModal, setViewPriorityModal] = useState(false)
   const [masterMode, setMasterMode] = useState(false)
@@ -413,6 +415,24 @@ export default function OrderSection ({ editProductController = {}, setShowSendC
             {status?.label}
           </Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{
+            borderRadius: 5,
+            fontSize: 20,
+            elevation: 10,
+            textAlign: 'center',
+            paddingVertical: 5,
+            paddingHorizontal: 10,
+            backgroundColor: status?.bgColor
+          }}
+          onPress={() => {
+            reloadOrder()
+          }}
+        >
+          <IconRefresh fill={status?.color} />
+        </TouchableOpacity>
+
         {/* <TouchableOpacity
           onPress={() => {
             editProductController?.setVisible(false)

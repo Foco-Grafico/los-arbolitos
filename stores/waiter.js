@@ -157,7 +157,18 @@ export const tableStore = create((set, get) => ({
     set({ order: newOrder })
   },
 
-  getOrderId: () => get().order.id
+  getOrderId: () => get().order.id,
+
+  reloadOrder: () => {
+    const { table } = get()
+
+    getOrder(table.current_order)
+      .then(order => {
+        set({
+          order
+        })
+      })
+  }
 }))
 
 export const modalStore = create((set) => ({
