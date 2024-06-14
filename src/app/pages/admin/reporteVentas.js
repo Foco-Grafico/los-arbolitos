@@ -32,26 +32,18 @@ const priceFormatter = new Intl.NumberFormat("es-MX", {
 	currency: "MXN",
 });
 
+const minifyHTML = (html) => {
+	return html.replace(/\s{2,}/g, " ");
+};
+
 export default function ReporteVentas() {
 	const [calendarInitialOpen, setCalendarInitialOpen] = useState(false);
 	const [calendarFinalOpen, setCalendarFinalOpen] = useState(false);
 	const [initialDate, setInitialDate] = useState(new Date());
 	const [finalDate, setFinalDate] = useState(new Date());
-	const { data, loading } = useGetSalesReport(initialDate, finalDate);
+	const { data, loading, totals } = useGetSalesReport(initialDate, finalDate);
 
-	console.log(JSON.stringify(data));
 	const salesReport = () => {
-		let totalCash = 0;
-		let totalDebit = 0;
-		let total = 0;
-
-		for (const order of data) {
-			if (order.is_effective === 1) totalCash += order.total;
-			else totalDebit += order.total;
-
-			total += order.total;
-		}
-
 		const header = new ClassHeader({
 			report: `VENTAS POR FECHA DEL ${dateFormatter.format(initialDate).toUpperCase()} AL ${dateFormatter.format(finalDate).toUpperCase()}`,
 		});
@@ -74,44 +66,47 @@ export default function ReporteVentas() {
 				}),
 		);
 
-		const html = `
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="description" content="Astro description">
-      <meta name="viewport" content="width=device-width" />
-      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      <meta name="generator" content={Astro.generator} />
-      <title>{title}</title>
-    </head>
-    <body>
-      <main class="px-16 py-16 flex-col flex gap-11 m-10">
-        <section class="flex flex-col gap-5">
-          ${header.render()}
-          ${tables.map((table) => table.getHTMLTable()).join("")}
-          <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-            <span style='color:white'>Total en efectivo: ${totalCash.toLocaleString("es-MX")}</span>
-          </section>
-          <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-            <span style='color:white'>Total en tarjeta: ${totalDebit.toLocaleString("es-MX")}</span>
-          </section>
-          <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-            <span style='color:white'>Total general: ${total.toLocaleString("es-MX")}</span>
-          </section>
-        </section>
-        </main>
-    </body>
-  </html>
-
-  ${CSSPDF}
-    `;
-
 		printToFileAsync({
-			html,
-			base64: false,
-		}).then((file) => {
-			shareAsync(file.uri);
-		});
+			html: minifyHTML(`
+				<html lang="en">
+				<head>
+				  <meta charset="UTF-8" />
+				  <meta name="description" content="Astro description">
+				  <meta name="viewport" content="width=device-width" />
+				  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+				  <meta name="generator" content={Astro.generator} />
+				  <title>{title}</title>
+				</head>
+				<body>
+				  <main class="px-16 py-16 flex-col flex gap-11 m-10">
+					<section class="flex flex-col gap-5">
+					  ${header.render()}
+					  ${tables.map((table) => table.getHTMLTable()).join("")}
+					  <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
+						<span style='color:white'>Total en efectivo: ${totals.totalCash.toLocaleString("es-MX")}</span>
+					  </section>
+					  <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
+						<span style='color:white'>Total en tarjeta: ${totals.totalDebit.toLocaleString("es-MX")}</span>
+					  </section>
+					  <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
+						<span style='color:white'>Total general: ${totals.total.toLocaleString("es-MX")}</span>
+					  </section>
+					</section>
+					</main>
+				</body>
+			  </html>
+			
+			  ${CSSPDF}
+				`),
+		})
+			.then((file) => {
+				shareAsync(file.uri).catch((err) => {
+					console.log(err);
+				});
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
 	return (
