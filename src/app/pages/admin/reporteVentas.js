@@ -12,14 +12,7 @@ import { Calendar } from "../../components/calendar";
 import { useState } from "react";
 import Calendario from "../../../../assets/calendario";
 import Descargar from "../../../../assets/descargar";
-import ClassHeader from "../../../classes/header";
-import ReportTable from "../../../classes/table";
-import useGetSalesReport from "../../hooks/useGetSalesReport";
-import { printToFileAsync } from "expo-print";
-import { shareAsync } from "expo-sharing";
-import { CSSPDF } from "../../components/pdfcss";
-import { LoadingModal } from "../../components/loading-modal";
-import { Table } from "../../components/table";
+import * as Linking from "expo-linking";
 
 const dateFormatter = new Intl.DateTimeFormat("es-MX", {
 	year: "numeric",
@@ -27,91 +20,27 @@ const dateFormatter = new Intl.DateTimeFormat("es-MX", {
 	day: "numeric",
 });
 
-const priceFormatter = new Intl.NumberFormat("es-MX", {
-	style: "currency",
-	currency: "MXN",
-});
-
-const minifyHTML = (html) => {
-	return html.replace(/\s{2,}/g, " ");
-};
-
 export default function ReporteVentas() {
 	const [calendarInitialOpen, setCalendarInitialOpen] = useState(false);
 	const [calendarFinalOpen, setCalendarFinalOpen] = useState(false);
-	const [initialDate, setInitialDate] = useState(new Date());
-	const [finalDate, setFinalDate] = useState(new Date());
-	const { data, loading, totals } = useGetSalesReport(initialDate, finalDate);
-
-	const salesReport = () => {
-		const header = new ClassHeader({
-			report: `VENTAS POR FECHA DEL ${dateFormatter.format(initialDate).toUpperCase()} AL ${dateFormatter.format(finalDate).toUpperCase()}`,
-		});
-
-		const tables = data?.map(
-			(orders) =>
-				new ReportTable({
-					header: [
-						"PRODUCTO",
-						`PRECIO (${orders?.is_effective ? "E" : "T"})`,
-						`MESA ${orders?.table?.name}`,
-					],
-
-					items: orders?.dishes?.map((dish) => ({
-						name: dish?.name,
-						price: dish?.total,
-						supplies: dish?.supplies,
-					})),
-					total: orders?.total,
-				}),
-		);
-
-		printToFileAsync({
-			html: minifyHTML(`
-				<html lang="en">
-				<head>
-				  <meta charset="UTF-8" />
-				  <meta name="description" content="Astro description">
-				  <meta name="viewport" content="width=device-width" />
-				  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-				  <meta name="generator" content={Astro.generator} />
-				  <title>{title}</title>
-				</head>
-				<body>
-				  <main class="px-16 py-16 flex-col flex gap-11 m-10">
-					<section class="flex flex-col gap-5">
-					  ${header.render()}
-					  ${tables.map((table) => table.getHTMLTable()).join("")}
-					  <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-						<span style='color:white'>Total en efectivo: ${totals.totalCash.toLocaleString("es-MX")}</span>
-					  </section>
-					  <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-						<span style='color:white'>Total en tarjeta: ${totals.totalDebit.toLocaleString("es-MX")}</span>
-					  </section>
-					  <section style='background-color: #005942; align-self: flex-end;' class="flex flex-col px-3 rounded font-black w-36 h-12 justify-center">
-						<span style='color:white'>Total general: ${totals.total.toLocaleString("es-MX")}</span>
-					  </section>
-					</section>
-					</main>
-				</body>
-			  </html>
-			
-			  ${CSSPDF}
-				`),
-		})
-			.then((file) => {
-				shareAsync(file.uri).catch((err) => {
-					console.log(err);
-				});
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
+	const [initialDate, setInitialDate] = useState(
+		(() => {
+			const date = new Date();
+			const dateMinusOneDay = new Date(date.getTime() - 24 * 60 * 60 * 1000);
+			return dateMinusOneDay;
+		})(),
+	);
+	const [finalDate, setFinalDate] = useState(
+		(() => {
+			const date = new Date();
+			const dateMinusOneDay = new Date(date.getTime() - 24 * 60 * 60 * 1000);
+			return dateMinusOneDay;
+		})(),
+	);
 
 	return (
 		<View style={styles.main}>
-			<LoadingModal loading={loading} />
+			{/* <LoadingModal loading={loading} /> */}
 			<HeaderAdmin>REPORTE DE VENTAS</HeaderAdmin>
 			<View style={styles.container}>
 				<View
@@ -208,11 +137,16 @@ export default function ReporteVentas() {
 					padding: 40,
 				}}
 			>
-				<View
+				<TouchableOpacity
 					style={{
 						borderWidth: 1,
 						borderRadius: 10,
 						gap: 10,
+					}}
+					onPress={() => {
+						Linking.openURL(
+							`https://vps.focograficomx.com:8001/reports/sell?init=${initialDate.toISOString().split("T")[0]}&end=${finalDate.toISOString().split("T")[0]}`,
+						);
 					}}
 				>
 					<View
@@ -223,66 +157,14 @@ export default function ReporteVentas() {
 							padding: 10,
 						}}
 					>
-						<Text style={styles.text}>VISTA PREVIA DEL PDF</Text>
+						<Text style={styles.text}>GENERAR PDF</Text>
 
-						<TouchableOpacity
-							style={{ height: 30 }}
-							onPress={() => {
-								salesReport();
-							}}
-						>
+						<View style={{ height: 30 }}>
 							<Descargar style={{ width: 24, height: 24 }} />
-						</TouchableOpacity>
+						</View>
 					</View>
-
-					<FlatList
-						style={{
-							maxHeight: 400,
-							paddingHorizontal: 10,
-						}}
-						data={data}
-						contentContainerStyle={{
-							gap: 10,
-						}}
-						renderItem={({ item }) => (
-							<Table
-								header={[
-									"PRODUCTO",
-									`PRECIO (${item?.is_effective ? "E" : "T"})`,
-									`MESA ${item?.table?.name}`,
-								]}
-								rows={item?.dishes?.reduce((acc, dish) => {
-									acc.push([
-										dish?.name,
-										priceFormatter.format(dish?.total),
-										"",
-									]);
-
-									if (dish?.supplies?.length) {
-										if (dish?.supplies == null) return;
-
-										for (const supply of dish.supplies) {
-											acc.push([
-												` - ${supply?.name}`,
-												priceFormatter.format(supply?.extra_cost),
-												"",
-											]);
-										}
-									}
-
-									return acc;
-								}, [])}
-							/>
-						)}
-					/>
-				</View>
+				</TouchableOpacity>
 			</View>
-
-			{/* <View style={{ flexDirection: 'row', gap: 50, paddingHorizontal: 20 }}>
-        <Cancelar style={{ width: 24, height: 24 }} />
-        <Aceptar style={{ width: 24, height: 24 }} />
-      </View> */}
-
 			<Footer />
 		</View>
 	);
