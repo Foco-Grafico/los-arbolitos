@@ -20,7 +20,7 @@ export default function ActualDish({ setOrders, bar = false }) {
 	const [visibleDetails, setVisibleDetails] = useState(false);
 	const [detailDish, setDetailDish] = useState({});
 	const { chef_perm: permittedDishes } = useConfig();
-	const isModified = dish.name.endsWith('(M)');
+	const isModified = dish?.name.endsWith('(M)');
 
 	const handleFinish = () => {
 		for (const id of dish.ids) {
