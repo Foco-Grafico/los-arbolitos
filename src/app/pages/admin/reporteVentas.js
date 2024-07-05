@@ -23,20 +23,8 @@ const dateFormatter = new Intl.DateTimeFormat("es-MX", {
 export default function ReporteVentas() {
 	const [calendarInitialOpen, setCalendarInitialOpen] = useState(false);
 	const [calendarFinalOpen, setCalendarFinalOpen] = useState(false);
-	const [initialDate, setInitialDate] = useState(
-		(() => {
-			const date = new Date();
-			const dateMinusOneDay = new Date(date.getTime() - 24 * 60 * 60 * 1000);
-			return dateMinusOneDay;
-		})(),
-	);
-	const [finalDate, setFinalDate] = useState(
-		(() => {
-			const date = new Date();
-			const dateMinusOneDay = new Date(date.getTime() - 24 * 60 * 60 * 1000);
-			return dateMinusOneDay;
-		})(),
-	);
+	const [initialDate, setInitialDate] = useState(new Date());
+	const [finalDate, setFinalDate] = useState(new Date());
 
 	return (
 		<View style={styles.main}>
