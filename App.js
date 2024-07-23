@@ -123,20 +123,4 @@ function App() {
 	);
 }
 
-// function AppTest () {
-//   return (
-//     <View>
-//       <StatusBar hidden />
-//       <Calendar
-//         isOpen
-//         onChangeDate={
-//           (date) => {
-//             console.log(date)
-//           }
-//         }
-//       />
-//     </View>
-//   )
-// }
-
 export default App;

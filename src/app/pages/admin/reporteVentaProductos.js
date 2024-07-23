@@ -17,7 +17,7 @@ import Descargar from '../../../../assets/descargar'
 import ReportXProductTable from '../../../classes/tablexproduct'
 // import Descargar from '../../../../assets/descargar'
 
-export default function ReporteVentasPorProducto () {
+export default function ReporteVentasPorProducto() {
   const [calendarInitialOpen, setCalendarInitialOpen] = useState(false)
   const [calendarFinalOpen, setCalendarFinalOpen] = useState(false)
   const [initialDate, setInitialDate] = useState(new Date())
@@ -28,6 +28,7 @@ export default function ReporteVentasPorProducto () {
 
   const salesReport = () => {
     const header = new ClassHeader({
+      // biome-ignore lint/style/useTemplate: <explanation>
       report: 'VENTAS POR PRODUCTO CON FECHA DEL ' + initialDate.toISOString().split('T')[0] + ' AL ' + finalDate.toISOString().split('T')[0]
     })
 
@@ -37,7 +38,8 @@ export default function ReporteVentasPorProducto () {
       items: value.products.map((dish) => ({
         name: dish?.name,
         quantity: dish?.quantity,
-        total: dish?.total
+        total: dish?.total,
+        extras: dish?.extras
       })),
       total: value?.total
 

@@ -1,19 +1,19 @@
 const priceFormatter = new Intl.NumberFormat('es-MX', {
-  style: 'currency',
-  currency: 'MXN'
+    style: 'currency',
+    currency: 'MXN'
 })
 
 export default class ReportXProductTable {
-  header = ['PRODUCTO', 'CANTIDAD', 'TOTAL']
+    header = ['PRODUCTO', 'CANTIDAD', 'TOTAL']
 
-  constructor ({ items, header, total }) {
-    this.items = items
-    this.header = header
-    this.total = total
-  }
+    constructor({ items, header, total }) {
+        this.items = items
+        this.header = header
+        this.total = total
+    }
 
-  getHTMLTable () {
-    return `
+    getHTMLTable() {
+        return `
           <table class="w-full">
               <thead>
                   <tr style='justify-between flex flex-col'>
@@ -34,6 +34,12 @@ export default class ReportXProductTable {
                               <div class="px-6 bg-slate-200">
                                   ${x?.name}
                               </div>
+                              ${// biome-ignore lint/complexity/useOptionalChain: <explanation>
+            x?.extras && x?.extras.map(extra => `
+                              <div class="px-6 bg-slate-200">
+                                - ${extra.name}: $${extra.total}
+                              </div>
+                              `).join('')}
                           </td>
                           <td class="px-1">
                                 <div class="px-6 bg-slate-200">
@@ -63,5 +69,5 @@ export default class ReportXProductTable {
               </tbody>
             </table>
         `
-  }
+    }
 }
