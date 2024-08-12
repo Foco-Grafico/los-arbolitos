@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import getOrdersInCashier from '../func/get-orders-in-cashier'
 import { socket } from '../../services/socket'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function useGetOrdersInCashier () {
   const [data, setData] = useState([])
@@ -19,10 +20,16 @@ export default function useGetOrdersInCashier () {
         throw new Error('Error al obtener las ordenes')
       })
       .then(res => {
-        setData(res.data.map(order => ({
+        const orders = res.data.map(order => ({
           ...order,
           requested: false
-        })))
+        }))
+
+        AsyncStorage.setItem('local-orders', JSON.stringify(orders))
+            .then(() => console.log('Orders saved'))
+            .catch(err => console.error(err))
+
+        setData(orders)
       })
       .catch(err => {
         console.error(err)
@@ -35,10 +42,20 @@ export default function useGetOrdersInCashier () {
 
   useEffect(() => {
     socket.on('new_cash_order', order => {
-      setData(prev => [...prev, {
-        ...order,
-        requested: false
-      }])
+
+
+      setData(prev => {
+        const newOrder = {
+          ...order,
+          requested: false
+        }
+
+        const newArray = [...prev, newOrder]
+
+        AsyncStorage.setItem('local-orders', JSON.stringify(newArray))
+
+        return newArray
+      })
     })
 
     return () => {

@@ -29,7 +29,6 @@ const dateFormatter = new Intl.DateTimeFormat("es-MX", {
 
 export default function Cashier() {
 	const [selectedTable, setSelectedTable] = useState({});
-	const [requested, setRequested] = useState(false);
 	const { data, setData, reloadOrders } = useGetOrdersInCashier();
 	const [discount, setDiscount] = useState(0);
 	const nav = routerStore((state) => state.nav);
@@ -37,6 +36,7 @@ export default function Cashier() {
 	const [isEffective, setIsEffective] = useState(true);
 	const [concept, setConcept] = useState("");
 	const [extraPrice, setExtraPrice] = useState(0);
+	const [modalCloseOser, setModalCloseOrder] = useState(false);
 
 	console.log("selectedTable", JSON.stringify(selectedTable?.total));
 
@@ -227,7 +227,6 @@ export default function Cashier() {
 		).finally(() => {
 			setData((prev) => prev.filter((order) => order.id !== selectedTable?.id));
 			setSelectedTable({});
-			setRequested(false);
 			setDiscount(0);
 			setConcept("");
 			setExtraPrice(0);
@@ -487,23 +486,101 @@ export default function Cashier() {
 						</TouchableOpacity>
 						<TouchableOpacity
 							style={styles.buttons}
-							onPress={handleFinishOrder}
-							disabled={!requested}
+							onPress={() => {
+								setModalCloseOrder(true);
+							}}
 						>
-							{requested ? (
 								<Text style={{ color: "#fff", fontWeight: "bold" }}>
 									CERRAR CUENTA
 								</Text>
-							) : (
-								<Text style={{ color: "#fff", fontWeight: "bold" }}>
-									ESPERE...
-								</Text>
-							)}
 						</TouchableOpacity>
 					</View>
 				</View>
 			</View>
 			<Footer />
+
+			<Modal
+				animationType="slide"
+				transparent
+				visible={modalCloseOser}
+				onRequestClose={() => {
+					setModalCloseOrder(false);
+				}}
+				statusBarTranslucent
+			>
+				<View
+					style={{
+						flex: 1,
+						justifyContent: "center",
+						alignItems: "center",
+						backgroundColor: "rgba(0,0,0,.5)",
+					}}
+				>
+					<View
+						style={{
+							backgroundColor: "#fff",
+							width: "80%",
+							height: "50%",
+							borderRadius: 10,
+							justifyContent: "center",
+							alignItems: "center",
+							gap: 40,
+						}}
+					>
+						<Text
+							style={{ color: "#005942", fontWeight: "bold", fontSize: 20 }}
+						>
+							¿Deseas cerrar la orden?
+						</Text>
+						<View
+							style={{
+								flexDirection: "row",
+								gap: 10,
+								justifyContent: "center",
+								alignItems: "center",
+							}}
+						>
+							<TouchableOpacity
+								style={{
+									height: 50,
+									width: 150,
+									borderWidth: 1,
+									backgroundColor: "#005942",
+									justifyContent: "center",
+									alignItems: "center",
+									borderRadius: 10,
+								}}
+								onPress={() => {
+									setModalCloseOrder(false);
+								}}
+							>
+								<Text style={{ color: "#fff", fontWeight: "bold" }}>
+									NO
+								</Text>
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={{
+									height: 50,
+									width: 150,
+									borderWidth: 1,
+									backgroundColor: "#005942",
+									justifyContent: "center",
+									alignItems: "center",
+									borderRadius: 10,
+								}}
+								onPress={() => {
+									setModalCloseOrder(false);
+									handleFinishOrder();
+								}}
+							>
+								<Text style={{ color: "#fff", fontWeight: "bold" }}>
+									SÍ
+								</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</View>
+			</Modal>
 		</View>
 	);
 }

@@ -26,6 +26,7 @@ import Empleados from "./src/app/pages/admin/empleados";
 import * as Notifications from "expo-notifications";
 import { LowConnectionModal } from "./src/app/components/LowConnectionModal";
 import { useRegisterNotifications } from "./src/app/hooks/register-notifications";
+import {CacheOrderListPage} from "./src/app/pages/cache-order-list.page";
 // import { Calendar } from './src/app/components/calendar'
 
 LogBox.ignoreLogs(["new NativeEventEmitter", "Aborted", "Maximum call stack"]);
@@ -49,7 +50,10 @@ function App() {
 			}}
 		>
 			<StatusBar hidden />
-			<LowConnectionModal />
+			{/*<LowConnectionModal />*/}
+			<Route name="cache-orders" orientation={ORIENTATIONS.PORTRAIT}>
+				<CacheOrderListPage />
+			</Route>
 			<Route name="login">
 				<Login />
 			</Route>

@@ -1,4 +1,4 @@
-export const API_URL = 'https://vps.soportefoco.com:8001'
+export const API_URL = 'https://vps.focograficomx.com:8001'
 // export const API_URL = 'http://192.168.1.194:3001'
 
 export const APIENDPOINTS = {

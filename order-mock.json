@@ -1,0 +1,230 @@
+{
+  "id": 7455,
+  "status": {
+    "id": 5,
+    "name": "in cash"
+  },
+  "priority": false,
+  "user": {
+    "id": "3942ee7a-bf01-11ee-be18-00505619bdba",
+    "name": "mesero6",
+    "lastname": "mesero6"
+  },
+  "finalized": true,
+  "table_id": 23,
+  "timestamp": "2024-08-11T16:34:10",
+  "is_effective": true,
+  "extra_price": 0,
+  "folio": "RLA7455-20240811-162526",
+  "waiter_name": "",
+  "table": {
+    "id": 23,
+    "name": "M23",
+    "zone_id": 6,
+    "status": 1
+  },
+  "dishes": [
+    {
+      "id": 63304,
+      "dish_id": 22,
+      "description": "",
+      "picture": "https://www.gastrolabweb.com/u/fotografias/m/2023/8/23/f1280x720-51519_183194_5050.jpg",
+      "priority": false,
+      "name": "Café de olla",
+      "price": 40,
+      "key": "39fa1fe4-584b-11ef-82a6-00505619bdba",
+      "modified": false,
+      "status": {
+        "id": 3,
+        "name": "ready"
+      },
+      "comment": null,
+      "category": 1,
+      "created_at": "2024-08-11T16:30:47",
+      "supplies": [],
+      "total": 40
+    },
+    {
+      "id": 63305,
+      "dish_id": 25,
+      "description": "",
+      "picture": "https://img.freepik.com/foto-gratis/angulo-alto-vasos-batido-menta-chocolate_23-2148707813.jpg",
+      "priority": false,
+      "name": "Chocomilk",
+      "price": 49,
+      "key": "39fa2058-584b-11ef-82a6-00505619bdba",
+      "modified": false,
+      "status": {
+        "id": 3,
+        "name": "ready"
+      },
+      "comment": null,
+      "category": 1,
+      "created_at": "2024-08-11T16:31:32",
+      "supplies": [],
+      "total": 49
+    },
+    {
+      "id": 63306,
+      "dish_id": 71,
+      "description": "",
+      "picture": "https://img.freepik.com/fotos-premium/desayuno-mexicano-huevos-rancheros-huevo-frito-salsa-closeup-sarten_645691-1791.jpg",
+      "priority": false,
+      "name": "Huevos rancheros",
+      "price": 79,
+      "key": "39fa208d-584b-11ef-82a6-00505619bdba",
+      "modified": false,
+      "status": {
+        "id": 3,
+        "name": "ready"
+      },
+      "comment": null,
+      "category": 5,
+      "created_at": "2024-08-11T16:31:41",
+      "supplies": [],
+      "total": 79
+    },
+    {
+      "id": 63307,
+      "dish_id": 79,
+      "description": "",
+      "picture": "https://i.ytimg.com/vi/XN6Rms6MqP0/maxresdefault.jpg",
+      "priority": false,
+      "name": "Chilaquiles de la casa poblanos",
+      "price": 119,
+      "key": "39fa20b6-584b-11ef-82a6-00505619bdba",
+      "modified": false,
+      "status": {
+        "id": 3,
+        "name": "ready"
+      },
+      "comment": null,
+      "category": 5,
+      "created_at": "2024-08-11T16:31:57",
+      "supplies": [],
+      "total": 119
+    }
+  ],
+  "all_finished": true,
+  "total": 287,
+  "pretty_list": [
+    {
+      "name": "Café de olla",
+      "quantity": 1,
+      "ids": [
+        63304
+      ],
+      "modified": false,
+      "comments": [],
+      "picture": "https://www.gastrolabweb.com/u/fotografias/m/2023/8/23/f1280x720-51519_183194_5050.jpg",
+      "description": "",
+      "supplies_modified": {
+        "63304": []
+      },
+      "priority": false,
+      "key": "207d72fa-2d69-4f49-8fc5-1be502a93244",
+      "status": {
+        "id": 3,
+        "name": "ready"
+      },
+      "price": 40,
+      "total": {
+        "63304": 40,
+        "all": 40
+      },
+      "type": 1,
+      "created_at": [
+        "2024-08-11T16:30:47"
+      ]
+    },
+    {
+      "name": "Chocomilk",
+      "quantity": 1,
+      "ids": [
+        63305
+      ],
+      "modified": false,
+      "comments": [],
+      "picture": "https://img.freepik.com/foto-gratis/angulo-alto-vasos-batido-menta-chocolate_23-2148707813.jpg",
+      "description": "",
+      "supplies_modified": {
+        "63305": []
+      },
+      "priority": false,
+      "key": "8997111a-d67c-4761-add1-e98cbcbe5083",
+      "status": {
+        "id": 3,
+        "name": "ready"
+      },
+      "price": 49,
+      "total": {
+        "63305": 49,
+        "all": 49
+      },
+      "type": 1,
+      "created_at": [
+        "2024-08-11T16:31:32"
+      ]
+    },
+    {
+      "name": "Huevos rancheros",
+      "quantity": 1,
+      "ids": [
+        63306
+      ],
+      "modified": false,
+      "comments": [],
+      "picture": "https://img.freepik.com/fotos-premium/desayuno-mexicano-huevos-rancheros-huevo-frito-salsa-closeup-sarten_645691-1791.jpg",
+      "description": "",
+      "supplies_modified": {
+        "63306": []
+      },
+      "priority": false,
+      "key": "d2b549c2-fb9c-4842-a1ed-1b403fe0b642",
+      "status": {
+        "id": 3,
+        "name": "ready"
+      },
+      "price": 79,
+      "total": {
+        "63306": 79,
+        "all": 79
+      },
+      "type": 5,
+      "created_at": [
+        "2024-08-11T16:31:41"
+      ]
+    },
+    {
+      "name": "Chilaquiles de la casa poblanos",
+      "quantity": 1,
+      "ids": [
+        63307
+      ],
+      "modified": false,
+      "comments": [],
+      "picture": "https://i.ytimg.com/vi/XN6Rms6MqP0/maxresdefault.jpg",
+      "description": "",
+      "supplies_modified": {
+        "63307": []
+      },
+      "priority": false,
+      "key": "58b847a6-c283-4413-9000-c8347fea7c3e",
+      "status": {
+        "id": 3,
+        "name": "ready"
+      },
+      "price": 119,
+      "total": {
+        "63307": 119,
+        "all": 119
+      },
+      "type": 5,
+      "created_at": [
+        "2024-08-11T16:31:57"
+      ]
+    }
+  ],
+  "pending_list": [],
+  "requested": false
+}
