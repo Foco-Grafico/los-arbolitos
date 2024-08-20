@@ -185,7 +185,6 @@ export default function Cashier() {
 			await Print.printAsync({
 				html,
 			});
-			setRequested(true);
 			setData((prev) => {
 				const copyPrev = [...prev];
 				const index = copyPrev.findIndex(
@@ -201,8 +200,8 @@ export default function Cashier() {
 
 				return copyPrev;
 			});
-		} catch (e) {
-			print(isEffective);
+		} catch {
+			globalThis.alert("No se pudo imprimir el documento");
 		}
 	};
 
