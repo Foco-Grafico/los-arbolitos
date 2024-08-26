@@ -6,6 +6,7 @@ import finishOrderInKitchen from '../../func/finish-order-in-kitchen'
 import { sendToCashier } from '../../../lib/api-call/order/move-order'
 import finishOrderInCashier from '../../func/finish-order-in.cashier'
 import { useConfig } from '../../hooks/use-get-config'
+import { cancelOrder } from '../../../lib/api-call/order/get-order'
 
 export const MasterModeModal = ({ isActive, onClose }) => {
   const [section, setSection] = useState('main')
@@ -363,6 +364,30 @@ export const MasterModeModal = ({ isActive, onClose }) => {
                   }}
                 >
                   Solicitar cuenta
+                </Button>
+
+                <Button
+                  onPress={() => {
+                    if (pass === '') return ToastAndroid.show('Ingrese la contraseña', ToastAndroid.SHORT)
+
+                    if (config?.pass === null) return ToastAndroid.show('No hay contraseña configurada', ToastAndroid.SHORT)
+
+                    if (pass !== config?.pass) return ToastAndroid.show('Contraseña incorrecta', ToastAndroid.SHORT)
+
+                    forceQuit()
+
+                    cancelOrder(order?.id)
+                      .then(res => {
+                        ToastAndroid.show('Orden cancelada', ToastAndroid.SHORT)
+                        setTimeout(() => {
+                          setSection('main')
+                        }, 3000)
+                      })
+
+                    setStatus(4) // ordern cancelada
+                  }}
+                >
+                  Cancelar orden
                 </Button>
 
               </View>

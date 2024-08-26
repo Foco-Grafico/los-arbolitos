@@ -6,3 +6,10 @@ export const getOrder = (orderId, data) => {
   })
     .then(res => res.json())
 }
+
+export const cancelOrder = (orderId, data) => {
+  return fetch(`${API_URL}/orders/${orderId}/cancel`, {
+    ...data
+  })
+    .then(res => res.json())
+}

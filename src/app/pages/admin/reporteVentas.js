@@ -123,6 +123,7 @@ export default function ReporteVentas() {
 				style={{
 					flex: 1,
 					padding: 40,
+					gap: 10,
 				}}
 			>
 				<TouchableOpacity
@@ -143,9 +144,39 @@ export default function ReporteVentas() {
 							justifyContent: "space-between",
 							alignItems: "center",
 							padding: 10,
+							gap: 10,
 						}}
 					>
-						<Text style={styles.text}>GENERAR PDF</Text>
+						<Text style={styles.text}>REPORTE DE VENTAS EXITOSAS</Text>
+
+						<View style={{ height: 30 }}>
+							<Descargar style={{ width: 24, height: 24 }} />
+						</View>
+					</View>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					style={{
+						borderWidth: 1,
+						borderRadius: 10,
+						gap: 10,
+					}}
+					onPress={() => {
+						Linking.openURL(
+							`https://vps.focograficomx.com:8001/reports/sell/canceled?init=${initialDate.toISOString().split("T")[0]}&end=${finalDate.toISOString().split("T")[0]}`,
+						);
+					}}
+				>
+					<View
+						style={{
+							flexDirection: "row",
+							justifyContent: "space-between",
+							alignItems: "center",
+							padding: 10,
+							gap: 10,
+						}}
+					>
+						<Text style={styles.text}>REPORTE DE CANCELADAS</Text>
 
 						<View style={{ height: 30 }}>
 							<Descargar style={{ width: 24, height: 24 }} />

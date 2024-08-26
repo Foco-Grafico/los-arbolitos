@@ -32,6 +32,9 @@
     "extra": {
       "eas": {
         "projectId": "125157e9-5358-4b8a-9e5c-2a9695819058"
+      },
+      "flags": {
+        "isCashier": true
       }
     },
     "owner": "foco-grafico",

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import getReconciliation from '../func/getReconciliation'
 
-export default function useGetReconciliation () {
+export default function useGetReconciliation() {
   const [reconciliation, setReconciliation] = useState({
     data: []
   })
@@ -9,15 +9,25 @@ export default function useGetReconciliation () {
 
   useEffect(() => {
     getReconciliation()
-      .then(res => {
+      .then(async res => {
         if (res.ok) {
-          return res.json()
+          return await res.json()
         }
+
+
         if (res.status === 404) {
           return {
             data: []
           }
         }
+
+        if (res.status === 400) {
+          console.log('RECONCILATION RESPONSE', await res.json())
+
+          globalThis.alert('Error: No se han cerrado todas las ordenes');
+          return []
+        }
+
         throw new Error('Error al obtener las ventas')
       })
       .then(res => {

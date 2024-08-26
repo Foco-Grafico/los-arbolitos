@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {StyleSheet, View, TextInput, Text, Pressable} from 'react-native'
+import { StyleSheet, View, TextInput, Text, Pressable } from 'react-native'
 import { routerStore } from '../../../stores/router'
 import { loginDebounce } from '../../lib/api-call/auth'
 import { accountStore } from '../../../stores/account'
@@ -9,9 +9,12 @@ import No from '../../../assets/no'
 import { Image } from 'expo-image'
 import Rest from '../../../assets/rest.jpg'
 import { routes } from '../../lib/data'
-import {IconList} from "@tabler/icons-react-native";
+import { IconList } from "@tabler/icons-react-native";
+import Constants from 'expo-constants';
 
-export default function Login () {
+const isCashier = Constants.expoConfig.extra.flags.isCashier;
+
+export default function Login() {
   const nav = routerStore(state => state.nav)
   const setAccount = accountStore(state => state.setAccount)
   const [authParams, setAuthParams] = useState({
@@ -31,6 +34,12 @@ export default function Login () {
     loginDebounce(authParams.user, authParams.pass, (user, err) => {
       if (err) {
         setStatus('error')
+        return
+      }
+
+      if (!isCashier && user.type.id === 4) {
+        globalThis.alert('No puedes acceder a la caja en este dispositivo.')
+
         return
       }
 
@@ -103,22 +112,22 @@ export default function Login () {
 
       <View>
         <Pressable
-            onPress={() => nav('cache-orders')}
-            style={{
-              backgroundColor: '#005943',
-              borderRadius: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-              margin: 10,
-            }}
+          onPress={() => nav('cache-orders')}
+          style={{
+            backgroundColor: '#005943',
+            borderRadius: 4,
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: 10,
+          }}
         >
           <Text
-              style={{
-                color: '#fff',
-                fontSize: 16,
-                fontWeight: 'bold',
-                textAlign: 'center'
-              }}
+            style={{
+              color: '#fff',
+              fontSize: 16,
+              fontWeight: 'bold',
+              textAlign: 'center'
+            }}
           >
             <IconList color="#fff" fill="#fff" />
           </Text>

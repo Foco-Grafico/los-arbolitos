@@ -52,6 +52,13 @@ const ORDER_STATES = {
       setVisibleSendToCash?.(true)
     }
   },
+  4: {
+    id: 4,
+    label: 'CANCELADA',
+    bgColor: '#FFA500', // Orange color
+    color: '#000',
+    next: null
+  },
   5: {
     id: 5,
     label: 'EN CAJA',
