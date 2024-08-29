@@ -6,7 +6,7 @@ import { socket } from '../../services/socket'
 import { tableStore } from '../../../stores/waiter'
 import { getAllTables } from '../../lib/api-call/waiter'
 
-export default function useWaiterGetTablesinZone (leader = false) {
+export default function useWaiterGetTablesinZone(leader = false) {
   const account = accountStore(state => state.account)
   const [tables, setTables] = useState([])
   const setProductsStatus = tableStore(state => state.setProductsStatus)
@@ -51,7 +51,7 @@ export default function useWaiterGetTablesinZone (leader = false) {
       setProductsStatus(data.product_ids, data.status)
     })
 
-    socket.on('order_status', data => {
+    socket.on(`order_status-${account?.id}`, data => {
       const orderId = getOrderId()
 
       if (orderId !== Number(data?.order_id)) return
@@ -61,7 +61,7 @@ export default function useWaiterGetTablesinZone (leader = false) {
 
     return () => {
       socket.off('product_status')
-      socket.off('order_status')
+      socket.off(`order_status-${account?.id}`)
     }
   }, [])
   return {
