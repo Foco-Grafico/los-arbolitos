@@ -9,7 +9,7 @@ import { accountStore } from '../../../../stores/account'
 import { tableStore } from '../../../../stores/waiter'
 import { BlockIcon } from '../../../../assets/cerrar'
 
-export function TableList ({ onPressItem = () => {}, data = [], hasSelected = false }) {
+export function TableList({ onPressItem = () => { }, data = [], hasSelected = false }) {
   const [tableSelected, setTableSelected] = useState(0)
   const [tables, setTables] = useState([])
   const abortController = useRef(new AbortController())
@@ -26,7 +26,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
   }, [data])
 
   useEffect(() => {
-    socket.on(`order_status-${account?.id}`, ({ table, order_id: orderId, status }) => {
+    socket.on(`order_status`, ({ table, order_id: orderId, status }) => {
       if (status?.id !== 3) return
       play()
 
@@ -51,7 +51,7 @@ export function TableList ({ onPressItem = () => {}, data = [], hasSelected = fa
     })
 
     return () => {
-      socket.off(`order_status-${account?.id}`)
+      socket.off(`order_status`)
     }
   }, [])
 

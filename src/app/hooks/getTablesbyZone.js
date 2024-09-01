@@ -51,7 +51,7 @@ export default function useWaiterGetTablesinZone(leader = false) {
       setProductsStatus(data.product_ids, data.status)
     })
 
-    socket.on(`order_status-${account?.id}`, data => {
+    socket.on(`order_status`, data => {
       const orderId = getOrderId()
 
       if (orderId !== Number(data?.order_id)) return
@@ -61,7 +61,7 @@ export default function useWaiterGetTablesinZone(leader = false) {
 
     return () => {
       socket.off('product_status')
-      socket.off(`order_status-${account?.id}`)
+      socket.off(`order_status`)
     }
   }, [])
   return {
