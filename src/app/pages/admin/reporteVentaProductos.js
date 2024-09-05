@@ -33,13 +33,14 @@ export default function ReporteVentasPorProducto() {
     })
 
     const tables = Object.entries(data).map(([key, value]) => new ReportXProductTable({
-      header: [`${key}`, 'PRODUCTO', 'CANTIDAD'],
+      header: ['PRODUCTO', 'CANTIDAD', "OBSERVACIONES", 'TOTAL'],
 
       items: value.products.map((dish) => ({
         name: dish?.name,
         quantity: dish?.quantity,
         total: dish?.total,
-        extras: dish?.extras
+        extras: dish?.extras,
+        obervation: dish?.observation,
       })),
       total: value?.total
 

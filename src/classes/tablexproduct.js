@@ -41,11 +41,18 @@ export default class ReportXProductTable {
                               </div>
                               `).join('')}
                           </td>
+                           
                           <td class="px-1">
                                 <div class="px-6 bg-slate-200">
                                     ${x?.quantity}
                                 </div>
                         </td>
+ <td class="px-1">
+                                <div class="px-6 bg-slate-200">
+                                    ${x?.obervation ?? ''}
+                                </div>
+                        </td>
+
                           <td class="px-1">
                                 <div class="px-6 bg-slate-200">
                                     ${priceFormatter.format(x?.total)}
