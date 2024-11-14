@@ -28,5 +28,6 @@ export const APIENDPOINTS = {
   getMeasurementUnit: `${API_URL}/supplies/measurement_unit`,
   createProductCategory: `${API_URL}/dishes/category`,
   getTables: `${API_URL}/zones/table`,
-  getReportXProduct: `${API_URL}/reports/report_x_product`
+  getReportXProduct: `${API_URL}/reports/report_x_product`,
+  cancelledProducts: `${API_URL}/reports/products/cancelled`,
 }

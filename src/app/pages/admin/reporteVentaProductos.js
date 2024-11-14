@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native'
 import HeaderAdmin from '../../components/admin/header'
 import Footer from '../../components/admin/footer'
 import { Calendar } from '../../components/calendar'
@@ -22,14 +22,15 @@ export default function ReporteVentasPorProducto() {
   const [calendarFinalOpen, setCalendarFinalOpen] = useState(false)
   const [initialDate, setInitialDate] = useState(new Date())
   const [finalDate, setFinalDate] = useState(new Date())
-  const { data, loading, total } = useGetReportXProduct(initialDate, finalDate)
+  const [isCancelledReport, setIsCancelledReport] = useState(false)
+  const toggleSwitch = () => setIsCancelledReport(previousState => !previousState)
 
-  console.log(JSON.stringify(data))
+  const { data, loading, total } = useGetReportXProduct(initialDate, finalDate, isCancelledReport)
 
   const salesReport = () => {
     const header = new ClassHeader({
       // biome-ignore lint/style/useTemplate: <explanation>
-      report: 'VENTAS POR PRODUCTO CON FECHA DEL ' + initialDate.toISOString().split('T')[0] + ' AL ' + finalDate.toISOString().split('T')[0]
+      report: `VENTAS POR PRODUCTO ${isCancelledReport ? 'CANCELADO ' : ''}CON FECHA DEL ` + initialDate.toISOString().split('T')[0] + ' AL ' + finalDate.toISOString().split('T')[0]
     })
 
     const tables = Object.entries(data).map(([key, value]) => new ReportXProductTable({
@@ -101,6 +102,24 @@ export default function ReporteVentasPorProducto() {
       <HeaderAdmin>
         <Text style={styles.textTitle}>REPORTE DE VENTAS POR PLATILLO</Text>
       </HeaderAdmin>
+
+      <View style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <Text style={{flex: 1, textAlign: 'center'}}>VENDIDOS</Text>
+        <Switch
+          trackColor={{ false: '#767577', true: '#81b0ff' }}
+          thumbColor={isCancelledReport ? '#005942' : '#f4f3f4'}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={isCancelledReport}
+        />
+        <Text style={{flex: 1, textAlign: 'center'}}>CANCELADOS</Text>
+      </View>
+
       <View style={styles.container}>
         <View style={{
           flexDirection: 'column',

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import getReportXProduct from '../func/get-report-x-product'
 
-export default function useGetReportXProduct (initialDate = new Date(), finalDate = new Date()) {
+export default function useGetReportXProduct (initialDate = new Date(), finalDate = new Date(), cancelled = false) {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState(0)
 
   useEffect(() => {
     setLoading(true)
-    getReportXProduct(initialDate.toISOString().split('T')[0], finalDate.toISOString().split('T')[0])
+    getReportXProduct(initialDate.toISOString().split('T')[0], finalDate.toISOString().split('T')[0], cancelled)
       .then((res) => {
         if (res.ok) {
           return res.json()
@@ -29,7 +29,7 @@ export default function useGetReportXProduct (initialDate = new Date(), finalDat
         console.error(err)
       })
       .finally(() => setLoading(false))
-  }, [initialDate, finalDate])
+  }, [initialDate, finalDate, cancelled])
 
   return {
     data,
